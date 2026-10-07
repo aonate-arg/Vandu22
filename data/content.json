@@ -9,21 +9,21 @@
   "url_entradas": "https://ejemplo.com/entradas",
   "fotos": [
     {
-      "img": "",
-      "alt": "Foto evento 01"
+      "img": "img/bar-exterior.jpg",
+      "alt": "Entrada del bar de noche"
+    },
+    {
+      "img": "img/bar-barra.jpg",
+      "alt": "La barra iluminada en rojo"
     },
     {
       "img": "",
-      "alt": "Foto evento 02"
+      "alt": "Próximamente"
     },
     {
       "img": "",
-      "alt": "Foto evento 03"
-    },
-    {
-      "img": "",
-      "alt": "Foto evento 04"
+      "alt": "Próximamente"
     }
   ],
-  "video_vertical": ""
+  "video_vertical": "media/recap.mp4"
 }

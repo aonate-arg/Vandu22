@@ -391,6 +391,21 @@ ol {
   color: var(--color-accent);
 }
 
+/* Botón de entradas a la derecha (versión compacta del .btn) */
+.brand-header__cta {
+  margin-left: auto;
+  padding: 9px 22px;
+  font-size: 15px;
+}
+
+@media (max-width: 520px) {
+  .brand-header__cta {
+    padding: 8px 16px;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+}
+
 
 /* 4. Sección */
 /* ---- sections/event.css ---- */
@@ -630,35 +645,6 @@ ol {
   width: max-content;
   max-width: 70%;
   transform: translateX(-50%);
-}
-
-.recap__play {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: clamp(64px, 5.5vw, 104px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--color-accent);
-  transition: transform 0.2s;
-}
-
-.recap__play:hover {
-  transform: scale(1.06);
-}
-
-.recap__play::after {
-  content: '';
-  margin-left: 6px;
-  border-top: 15px solid transparent;
-  border-bottom: 15px solid transparent;
-  border-left: 25px solid var(--color-navy);
-}
-
-.recap__play[hidden] {
-  display: none;
 }
 
 /* Grilla 2 × 2 de fotos en paralelogramo */

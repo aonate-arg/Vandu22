@@ -15,12 +15,12 @@
     texto: 'Los que llegan temprano eligen mesa; los demás, miran desde la tribuna.',
     url_entradas: 'https://ejemplo.com/entradas',
     fotos: [
-      { img: '', alt: 'Foto evento 01' },
-      { img: '', alt: 'Foto evento 02' },
-      { img: '', alt: 'Foto evento 03' },
-      { img: '', alt: 'Foto evento 04' },
+      { img: 'img/bar-exterior.jpg', alt: 'Entrada del bar de noche' },
+      { img: 'img/bar-barra.jpg', alt: 'La barra iluminada en rojo' },
+      { img: '', alt: 'Próximamente' },
+      { img: '', alt: 'Próximamente' },
     ],
-    video_vertical: '',
+    video_vertical: 'media/recap.mp4',
   };
 
   const qs = (sel, root = document) => root.querySelector(sel);
@@ -223,42 +223,55 @@
   function initRecapVideo(src) {
     if (!src) return;
     const frame = qs('[data-recap-video]');
-    const play = qs('.recap__play', frame);
     qs('.recap__label', frame)?.remove();
 
     const yt = src.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);
     const vimeo = src.match(/vimeo\.com\/(?:video\/)?(\d+)/);
 
     if (yt || vimeo) {
-      play.addEventListener('click', () => {
-        const iframe = document.createElement('iframe');
-        iframe.title = 'Video del último evento';
-        iframe.allow = 'autoplay; fullscreen; picture-in-picture';
-        iframe.allowFullscreen = true;
-        iframe.src = yt
-          ? `https://www.youtube-nocookie.com/embed/${yt[1]}?autoplay=1&rel=0`
-          : `https://player.vimeo.com/video/${vimeo[1]}?autoplay=1`;
-        frame.append(iframe);
-        play.hidden = true;
-      });
+      const iframe = document.createElement('iframe');
+      iframe.title = 'Video del último evento';
+      iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.loading = 'lazy';
+      iframe.src = yt
+        ? `https://www.youtube-nocookie.com/embed/${yt[1]}?autoplay=1&mute=1&loop=1&playlist=${yt[1]}&rel=0`
+        : `https://player.vimeo.com/video/${vimeo[1]}?autoplay=1&muted=1&loop=1`;
+      frame.append(iframe);
       return;
     }
 
+    /* Arranca con sonido a la mitad de volumen. Si el navegador no deja reproducir
+       con sonido antes de que la persona toque la página, arranca muteado y
+       activa el sonido en el primer toque/clic/tecla. */
     const video = Object.assign(document.createElement('video'), {
-      src, muted: true, loop: true, playsInline: true, preload: 'metadata',
+      src, loop: true, playsInline: true, controls: true, preload: 'metadata',
     });
+    video.volume = 0.5;
     frame.prepend(video);
-    play.addEventListener('click', () => {
-      video.muted = false;
-      video.controls = true;
-      video.play();
-      play.hidden = true;
-    });
+
+    const unmuteOnGesture = () => {
+      const unmute = () => {
+        video.muted = false;
+        video.volume = 0.5;
+      };
+      ['pointerdown', 'keydown', 'touchend'].forEach((type) =>
+        window.addEventListener(type, unmute, { once: true, capture: true }),
+      );
+    };
+
+    const play = () =>
+      video.play().catch(() => {
+        video.muted = true;
+        video.play().catch(() => {});
+        unmuteOnGesture();
+      });
+
     if (reducedMotion()) return;
     new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !video.controls) video.play().catch(() => {});
-        if (!entry.isIntersecting) video.pause();
+        if (entry.isIntersecting) play();
+        else video.pause();
       },
       { threshold: 0.5 },
     ).observe(frame);
