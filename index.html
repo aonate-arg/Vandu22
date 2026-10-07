@@ -27,6 +27,9 @@
           opacity: 1;
           transform: none;
         }
+        .page-loader {
+          display: none;
+        }
       </style>
     </noscript>
 
@@ -35,6 +38,12 @@
   </head>
 
   <body class="page-event">
+    <!-- Pantalla de carga: se oculta sola cuando la página está lista (js/main.js) -->
+    <div class="page-loader" data-page-loader aria-hidden="true">
+      <logo-loader-tide color="#ffffff" size="min(260px, 60vw)"></logo-loader-tide>
+    </div>
+    <script src="img/loader.js"></script>
+
     <a class="skip-link" href="#evento">Saltar al contenido</a>
 
     <!-- ============ LOGO ============ -->
@@ -42,7 +51,7 @@
       <a class="brand-header__logo" href="#evento" aria-label="22">
         <logo-loader-inverse color="currentColor" aria-hidden="true"></logo-loader-inverse>
       </a>
-      <a class="btn brand-header__cta" href="#" target="_blank" rel="noopener" data-cta="header"
+      <a class="btn brand-header__cta" href="#entradas" data-cta="header"
         >Sacá tu entrada ↗</a
       >
     </header>
@@ -112,7 +121,7 @@
               </div>
             </dl>
             <p class="gp-card__text" data-event="text"></p>
-            <a class="btn" href="#" target="_blank" rel="noopener" data-cta="pagina-evento"
+            <a class="btn" href="#entradas" data-cta="pagina-evento"
               >Sacá tu entrada ↗</a
             >
           </article>
@@ -129,6 +138,35 @@
           </div>
           <ul class="recap__photos" data-recap-photos aria-label="Fotos del último evento"></ul>
         </div>
+
+        <!-- Formulario de entradas: guarda el mail en Brevo (api/suscribir.js) -->
+        <dialog class="signup" id="entradas" data-signup aria-labelledby="signup-title">
+          <button class="icon-btn signup__close" type="button" aria-label="Cerrar">✕</button>
+          <form class="signup__form" data-signup-form>
+            <p class="eyebrow">Entradas</p>
+            <h2 class="signup__title" id="signup-title">Dejanos tu <em>mail</em></h2>
+            <p class="signup__text">Te escribimos con toda la info para sacar tu entrada.</p>
+            <label class="signup__label" for="signup-email">Email</label>
+            <input
+              class="signup__input"
+              id="signup-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              inputmode="email"
+              placeholder="tu@mail.com"
+              required
+            />
+            <input class="signup__trap" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <button class="btn" type="submit">Quiero mi entrada</button>
+            <p class="signup__status" role="status" aria-live="polite"></p>
+          </form>
+          <div class="signup__done" hidden>
+            <p class="eyebrow">Listo</p>
+            <h2 class="signup__title">¡Gracias!</h2>
+            <p class="signup__text">Ya tenemos tu mail. Te escribimos pronto con la info de las entradas.</p>
+          </div>
+        </dialog>
 
         <dialog class="lightbox" data-lightbox aria-label="Foto ampliada">
           <img class="lightbox__img" alt="" />

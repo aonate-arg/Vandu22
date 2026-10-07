@@ -13,7 +13,6 @@
     lugar: 'Cucha Cucha 2595, CABA.',
     url_lugar: 'https://www.instagram.com/aci2bar/',
     texto: 'Los que llegan temprano eligen mesa; los demás, miran desde la tribuna.',
-    url_entradas: 'https://ejemplo.com/entradas',
     fotos: [
       { img: 'img/bar-exterior.jpg', alt: 'Entrada del bar de noche' },
       { img: 'img/bar-barra.jpg', alt: 'La barra iluminada en rojo' },
@@ -39,6 +38,23 @@
     img.loading = 'lazy';
     img.decoding = 'async';
     container.replaceChildren(img);
+  }
+
+  /* ---------- Pantalla de carga ---------- */
+  /* Se va cuando la página terminó de cargar (o a los 4 s, para no trabar si algo tarda) */
+  function hidePageLoader() {
+    const loader = qs('[data-page-loader]');
+    if (!loader) return;
+    const loaded = new Promise((resolve) => {
+      if (document.readyState === 'complete') resolve();
+      else window.addEventListener('load', resolve, { once: true });
+    });
+    const minTime = new Promise((resolve) => setTimeout(resolve, 600));
+    const maxTime = new Promise((resolve) => setTimeout(resolve, 4000));
+    Promise.race([Promise.all([loaded, minTime]), maxTime]).then(() => {
+      loader.classList.add('is-done');
+      loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+    });
   }
 
   /* ---------- Aparición al scrollear ---------- */
@@ -77,10 +93,49 @@
   }
 
   /* ---------- Botones de entradas ---------- */
-  function initCta(url) {
+  function initCta() {
+    const dialog = qs('[data-signup]');
+    const form = qs('[data-signup-form]', dialog);
+    const done = qs('.signup__done', dialog);
+    const status = qs('.signup__status', form);
+    const submit = qs('button[type="submit"]', form);
+
     qsa('[data-cta]').forEach((link) => {
-      if (url) link.href = url;
-      link.addEventListener('click', () => track('cta_entradas', { ubicacion: link.dataset.cta }));
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        track('cta_entradas', { ubicacion: link.dataset.cta });
+        status.textContent = '';
+        dialog.showModal();
+      });
+    });
+
+    qs('.signup__close', dialog).addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (e) => e.target === dialog && dialog.close());
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.textContent = '';
+      submit.disabled = true;
+      try {
+        const res = await fetch('/api/suscribir', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) throw new Error(data.error || `HTTP ${res.status}`);
+        track('registro_entradas');
+        form.hidden = true;
+        done.hidden = false;
+      } catch (err) {
+        console.warn('No se pudo guardar el mail', err);
+        status.textContent =
+          err.message === 'email'
+            ? 'Revisá el mail: parece que tiene un error.'
+            : 'No pudimos guardar tu mail. Probá de nuevo en un rato.';
+      } finally {
+        submit.disabled = false;
+      }
     });
   }
 
@@ -293,11 +348,12 @@
       evento = DATOS_RESPALDO;
     }
 
-    initCta(evento.url_entradas);
+    initCta();
     initEventCard(evento);
     initCountdown(evento.fecha_hora);
     initRecapPhotos(evento.fotos);
     initRecapVideo(evento.video_vertical);
+    hidePageLoader();
   }
 
   init();
