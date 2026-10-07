@@ -1,0 +1,29 @@
+{
+  "_ayuda": "fecha_hora en formato ISO con zona horaria. Fotos: se muestran 4; si cargás más, la cuarta muestra +N y todas se ven en el visor. Imágenes: link https://... o ruta tipo img/foto-01.jpg. video_vertical: .mp4/.webm (ej. media/recap.mp4) o link de YouTube Shorts / Vimeo. pais: código de 2 letras del país del GP para la bandera (us, br, mx, it, gb, jp...). url_lugar: link del lugar (ej. su Instagram); si queda vacío, no se muestra.",
+  "gran_premio": "GP de Austin",
+  "pais": "us",
+  "fecha_hora": "2026-10-25T15:30:00-03:00",
+  "lugar": "Cucha Cucha 2595, CABA.",
+  "url_lugar": "https://www.instagram.com/aci2bar/",
+  "texto": "Los que llegan temprano eligen mesa; los demás, miran desde la tribuna.",
+  "url_entradas": "https://ejemplo.com/entradas",
+  "fotos": [
+    {
+      "img": "",
+      "alt": "Foto evento 01"
+    },
+    {
+      "img": "",
+      "alt": "Foto evento 02"
+    },
+    {
+      "img": "",
+      "alt": "Foto evento 03"
+    },
+    {
+      "img": "",
+      "alt": "Foto evento 04"
+    }
+  ],
+  "video_vertical": ""
+}

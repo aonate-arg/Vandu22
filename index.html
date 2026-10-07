@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Próximo evento · 22</title>
+    <!-- Los datos del evento se editan en data/content.json -->
+    <meta
+      name="description"
+      content="Se apagan las luces. Fecha, lugar y entradas para el próximo evento de 22: la F1 en comunidad."
+    />
+    <meta name="theme-color" content="#021d42" />
+
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
+    />
+
+
+    <noscript>
+      <style>
+        .reveal {
+          opacity: 1;
+          transform: none;
+        }
+      </style>
+    </noscript>
+
+    <link rel="stylesheet" href="css/styles.css" />
+    <script src="img/logo-loader-inverse.js" defer></script>
+  </head>
+
+  <body class="page-event">
+    <a class="skip-link" href="#evento">Saltar al contenido</a>
+
+    <!-- ============ LOGO ============ -->
+    <header class="brand-header">
+      <a class="brand-header__logo" href="#evento" aria-label="22">
+        <logo-loader-inverse color="currentColor" aria-hidden="true"></logo-loader-inverse>
+      </a>
+    </header>
+
+    <main>
+      <!-- ============ PRÓXIMO EVENTO ============ -->
+      <section class="section section--navy event" id="evento" aria-labelledby="evento-title">
+        <div class="event__grid">
+          <div class="reveal">
+            <p class="eyebrow">Próximo evento</p>
+            <h1 class="section-title" id="evento-title">
+              Se apagan las luces.<br /><em>¿Estás?</em>
+            </h1>
+
+            <div class="lights" aria-hidden="true" data-lights>
+              <i class="lights__bulb"></i><i class="lights__bulb"></i><i class="lights__bulb"></i
+              ><i class="lights__bulb"></i><i class="lights__bulb"></i>
+            </div>
+
+            <div
+              class="countdown"
+              data-countdown
+              role="timer"
+              aria-label="Tiempo hasta el próximo evento"
+            >
+              <div class="countdown__unit">
+                <b class="countdown__value" data-unit="days">00</b
+                ><small class="countdown__label">Días</small>
+              </div>
+              <div class="countdown__unit">
+                <b class="countdown__value" data-unit="hours">00</b
+                ><small class="countdown__label">Horas</small>
+              </div>
+              <div class="countdown__unit">
+                <b class="countdown__value" data-unit="minutes">00</b
+                ><small class="countdown__label">Min</small>
+              </div>
+              <div class="countdown__unit">
+                <b class="countdown__value" data-unit="seconds">00</b
+                ><small class="countdown__label">Seg</small>
+              </div>
+            </div>
+          </div>
+
+          <article class="gp-card reveal">
+            <logo-loader-inverse class="gp-card__watermark" color="currentColor" aria-hidden="true"></logo-loader-inverse>
+            <p class="eyebrow">Gran Premio</p>
+            <h2 class="gp-card__name">
+              <span data-event="name">GP de Austin</span>
+              <img
+                class="gp-card__flag"
+                data-event="flag"
+                src="https://flagcdn.com/us.svg"
+                alt="Bandera de Estados Unidos"
+                width="48"
+                height="32"
+              />
+            </h2>
+            <dl class="gp-card__meta">
+              <div>
+                <dt>Fecha</dt>
+                <dd><time data-event="date">25/10 · 15:30 h</time></dd>
+              </div>
+              <div>
+                <dt>Lugar</dt>
+                <dd data-event="place">Cucha Cucha 2595, CABA.</dd>
+              </div>
+            </dl>
+            <p class="gp-card__text" data-event="text"></p>
+            <a class="btn" href="#" target="_blank" rel="noopener" data-cta="pagina-evento"
+              >Sacá tu entrada ↗</a
+            >
+          </article>
+        </div>
+
+        <div class="recap-head reveal">
+          <p class="eyebrow">Lo que corremos</p>
+          <h2 class="section-title section-title--sm">Llegar es tu meta</h2>
+        </div>
+
+        <div class="recap reveal">
+          <div class="recap__video" data-recap-video>
+            <span class="recap__label">Video vertical · 9:16</span>
+            <button class="recap__play" type="button" aria-label="Reproducir video"></button>
+          </div>
+          <ul class="recap__photos" data-recap-photos aria-label="Fotos del último evento"></ul>
+        </div>
+
+        <dialog class="lightbox" data-lightbox aria-label="Foto ampliada">
+          <img class="lightbox__img" alt="" />
+          <p class="lightbox__caption"></p>
+          <button class="icon-btn lightbox__close" type="button" aria-label="Cerrar">✕</button>
+          <button class="icon-btn lightbox__prev" type="button" aria-label="Foto anterior">←</button>
+          <button class="icon-btn lightbox__next" type="button" aria-label="Foto siguiente">→</button>
+        </dialog>
+      </section>
+    </main>
+
+    <!-- ============ FOOTER (esqueleto) ============ -->
+    <footer class="site-footer">
+      <div class="site-footer__grid">
+        <div class="site-footer__brand">
+          <a class="site-footer__logo" href="#evento" aria-label="22">
+            <logo-loader-inverse color="currentColor" aria-hidden="true"></logo-loader-inverse>
+          </a>
+          <p class="site-footer__tagline">[Frase corta de la marca]</p>
+        </div>
+
+        <nav class="site-footer__col" aria-label="Secciones">
+          <p class="eyebrow">Secciones</p>
+          <ul>
+            <li><a href="#">[Link 1]</a></li>
+            <li><a href="#">[Link 2]</a></li>
+            <li><a href="#">[Link 3]</a></li>
+          </ul>
+        </nav>
+
+        <div class="site-footer__col">
+          <p class="eyebrow">Contacto</p>
+          <ul>
+            <li><a href="#">[Email]</a></li>
+            <li><a href="#">[WhatsApp]</a></li>
+            <li>[Dirección]</li>
+          </ul>
+        </div>
+
+        <div class="site-footer__col">
+          <p class="eyebrow">Redes</p>
+          <ul>
+            <li><a href="https://www.instagram.com/vandu.f1/" target="_blank" rel="noopener">Instagram ↗</a></li>
+            <li><a href="https://www.tiktok.com/@thevandu" target="_blank" rel="noopener">TikTok ↗</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <small>© <span data-year>2026</span> · [Nombre]</small>
+        <small>[Legales / Términos]</small>
+      </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

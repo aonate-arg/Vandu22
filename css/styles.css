@@ -1,0 +1,915 @@
+/* Estilos del evento (misma base que la landing: tokens, componentes y sección Evento) */
+
+/* 1. Base */
+/* ---- base/tokens.css ---- */
+/* Design tokens: colores, tipografías y medidas de la marca (ver brief §3). */
+:root {
+  /* Base (marca) */
+  --color-navy: #021d42;
+  --color-navy-2: #20457f;
+  --color-neon: #6d9be0;
+
+  /* Secundario (contraste) */
+  --color-gray-1: #3d3d3d;
+  --color-gray-2: #717171;
+  --color-gray-3: #aaa6a5;
+
+  /* Acento */
+  --color-accent: #00ffe0;
+  --color-accent-2: #3fd0c0;
+  --color-accent-3: #82d0c7;
+
+  /* Superficies */
+  --color-white: #fff;
+  --color-muted-bg: #f4f6fa;
+  --color-line: #dfe5ef;
+  --color-line-2: #cdd6e4;
+  --color-placeholder: #8a97ad;
+  --color-navy-soft: #0b2856;
+  --color-on-navy: #cfd8e8;
+  --color-on-navy-2: #9fb3d6;
+  --color-intro-bg: #10141c; /* igual al fondo del video de la intro */
+
+  /* Tipografías */
+  --font-display: 'Barlow Condensed', 'DejaVu Sans Condensed', sans-serif;
+  --font-body: 'Inter', system-ui, 'DejaVu Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'DejaVu Sans Mono', monospace;
+
+  /* Espaciado fluido: crece con el ancho de pantalla */
+  --gutter: clamp(20px, 5vw, 96px);
+  --section-space: clamp(72px, 8vw, 140px);
+  --nav-h: 76px;
+
+  /* Efectos */
+  --glow-neon: 0 0 10px var(--color-neon);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.7, 0, 0.2, 1);
+
+  /* Cortes diagonales (lenguaje del logo) */
+  --cut-btn: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+}
+
+@media (max-width: 860px) {
+  :root {
+    --nav-h: 64px;
+  }
+}
+
+/* ---- base/reset.css ---- */
+/* Reset moderno y liviano */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--color-white);
+  color: var(--color-navy);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Link de accesibilidad: aparece solo al navegar con teclado */
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 10000;
+  padding: 10px 16px;
+  background: var(--color-navy);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---- base/typography.css ---- */
+/* Etiqueta (JetBrains Mono) con rayita turquesa */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-navy-2);
+}
+
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 26px;
+  height: 2px;
+  margin-right: 10px;
+  vertical-align: middle;
+  background: var(--color-accent);
+}
+
+/* Titular de sección: Barlow Condensed itálica */
+.section-title {
+  margin: 16px 0 26px;
+  font-family: var(--font-display);
+  font-size: clamp(48px, 6.2vw, 112px);
+  font-style: italic;
+  font-weight: 800;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.section-title em {
+  font-style: inherit;
+  color: var(--color-accent);
+}
+
+.section-title--sm {
+  margin-bottom: 0;
+  font-size: clamp(38px, 4vw, 72px);
+}
+
+/* Sobre blanco: palabra destacada en navy-2 con subrayado turquesa (regla del brief) */
+.section--light .section-title em {
+  color: var(--color-navy-2);
+  box-shadow: inset 0 -0.16em 0 rgb(0 255 224 / 40%);
+}
+
+.lead {
+  max-width: 48ch;
+  font-size: clamp(17px, 1.3vw, 21px);
+  line-height: 1.55;
+  color: var(--color-gray-1);
+}
+
+
+/* 2. Componentes */
+/* ---- components/button.css ---- */
+/* Botón principal: relleno turquesa con corte diagonal */
+.btn {
+  display: inline-block;
+  padding: 14px 32px;
+  background: var(--color-accent);
+  color: var(--color-navy);
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  clip-path: var(--cut-btn);
+  transition:
+    filter 0.2s,
+    transform 0.2s;
+}
+
+.btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.btn--navy {
+  background: var(--color-navy);
+  color: var(--color-white);
+}
+
+/* Contorno inclinado */
+.btn--outline {
+  padding: 12px 30px;
+  background: transparent;
+  border: 2px solid var(--color-navy);
+  clip-path: none;
+  transform: skewX(-12deg);
+}
+
+.btn--outline:hover {
+  background: var(--color-navy);
+  color: var(--color-white);
+  transform: skewX(-12deg) translateY(-1px);
+}
+
+/* Botón redondo (flechas y cierre del visor de fotos) */
+.icon-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--color-neon);
+  color: var(--color-white);
+  font-size: 18px;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    opacity 0.2s;
+}
+
+.icon-btn:hover {
+  background: var(--color-accent);
+  color: var(--color-navy);
+  box-shadow: none;
+}
+
+.icon-btn:disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ---- components/media-placeholder.css ---- */
+/* Contenedor de imagen: muestra un texto de ejemplo hasta que haya foto real */
+.media-ph {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--color-line), var(--color-line-2));
+  color: var(--color-placeholder);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.media-ph > img,
+.media-ph > video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---- components/reveal.css ---- */
+/* Aparición suave al entrar en pantalla (lo activa js/modules/reveal.js) */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s var(--ease-out);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Entrada de tarjetas al filtrar */
+.fade-in {
+  animation: fade-in 0.35s ease both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+
+/* 3. Layout */
+/* ---- layout/section.css ---- */
+/* Contenedor genérico de sección: ocupa todo el ancho, con margen lateral fluido */
+.section {
+  position: relative;
+  overflow: hidden;
+  padding: var(--section-space) var(--gutter);
+  scroll-margin-top: calc(var(--nav-h) - 1px);
+}
+
+.section--navy {
+  background: var(--color-navy);
+  color: var(--color-white);
+}
+
+.section--navy .eyebrow {
+  color: var(--color-neon);
+}
+
+.section--muted {
+  background: var(--color-muted-bg);
+}
+
+/* ---- layout/brand-header.css ---- */
+/* Cabecera mínima con el logo (páginas sueltas, ej. evento.html) */
+.brand-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  height: var(--nav-h);
+  padding: 0 var(--gutter);
+  background: rgb(2 29 66 / 92%);
+  backdrop-filter: saturate(1.4) blur(10px);
+}
+
+/* Línea neón bajo el logo */
+.brand-header::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 1px;
+  background: var(--color-neon);
+  box-shadow:
+    0 0 8px var(--color-neon),
+    0 0 2px var(--color-neon);
+}
+
+.brand-header__logo {
+  display: inline-flex;
+}
+
+/* Logo animado (img/logo-loader-inverse.js): el color sale de `color` */
+.brand-header__logo logo-loader-inverse {
+  width: 96px;
+  color: var(--color-white);
+  transition: color 0.2s;
+}
+
+.brand-header__logo:hover logo-loader-inverse {
+  color: var(--color-accent);
+}
+
+
+/* 4. Sección */
+/* ---- sections/event.css ---- */
+/* 01 · Próximo evento (bloque navy) */
+.event__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 110px);
+}
+
+/* ---- Semáforo de largada ---- */
+.lights {
+  display: flex;
+  gap: clamp(10px, 1.2vw, 20px);
+  margin-bottom: 24px;
+}
+
+.lights__bulb {
+  width: clamp(40px, 3.8vw, 64px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #0d2a57;
+  box-shadow: inset 0 2px 5px rgb(0 0 0 / 40%);
+  transition:
+    background 0.15s,
+    box-shadow 0.15s;
+}
+
+.lights__bulb.is-on {
+  background: var(--color-accent);
+  box-shadow:
+    0 0 0 3px var(--color-navy),
+    0 0 18px var(--color-accent);
+}
+
+/* ---- Cuenta regresiva ---- */
+.countdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.countdown__unit {
+  flex: 1 1 0;
+  min-width: clamp(78px, 7.5vw, 128px);
+  max-width: 140px;
+  padding: 14px 16px;
+  border-bottom: 3px solid var(--color-neon);
+  border-radius: 4px;
+  background: var(--color-navy-soft);
+  text-align: center;
+}
+
+.countdown__value {
+  display: block;
+  color: var(--color-white);
+  font-family: var(--font-display);
+  font-size: clamp(44px, 4.2vw, 72px);
+  font-style: italic;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.countdown__label {
+  color: var(--color-on-navy-2);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.countdown--live {
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-size: clamp(36px, 3.4vw, 56px);
+  font-style: italic;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* ---- Tarjeta del GP ---- */
+.gp-card {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(28px, 3vw, 52px) clamp(26px, 3vw, 56px);
+  background: var(--color-white);
+  color: var(--color-navy);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%, 0 calc(100% - 40px));
+}
+
+.gp-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: var(--color-neon);
+  box-shadow: var(--glow-neon);
+}
+
+.section--navy .gp-card .eyebrow {
+  color: var(--color-navy-2);
+}
+
+.gp-card__watermark {
+  position: absolute;
+  right: -30px;
+  bottom: -30px;
+  width: 490px;
+  color: var(--color-navy);
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.gp-card__name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2em 0.35em;
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-size: clamp(38px, 3.6vw, 64px);
+  font-style: italic;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* Bandera del país: mismo corte diagonal que los botones */
+.gp-card__flag {
+  width: auto;
+  height: 0.62em;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  clip-path: polygon(0.12em 0, 100% 0, calc(100% - 0.12em) 100%, 0 100%);
+}
+
+.gp-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 30px;
+  margin: 14px 0 22px;
+  color: var(--color-gray-1);
+  font-size: 15px;
+}
+
+.gp-card__meta div {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.gp-card__meta dt {
+  color: var(--color-navy-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.gp-card__place-link {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.gp-card__place-link:hover {
+  color: var(--color-navy);
+}
+
+.gp-card__text {
+  max-width: 46ch;
+  margin-bottom: 28px;
+  color: var(--color-gray-1);
+  line-height: 1.55;
+}
+
+/* ---- Así fue la última: video vertical + fotos ---- */
+.recap-head {
+  margin-top: clamp(70px, 7vw, 120px);
+}
+
+.recap {
+  --row: clamp(140px, 17.5vw, 340px); /* alto de cada fila de fotos (fotos ~16:10) */
+  --gap: clamp(12px, 1.4vw, 24px);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--gap) clamp(20px, 2.4vw, 44px);
+  margin-top: clamp(28px, 3vw, 48px);
+}
+
+/* Video vertical tipo celular (9:16) con corte diagonal */
+.recap__video {
+  --h: calc(var(--row) * 2 + var(--gap)); /* mismo alto que las dos filas de fotos */
+  --skew: calc(var(--h) * 0.12);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--h) * 9 / 16 + var(--skew));
+  height: var(--h);
+  overflow: hidden;
+  background: linear-gradient(160deg, #0d2c5c, var(--color-navy-2));
+  clip-path: polygon(var(--skew) 0, 100% 0, calc(100% - var(--skew)) 100%, 0 100%);
+}
+
+.recap__video::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  height: 2px;
+  background: var(--color-neon);
+  box-shadow: var(--glow-neon);
+}
+
+.recap__video video,
+.recap__video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+
+.recap__label {
+  position: absolute;
+  bottom: 14%;
+  left: 50%;
+  color: rgb(109 155 224 / 67%);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-align: center;
+  text-transform: uppercase;
+  width: max-content;
+  max-width: 70%;
+  transform: translateX(-50%);
+}
+
+.recap__play {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(64px, 5.5vw, 104px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-accent);
+  transition: transform 0.2s;
+}
+
+.recap__play:hover {
+  transform: scale(1.06);
+}
+
+.recap__play::after {
+  content: '';
+  margin-left: 6px;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 25px solid var(--color-navy);
+}
+
+.recap__play[hidden] {
+  display: none;
+}
+
+/* Grilla 2 × 2 de fotos en paralelogramo */
+.recap__photos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: var(--row);
+  gap: var(--gap);
+}
+
+.recap__photo {
+  --skew: calc(var(--row) * 0.2);
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0d2c5c, var(--color-navy-2));
+  color: rgb(109 155 224 / 67%);
+  clip-path: polygon(var(--skew) 0, 100% 0, calc(100% - var(--skew)) 100%, 0 100%);
+}
+
+button.recap__photo {
+  cursor: zoom-in;
+}
+
+.recap__photo img {
+  transition:
+    transform 0.5s var(--ease-out),
+    filter 0.3s;
+}
+
+button.recap__photo:hover img {
+  filter: brightness(1.08);
+  transform: scale(1.05);
+}
+
+/* "+N" cuando hay más de 4 fotos */
+.recap__more {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(2 29 66 / 72%);
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4vw, 72px);
+  font-style: italic;
+  font-weight: 800;
+}
+
+/* ---- Visor de fotos ---- */
+.lightbox {
+  max-width: none;
+  max-height: none;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: clamp(56px, 6vw, 96px) clamp(16px, 6vw, 120px);
+  border: 0;
+  background: transparent;
+  color: var(--color-white);
+}
+
+.lightbox[open] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.lightbox::backdrop {
+  background: rgb(2 29 66 / 94%);
+  backdrop-filter: blur(6px);
+}
+
+.lightbox__img {
+  max-width: 100%;
+  max-height: calc(100% - 40px);
+  object-fit: contain;
+  clip-path: polygon(24px 0, 100% 0, calc(100% - 24px) 100%, 0 100%);
+}
+
+.lightbox__caption {
+  color: var(--color-on-navy-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.lightbox__close,
+.lightbox__prev,
+.lightbox__next {
+  position: fixed;
+}
+
+.lightbox__close {
+  top: 20px;
+  right: 20px;
+}
+
+.lightbox__prev,
+.lightbox__next {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lightbox__prev {
+  left: clamp(8px, 2vw, 32px);
+}
+
+.lightbox__next {
+  right: clamp(8px, 2vw, 32px);
+}
+
+.lightbox__prev[hidden],
+.lightbox__next[hidden] {
+  display: none;
+}
+
+/* Tablet: el video se achica y las fotos mantienen la grilla */
+@media (max-width: 1024px) {
+  .recap {
+    --row: clamp(120px, 19vw, 200px);
+  }
+}
+
+/* Celular: video arriba (formato teléfono) y fotos 2 × 2 abajo */
+@media (max-width: 680px) {
+  .recap {
+    --row: clamp(96px, 28vw, 180px);
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .recap__video {
+    --h: min(100vw, 480px);
+    justify-self: center;
+  }
+
+  .recap__photo {
+    --skew: calc(var(--row) * 0.16);
+  }
+}
+
+@media (max-width: 1024px) {
+  .event__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .countdown__unit {
+    min-width: 0;
+    padding: 12px 8px;
+  }
+
+  .gp-card {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 24px 100%, 0 calc(100% - 24px));
+  }
+}
+
+
+/* ---- layout/footer.css ---- */
+/* Pie de página (esqueleto: contenido a definir) */
+.site-footer {
+  position: relative;
+  padding: clamp(48px, 5vw, 80px) var(--gutter) 28px;
+  background: var(--color-navy);
+  color: var(--color-on-navy);
+}
+
+/* Línea neón arriba, igual que la cabecera */
+.site-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: var(--color-neon);
+  box-shadow: 0 0 8px var(--color-neon);
+}
+
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 64px);
+}
+
+.site-footer__logo {
+  display: inline-flex;
+}
+
+.site-footer__logo logo-loader-inverse {
+  width: 88px;
+  color: var(--color-white);
+}
+
+.site-footer__tagline {
+  max-width: 32ch;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.site-footer__col .eyebrow {
+  margin-bottom: 14px;
+  color: var(--color-neon);
+}
+
+.site-footer__col ul {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.site-footer__col a:hover {
+  color: var(--color-accent);
+}
+
+.site-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: clamp(40px, 4vw, 64px);
+  padding-top: 20px;
+  border-top: 1px solid rgb(109 155 224 / 25%);
+  color: var(--color-on-navy-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 860px) {
+  .site-footer__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .site-footer__brand {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Ajustes propios de esta página */
+.page-event {
+  background: var(--color-navy);
+}
+
+/* Sin la curva del hero, la sección arranca con menos aire arriba */
+.page-event .event {
+  min-height: calc(100vh - var(--nav-h));
+  min-height: calc(100svh - var(--nav-h));
+  padding-top: clamp(48px, 6vw, 110px);
+}
