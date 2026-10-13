@@ -410,18 +410,110 @@ ol {
   color: var(--color-accent);
 }
 
-/* Botón de entradas a la derecha (versión compacta del .btn) */
-.brand-header__cta {
+/* Acciones a la derecha: registro / usuario + entradas */
+.brand-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-left: auto;
+}
+
+/* Versión compacta del .btn */
+.brand-header__cta,
+.brand-header__register {
   padding: 9px 22px;
   font-size: 15px;
 }
 
+/* Registrarme: misma forma que .btn, en contorno neón sobre el navy.
+   El fondo es el color del borde y ::before rellena el interior con el mismo corte. */
+.brand-header__register {
+  position: relative;
+  isolation: isolate;
+  background: var(--color-neon);
+  color: var(--color-white);
+}
+
+.brand-header__register::before {
+  content: '';
+  position: absolute;
+  inset: 1.5px;
+  z-index: -1;
+  background: var(--color-navy);
+  clip-path: var(--cut-btn);
+  transition: background 0.2s;
+}
+
+.brand-header__register[hidden] {
+  display: none;
+}
+
+.brand-header__register:hover {
+  filter: none;
+}
+
+.brand-header__register:hover::before {
+  background: var(--color-navy-soft);
+}
+
+/* Usuario registrado: personita + mail hasta el @ */
+.brand-header__user {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 200px;
+  color: var(--color-white);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.brand-header__user[hidden] {
+  display: none;
+}
+
+.brand-header__user svg {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--color-neon);
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.brand-header__user-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 @media (max-width: 520px) {
-  .brand-header__cta {
-    padding: 8px 16px;
+  .brand-header__logo logo-loader-inverse {
+    width: 72px;
+  }
+
+  .brand-header__actions {
+    gap: 8px;
+  }
+
+  .brand-header__cta,
+  .brand-header__register {
+    padding: 8px 12px;
     font-size: 13px;
     letter-spacing: 1px;
+  }
+
+  .brand-header__user {
+    max-width: 96px;
+    font-size: 12px;
+  }
+
+  .brand-header__user svg {
+    width: 26px;
+    height: 26px;
   }
 }
 

@@ -16,12 +16,12 @@
       "alt": "La barra iluminada en rojo"
     },
     {
-      "img": "",
-      "alt": "Próximamente"
+      "img": "img/bar-comida.jpg",
+      "alt": "Alitas y cervezas en la mesa"
     },
     {
-      "img": "",
-      "alt": "Próximamente"
+      "img": "img/bar-mesa-22.jpg",
+      "alt": "La carta del bar con los stickers de 22"
     }
   ],
   "video_vertical": "media/recap.mp4"

@@ -16,8 +16,8 @@
     fotos: [
       { img: 'img/bar-exterior.jpg', alt: 'Entrada del bar de noche' },
       { img: 'img/bar-barra.jpg', alt: 'La barra iluminada en rojo' },
-      { img: '', alt: 'Próximamente' },
-      { img: '', alt: 'Próximamente' },
+      { img: 'img/bar-comida.jpg', alt: 'Alitas y cervezas en la mesa' },
+      { img: 'img/bar-mesa-22.jpg', alt: 'La carta del bar con los stickers de 22' },
     ],
     video_vertical: 'media/recap.mp4',
   };
@@ -93,17 +93,62 @@
   }
 
   /* ---------- Botones de entradas ---------- */
+  /* Textos del formulario según el botón que lo abrió */
+  const SIGNUP_COPY = {
+    entradas: {
+      eyebrow: 'Entradas',
+      title: 'Dejanos tu <em>mail</em>',
+      text: 'Te escribimos con toda la info para sacar tu entrada.',
+      submit: 'Quiero mi entrada',
+      done: 'Ya tenemos tu mail. Te escribimos pronto con la info de las entradas.',
+    },
+    registro: {
+      eyebrow: 'Registro',
+      title: 'Registrate',
+      text: 'Dejanos tu mail y te avisamos antes que nadie de los próximos eventos.',
+      submit: 'Registrarme',
+      done: 'Ya estás registrado. Te escribimos pronto.',
+    },
+  };
+
+  /* Usuario registrado: se guarda solo la parte del mail antes del @, en este navegador */
+  const USER_KEY = 'vandu22_usuario';
+
+  function showUser(name) {
+    if (!name) return;
+    qs('[data-user-name]').textContent = name;
+    qs('[data-user]').title = name;
+    qs('[data-user]').hidden = false;
+    qs('[data-cta="registro"]').hidden = true;
+  }
+
   function initCta() {
     const dialog = qs('[data-signup]');
     const form = qs('[data-signup-form]', dialog);
     const done = qs('.signup__done', dialog);
     const status = qs('.signup__status', form);
-    const submit = qs('button[type="submit"]', form);
+    const submit = qs('[data-signup-submit]', form);
+    let origen = 'entradas';
+
+    try {
+      showUser(localStorage.getItem(USER_KEY));
+    } catch {}
+
+    const setCopy = (mode) => {
+      const copy = SIGNUP_COPY[mode];
+      qs('[data-signup-eyebrow]', dialog).textContent = copy.eyebrow;
+      qs('[data-signup-title]', dialog).innerHTML = copy.title;
+      qs('[data-signup-text]', dialog).textContent = copy.text;
+      qs('[data-signup-done-text]', dialog).textContent = copy.done;
+      submit.textContent = copy.submit;
+    };
 
     qsa('[data-cta]').forEach((link) => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        track('cta_entradas', { ubicacion: link.dataset.cta });
+        origen = link.dataset.cta === 'registro' ? 'registro' : 'entradas';
+        track(origen === 'registro' ? 'cta_registro' : 'cta_entradas', { ubicacion: link.dataset.cta });
+        setCopy(origen);
         status.textContent = '';
         dialog.showModal();
       });
@@ -117,14 +162,20 @@
       status.textContent = '';
       submit.disabled = true;
       try {
+        const fields = Object.fromEntries(new FormData(form));
         const res = await fetch('/api/suscribir', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(Object.fromEntries(new FormData(form))),
+          body: JSON.stringify(fields),
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok || !data.ok) throw new Error(data.error || `HTTP ${res.status}`);
-        track('registro_entradas');
+        track('registro_entradas', { origen });
+        const name = fields.email.trim().split('@')[0];
+        showUser(name);
+        try {
+          localStorage.setItem(USER_KEY, name);
+        } catch {}
         form.hidden = true;
         done.hidden = false;
       } catch (err) {

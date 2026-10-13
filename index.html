@@ -51,9 +51,20 @@
       <a class="brand-header__logo" href="#evento" aria-label="22">
         <logo-loader-inverse color="currentColor" aria-hidden="true"></logo-loader-inverse>
       </a>
-      <a class="btn brand-header__cta" href="#entradas" data-cta="header"
-        >Sacá tu entrada ↗</a
-      >
+      <div class="brand-header__actions">
+        <a class="btn brand-header__register" href="#entradas" data-cta="registro">Registrarme</a>
+        <!-- Se muestra en lugar de "Registrarme" cuando la persona ya dejó su mail -->
+        <span class="brand-header__user" data-user hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />
+          </svg>
+          <span class="brand-header__user-name" data-user-name></span>
+        </span>
+        <a class="btn brand-header__cta" href="#entradas" data-cta="header"
+          >Sacá tu entrada ↗</a
+        >
+      </div>
     </header>
 
     <main>
@@ -143,9 +154,9 @@
         <dialog class="signup" id="entradas" data-signup aria-labelledby="signup-title">
           <button class="icon-btn signup__close" type="button" aria-label="Cerrar">✕</button>
           <form class="signup__form" data-signup-form>
-            <p class="eyebrow">Entradas</p>
-            <h2 class="signup__title" id="signup-title">Dejanos tu <em>mail</em></h2>
-            <p class="signup__text">Te escribimos con toda la info para sacar tu entrada.</p>
+            <p class="eyebrow" data-signup-eyebrow>Entradas</p>
+            <h2 class="signup__title" id="signup-title" data-signup-title>Dejanos tu <em>mail</em></h2>
+            <p class="signup__text" data-signup-text>Te escribimos con toda la info para sacar tu entrada.</p>
             <label class="signup__label" for="signup-email">Email</label>
             <input
               class="signup__input"
@@ -158,13 +169,13 @@
               required
             />
             <input class="signup__trap" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
-            <button class="btn" type="submit">Quiero mi entrada</button>
+            <button class="btn" type="submit" data-signup-submit>Quiero mi entrada</button>
             <p class="signup__status" role="status" aria-live="polite"></p>
           </form>
           <div class="signup__done" hidden>
             <p class="eyebrow">Listo</p>
             <h2 class="signup__title">¡Gracias!</h2>
-            <p class="signup__text">Ya tenemos tu mail. Te escribimos pronto con la info de las entradas.</p>
+            <p class="signup__text" data-signup-done-text>Ya tenemos tu mail. Te escribimos pronto con la info de las entradas.</p>
           </div>
         </dialog>
 
