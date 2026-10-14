@@ -13,6 +13,7 @@
     lugar: 'Cucha Cucha 2595, CABA.',
     url_lugar: 'https://www.instagram.com/aci2bar/',
     texto: 'Los que llegan temprano eligen mesa; los demás, miran desde la tribuna.',
+    url_entradas: 'https://www.passline.com/eventos/vandu-x-acido',
     fotos: [
       { img: 'img/bar-exterior.jpg', alt: 'Entrada del bar de noche' },
       { img: 'img/bar-barra.jpg', alt: 'La barra iluminada en rojo' },
@@ -122,7 +123,7 @@
     qs('[data-cta="registro"]').hidden = true;
   }
 
-  function initCta() {
+  function initCta(urlEntradas) {
     const dialog = qs('[data-signup]');
     const form = qs('[data-signup-form]', dialog);
     const done = qs('.signup__done', dialog);
@@ -144,10 +145,18 @@
     };
 
     qsa('[data-cta]').forEach((link) => {
+      const esRegistro = link.dataset.cta === 'registro';
+      // "Sacá tu entrada" va directo a la venta; si no hay link, abre el formulario de mail
+      if (!esRegistro && urlEntradas) {
+        link.href = urlEntradas;
+        link.target = '_blank';
+        link.rel = 'noopener';
+      }
       link.addEventListener('click', (e) => {
+        track(esRegistro ? 'cta_registro' : 'cta_entradas', { ubicacion: link.dataset.cta });
+        if (!esRegistro && urlEntradas) return;
         e.preventDefault();
-        origen = link.dataset.cta === 'registro' ? 'registro' : 'entradas';
-        track(origen === 'registro' ? 'cta_registro' : 'cta_entradas', { ubicacion: link.dataset.cta });
+        origen = esRegistro ? 'registro' : 'entradas';
         setCopy(origen);
         status.textContent = '';
         dialog.showModal();
@@ -399,7 +408,7 @@
       evento = DATOS_RESPALDO;
     }
 
-    initCta();
+    initCta(evento.url_entradas);
     initEventCard(evento);
     initCountdown(evento.fecha_hora);
     initRecapPhotos(evento.fotos);
