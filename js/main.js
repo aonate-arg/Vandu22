@@ -29,7 +29,12 @@
   const pad = (n) => String(n).padStart(2, '0');
 
   window.dataLayer = window.dataLayer || [];
-  const track = (event, data = {}) => window.dataLayer.push({ event, ...data });
+  /* Eventos (clics en botones, registros): al dataLayer y a Vercel Analytics.
+     Vercel solo muestra eventos propios en planes pagos; en el gratis se ignoran. */
+  const track = (event, data = {}) => {
+    window.dataLayer.push({ event, ...data });
+    window.va?.('event', { name: event, data });
+  };
 
   function setImage(container, src, alt = '') {
     if (!src) return;
