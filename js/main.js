@@ -9,7 +9,7 @@
   const DATOS_RESPALDO = {
     gran_premio: 'GP de Austin',
     pais: 'us',
-    fecha_hora: '2026-10-25T15:30:00-03:00',
+    fecha_hora: '2026-10-25T16:15:00-03:00',
     lugar: 'Cucha Cucha 2595, CABA.',
     url_lugar: 'https://www.instagram.com/aci2bar/',
     texto: 'Los que llegan temprano eligen mesa; los demás, miran desde la tribuna.',
