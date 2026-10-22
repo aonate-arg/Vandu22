@@ -3,6 +3,6 @@
    y la seguridad la dan las reglas de la tabla perfiles.
    NUNCA pongas acá la "secret key" ni la "service_role key". */
 window.SUPABASE_CONFIG = {
-  url: 'PEGAR_ACA_PROJECT_URL', // ej. https://abcdefghijkl.supabase.co
-  key: 'PEGAR_ACA_PUBLISHABLE_KEY', // ej. sb_publishable_... o eyJhbGciOi...
+  url: 'https://ixywjezqfkygykopufuy.supabase.co', // ej. https://abcdefghijkl.supabase.co
+  key: 'sb_publishable_HBlz_dfVbS6cDaJ2Aect3A_TaeuhiPf', // ej. sb_publishable_... o eyJhbGciOi...
 };
