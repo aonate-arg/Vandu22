@@ -36,20 +36,20 @@
   --font-mono: 'JetBrains Mono', ui-monospace, 'DejaVu Sans Mono', monospace;
 
   /* Espaciado fluido: crece con el ancho de pantalla */
-  --gutter: clamp(20px, 5vw, 96px);
-  --section-space: clamp(72px, 8vw, 140px);
-  --nav-h: 76px;
+  --gutter: clamp(24px, 5vw, 96px);
+  --section-space: clamp(72px, 8vw, 144px);
+  --nav-h: 80px;
 
   /* Efectos */
-  --glow-neon: 0 0 10px var(--color-neon);
+  --glow-neon: 0 0 8px var(--color-neon);
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
   --ease-in-out: cubic-bezier(0.7, 0, 0.2, 1);
 
   /* Cortes diagonales (lenguaje del logo) */
-  --cut-btn: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  --cut-btn: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
 }
 
-@media (max-width: 860px) {
+@media (max-width: 864px) {
   :root {
     --nav-h: 64px;
   }
@@ -116,7 +116,7 @@ ol {
   top: 8px;
   left: 8px;
   z-index: 10000;
-  padding: 10px 16px;
+  padding: 8px 16px;
   background: var(--color-navy);
   color: var(--color-accent);
   font-family: var(--font-mono);
@@ -155,16 +155,16 @@ ol {
 .eyebrow::before {
   content: '';
   display: inline-block;
-  width: 26px;
+  width: 24px;
   height: 2px;
-  margin-right: 10px;
+  margin-right: 8px;
   vertical-align: middle;
   background: var(--color-accent);
 }
 
 /* Titular de sección: Barlow Condensed itálica */
 .section-title {
-  margin: 16px 0 26px;
+  margin: 16px 0 24px;
   font-family: var(--font-display);
   font-size: clamp(48px, 6.2vw, 112px);
   font-style: italic;
@@ -202,7 +202,7 @@ ol {
 /* Botón principal: relleno turquesa con corte diagonal */
 .btn {
   display: inline-block;
-  padding: 14px 32px;
+  padding: 16px 32px;
   background: var(--color-accent);
   color: var(--color-navy);
   font-family: var(--font-display);
@@ -229,7 +229,7 @@ ol {
 
 /* Contorno inclinado */
 .btn--outline {
-  padding: 12px 30px;
+  padding: 16px 32px;
   background: transparent;
   border: 2px solid var(--color-navy);
   clip-path: none;
@@ -315,7 +315,7 @@ ol {
 /* Aparición suave al entrar en pantalla (lo activa js/modules/reveal.js) */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(32px);
   transition:
     opacity 0.8s ease,
     transform 0.8s var(--ease-out);
@@ -380,7 +380,7 @@ ol {
   height: var(--nav-h);
   padding: 0 var(--gutter);
   background: rgb(2 29 66 / 92%);
-  backdrop-filter: saturate(1.4) blur(10px);
+  backdrop-filter: saturate(1.4) blur(8px);
 }
 
 /* Línea neón bajo el logo */
@@ -414,14 +414,14 @@ ol {
 .brand-header__actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   margin-left: auto;
 }
 
 /* Versión compacta del .btn */
 .brand-header__cta,
 .brand-header__register {
-  padding: 9px 22px;
+  padding: 8px 24px;
   font-size: 15px;
 }
 
@@ -486,16 +486,16 @@ ol {
 /* Menú que se abre al tocar la personita */
 .user-menu {
   position: absolute;
-  top: calc(100% + 12px);
+  top: calc(100% + 8px);
   right: 0;
   z-index: 10;
-  min-width: 220px;
+  min-width: 224px;
   padding: 16px;
   background: var(--color-white);
   color: var(--color-navy);
   box-shadow:
     inset 0 2px 0 var(--color-neon),
-    0 12px 32px rgb(2 29 66 / 35%);
+    0 16px 32px rgb(2 29 66 / 35%);
 }
 
 .user-menu[hidden] {
@@ -515,7 +515,7 @@ ol {
 }
 
 .user-menu__email {
-  margin: 2px 0 14px;
+  margin: 0 0 16px;
   overflow: hidden;
   color: var(--color-gray-2);
   font-size: 13px;
@@ -524,7 +524,7 @@ ol {
 
 .user-menu__item {
   width: 100%;
-  padding: 10px 0 0;
+  padding: 8px 0 0;
   border: 0;
   border-top: 1px solid var(--color-line);
   background: none;
@@ -542,9 +542,9 @@ ol {
 
 .brand-header__user svg {
   flex: none;
-  width: 30px;
-  height: 30px;
-  padding: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
   border-radius: 50%;
   box-shadow: inset 0 0 0 1.5px var(--color-neon);
   fill: none;
@@ -570,7 +570,7 @@ ol {
 
   .brand-header__cta,
   .brand-header__register {
-    padding: 8px 12px;
+    padding: 8px 16px;
     font-size: 13px;
     letter-spacing: 1px;
   }
@@ -581,8 +581,8 @@ ol {
   }
 
   .brand-header__user svg {
-    width: 26px;
-    height: 26px;
+    width: 32px;
+    height: 32px;
   }
 }
 
@@ -594,13 +594,13 @@ ol {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
   align-items: center;
-  gap: clamp(32px, 5vw, 110px);
+  gap: clamp(32px, 5vw, 112px);
 }
 
 /* ---- Semáforo de largada ---- */
 .lights {
   display: flex;
-  gap: clamp(10px, 1.2vw, 20px);
+  gap: clamp(8px, 1.2vw, 24px);
   margin-bottom: 24px;
 }
 
@@ -609,7 +609,7 @@ ol {
   aspect-ratio: 1;
   border-radius: 50%;
   background: #0d2a57;
-  box-shadow: inset 0 2px 5px rgb(0 0 0 / 40%);
+  box-shadow: inset 0 2px 8px rgb(0 0 0 / 40%);
   transition:
     background 0.15s,
     box-shadow 0.15s;
@@ -619,21 +619,21 @@ ol {
   background: var(--color-accent);
   box-shadow:
     0 0 0 3px var(--color-navy),
-    0 0 18px var(--color-accent);
+    0 0 16px var(--color-accent);
 }
 
 /* ---- Cuenta regresiva ---- */
 .countdown {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 16px;
 }
 
 .countdown__unit {
   flex: 1 1 0;
-  min-width: clamp(78px, 7.5vw, 128px);
-  max-width: 140px;
-  padding: 14px 16px;
+  min-width: clamp(80px, 7.5vw, 128px);
+  max-width: 144px;
+  padding: 16px 16px;
   border-bottom: 3px solid var(--color-neon);
   border-radius: 4px;
   background: var(--color-navy-soft);
@@ -671,7 +671,7 @@ ol {
 .gp-card {
   position: relative;
   overflow: hidden;
-  padding: clamp(28px, 3vw, 52px) clamp(26px, 3vw, 56px);
+  padding: clamp(32px, 3vw, 56px) clamp(24px, 3vw, 56px);
   background: var(--color-white);
   color: var(--color-navy);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%, 0 calc(100% - 40px));
@@ -692,9 +692,9 @@ ol {
 
 .gp-card__watermark {
   position: absolute;
-  right: -30px;
-  bottom: -30px;
-  width: 490px;
+  right: -32px;
+  bottom: -32px;
+  width: 488px;
   color: var(--color-navy);
   opacity: 0.06;
   pointer-events: none;
@@ -705,7 +705,7 @@ ol {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.2em 0.35em;
-  margin-top: 10px;
+  margin-top: 8px;
   font-family: var(--font-display);
   font-size: clamp(38px, 3.6vw, 64px);
   font-style: italic;
@@ -726,8 +726,8 @@ ol {
 .gp-card__meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px 30px;
-  margin: 14px 0 22px;
+  gap: 8px 32px;
+  margin: 16px 0 24px;
   color: var(--color-gray-1);
   font-size: 15px;
 }
@@ -735,7 +735,7 @@ ol {
 .gp-card__meta div {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 8px;
 }
 
 .gp-card__meta dt {
@@ -757,24 +757,24 @@ ol {
 
 .gp-card__text {
   max-width: 46ch;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
   color: var(--color-gray-1);
   line-height: 1.55;
 }
 
 /* ---- Así fue la última: video vertical + fotos ---- */
 .recap-head {
-  margin-top: clamp(70px, 7vw, 120px);
+  margin-top: clamp(72px, 7vw, 120px);
 }
 
 .recap {
-  --row: clamp(140px, 17.5vw, 340px); /* alto de cada fila de fotos (fotos ~16:10) */
-  --gap: clamp(12px, 1.4vw, 24px);
+  --row: clamp(144px, 17.5vw, 344px); /* alto de cada fila de fotos (fotos ~16:10) */
+  --gap: clamp(16px, 1.4vw, 24px);
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: start;
-  gap: var(--gap) clamp(20px, 2.4vw, 44px);
-  margin-top: clamp(28px, 3vw, 48px);
+  gap: var(--gap) clamp(24px, 2.4vw, 48px);
+  margin-top: clamp(32px, 3vw, 48px);
 }
 
 /* Video vertical tipo celular (9:16) con corte diagonal */
@@ -898,7 +898,7 @@ button.recap__photo:hover img {
 
 .lightbox::backdrop {
   background: rgb(2 29 66 / 94%);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
 }
 
 .lightbox__img {
@@ -923,8 +923,8 @@ button.recap__photo:hover img {
 }
 
 .lightbox__close {
-  top: 20px;
-  right: 20px;
+  top: 24px;
+  right: 24px;
 }
 
 .lightbox__prev,
@@ -951,7 +951,7 @@ button.recap__photo:hover img {
   width: min(100% - 32px, 480px);
   max-height: calc(100% - 32px);
   margin: auto;
-  padding: clamp(32px, 4vw, 48px) clamp(24px, 4vw, 44px);
+  padding: clamp(32px, 4vw, 48px) clamp(24px, 4vw, 48px);
   border: 0;
   background: var(--color-white);
   color: var(--color-navy);
@@ -960,20 +960,20 @@ button.recap__photo:hover img {
 
 .signup::backdrop {
   background: rgb(2 29 66 / 94%);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
 }
 
 .signup__close {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 16px;
+  right: 16px;
   width: 40px;
   height: 40px;
   color: var(--color-navy);
 }
 
 .signup__title {
-  margin: 12px 0 10px;
+  margin: 16px 0 8px;
   font-family: var(--font-display);
   font-size: clamp(38px, 5vw, 52px);
   font-style: italic;
@@ -995,7 +995,7 @@ button.recap__photo:hover img {
 
 .signup__label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   color: var(--color-navy-2);
   font-family: var(--font-mono);
   font-size: 11px;
@@ -1005,8 +1005,8 @@ button.recap__photo:hover img {
 
 .signup__input {
   width: 100%;
-  margin-bottom: 18px;
-  padding: 14px 16px;
+  margin-bottom: 16px;
+  padding: 16px 16px;
   border: 1.5px solid var(--color-line-2);
   border-radius: 0;
   background: var(--color-muted-bg);
@@ -1042,7 +1042,7 @@ button.recap__photo:hover img {
 
 .signup__status {
   min-height: 1.4em;
-  margin-top: 12px;
+  margin-top: 16px;
   color: #b3261e;
   font-size: 14px;
 }
@@ -1059,8 +1059,8 @@ button.recap__photo:hover img {
 
 .account__tabs {
   display: flex;
-  gap: 4px;
-  margin: 0 40px 22px 0;
+  gap: 8px;
+  margin: 0 40px 24px 0;
   border-bottom: 1px solid var(--color-line);
 }
 
@@ -1070,8 +1070,8 @@ button.recap__photo:hover img {
 
 .account__tab {
   margin-bottom: -1px;
-  padding: 8px 4px 10px;
-  margin-right: 18px;
+  padding: 8px 0;
+  margin-right: 16px;
   border: 0;
   border-bottom: 2px solid transparent;
   background: none;
@@ -1091,13 +1091,13 @@ button.recap__photo:hover img {
 
 .account .signup__title {
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .account__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 14px;
+  gap: 0 16px;
 }
 
 .account__field--full {
@@ -1138,7 +1138,7 @@ button.recap__photo:hover img {
 /* Celular: video arriba (formato teléfono) y fotos 2 × 2 abajo */
 @media (max-width: 680px) {
   .recap {
-    --row: clamp(96px, 28vw, 180px);
+    --row: clamp(96px, 28vw, 184px);
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -1161,7 +1161,7 @@ button.recap__photo:hover img {
 @media (max-width: 520px) {
   .countdown__unit {
     min-width: 0;
-    padding: 12px 8px;
+    padding: 8px;
   }
 
   .gp-card {
@@ -1174,7 +1174,7 @@ button.recap__photo:hover img {
 /* Pie de página (esqueleto: contenido a definir) */
 .site-footer {
   position: relative;
-  padding: clamp(48px, 5vw, 80px) var(--gutter) 28px;
+  padding: clamp(48px, 5vw, 80px) var(--gutter) 32px;
   background: var(--color-navy);
   color: var(--color-on-navy);
 }
@@ -1192,7 +1192,7 @@ button.recap__photo:hover img {
 .site-footer__grid {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
-  gap: clamp(28px, 4vw, 64px);
+  gap: clamp(32px, 4vw, 64px);
 }
 
 .site-footer__logo {
@@ -1211,7 +1211,7 @@ button.recap__photo:hover img {
 }
 
 .site-footer__col .eyebrow {
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   color: var(--color-neon);
 }
 
@@ -1229,9 +1229,9 @@ button.recap__photo:hover img {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
   margin-top: clamp(40px, 4vw, 64px);
-  padding-top: 20px;
+  padding-top: 24px;
   border-top: 1px solid rgb(109 155 224 / 25%);
   color: var(--color-on-navy-2);
   font-family: var(--font-mono);
@@ -1240,7 +1240,7 @@ button.recap__photo:hover img {
   text-transform: uppercase;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 864px) {
   .site-footer__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1259,5 +1259,5 @@ button.recap__photo:hover img {
 .page-event .event {
   min-height: calc(100vh - var(--nav-h));
   min-height: calc(100svh - var(--nav-h));
-  padding-top: clamp(48px, 6vw, 110px);
+  padding-top: clamp(48px, 6vw, 112px);
 }
