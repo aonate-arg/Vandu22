@@ -266,12 +266,6 @@
     }
   }
 
-  /* Atajo para desarrollo: registro.html?paso=4 abre directo en ese paso, sin validar los anteriores.
-     Solo en local (archivo abierto directo, localhost o 127.0.0.1): en la página publicada no hace nada. */
-  const enLocal = location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(location.hostname);
-  const pasoDev = Number(new URLSearchParams(location.search).get('paso'));
-  const inicial = enLocal && pasoDev >= 1 && pasoDev <= steps.length ? pasoDev - 1 : 0;
-
-  irA(inicial);
+  irA(0);
   mostrarAlias();
 })();
