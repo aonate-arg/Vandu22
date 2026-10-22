@@ -1052,80 +1052,23 @@ button.recap__photo:hover img {
   display: none;
 }
 
-/* ---- Cuenta: crear cuenta / iniciar sesión ---- */
-.account {
-  width: min(100% - 32px, 560px);
-}
-
-.account__tabs {
-  display: flex;
-  gap: 8px;
-  margin: 0 40px 24px 0;
-  border-bottom: 1px solid var(--color-line);
-}
-
-.account__tabs[hidden] {
-  display: none;
-}
-
-.account__tab {
-  margin-bottom: -1px;
-  padding: 8px 0;
-  margin-right: 16px;
-  border: 0;
-  border-bottom: 2px solid transparent;
-  background: none;
-  color: var(--color-gray-2);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.account__tab[aria-selected='true'] {
-  border-bottom-color: var(--color-navy-2);
-  color: var(--color-navy);
-}
-
+/* ---- Cuenta: iniciar sesión (crear cuenta está en registro.html) ---- */
 .account .signup__title {
   margin-top: 0;
   margin-bottom: 24px;
 }
 
-.account__grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 16px;
+.account__alt {
+  margin-top: 8px;
+  color: var(--color-gray-1);
+  font-size: 14px;
 }
 
-.account__field--full {
-  grid-column: 1 / -1;
-}
-
-.account select.signup__input {
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, var(--color-navy-2) 50%),
-    linear-gradient(135deg, var(--color-navy-2) 50%, transparent 50%);
-  background-position:
-    calc(100% - 20px) 50%,
-    calc(100% - 14px) 50%;
-  background-size: 6px 6px;
-  background-repeat: no-repeat;
-  background-color: var(--color-muted-bg);
-}
-
-@media (max-width: 520px) {
-  .account__grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .account__tab {
-    margin-right: 8px;
-    font-size: 11px;
-    letter-spacing: 0.5px;
-  }
+.account__alt a {
+  color: var(--color-navy-2);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* Tablet: el video se achica y las fotos mantienen la grilla */

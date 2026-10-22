@@ -1,0 +1,383 @@
+/* Registro por pasos (registro.html). Usa los tokens de styles.css.
+   Medidas en múltiplos de 8 (regla de los 8px). */
+
+.page-registro {
+  --reg-field: var(--color-navy-2);
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--color-navy);
+  color: var(--color-white);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.registro-header {
+  padding: 24px var(--gutter) 0;
+}
+
+/* ---- Contenido (sin recuadro: directo sobre el navy) ---- */
+.registro {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 24px var(--gutter) 48px;
+}
+
+.registro__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 800px);
+}
+
+/* Tipografía: la de la página principal (.eyebrow y .section-title de styles.css) */
+.registro__paso {
+  margin-bottom: 8px;
+  color: var(--color-on-navy-2);
+}
+
+.registro__title {
+  margin: 0 0 32px;
+  text-align: center;
+}
+
+/* ---- Pasos ---- */
+.registro__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 480px);
+  min-width: 0; /* un fieldset se estira hasta su contenido: así la tira de escuderías scrollea */
+  border: 0;
+  animation: registro-entra 0.32s var(--ease-out);
+}
+
+.registro__step[hidden] {
+  display: none;
+}
+
+.registro__step--wide {
+  width: 100%;
+}
+
+/* En el paso de escuderías el título queda más chico para que entre todo en pantalla */
+.registro__card:has(.registro__step--wide:not([hidden])) .registro__title {
+  margin-bottom: 24px;
+  font-size: clamp(32px, 4vw, 48px);
+}
+
+@keyframes registro-entra {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+.registro__label {
+  margin-bottom: 8px;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.registro__input {
+  width: 100%;
+  height: 64px;
+  margin-bottom: 24px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-navy-soft);
+  box-shadow: inset 0 0 0 1.5px var(--color-navy-2);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 600;
+  color-scheme: dark; /* ícono del calendario en claro */
+}
+
+.registro__input::placeholder {
+  color: var(--color-on-navy-2);
+  font-weight: 500;
+}
+
+.registro__input:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  color: var(--color-white);
+}
+
+.registro__input[aria-invalid='true'] {
+  outline: 2px solid #ff8a80;
+  outline-offset: 2px;
+}
+
+.registro__alt {
+  color: var(--color-on-navy-2);
+  font-size: 14px;
+}
+
+.registro__alt a {
+  color: var(--color-accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.registro__hint {
+  margin-top: 8px;
+  color: var(--color-on-navy-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ---- Escuderías: carrusel de 2 columnas x 2 filas ---- */
+.registro__carrusel {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: min(100%, 560px);
+  margin: -16px 0 8px; /* compensa el aire del brillo */
+}
+
+.registro__flecha {
+  flex: none;
+}
+
+.registro__flecha:disabled {
+  opacity: 0.32;
+  cursor: default;
+  pointer-events: none;
+}
+
+.registro__teams {
+  display: grid;
+  flex: 1;
+  grid-template-rows: repeat(2, auto);
+  grid-auto-columns: calc((100% - 16px) / 2); /* 2 columnas a la vista */
+  grid-auto-flow: column;
+  gap: 16px;
+  min-width: 0;
+  padding: 24px 16px; /* lugar para el brillo neón (si no, el scroll lo corta) */
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-padding-inline: 16px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* se mueve con las flechas o deslizando */
+}
+
+.registro__teams::-webkit-scrollbar {
+  display: none;
+}
+
+.registro__team {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  scroll-snap-align: start;
+}
+
+/* Solo las columnas impares son puntos de frenado: siempre se ven 2 columnas enteras */
+.registro__team:nth-child(4n + 3),
+.registro__team:nth-child(4n + 4) {
+  scroll-snap-align: none;
+}
+
+.registro__team input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Solo el ícono: el fondo de atrás se ilumina en neón al pasar por arriba */
+.registro__team label {
+  display: block;
+  padding: 4px; /* borde neón finito */
+  border-radius: 20px;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    box-shadow 0.2s;
+}
+
+.registro__team img {
+  width: 96px;
+  height: 96px;
+  border-radius: 16px;
+}
+
+/* Hover, foco y elegida: solo el neón */
+.registro__team label:hover,
+.registro__team input:focus-visible + label,
+.registro__team input:checked + label {
+  background: var(--color-neon);
+  box-shadow: 0 0 24px var(--color-neon);
+}
+
+/* ---- Número de piloto ---- */
+.registro__numero {
+  width: 288px;
+  max-width: 100%;
+  padding: 8px 48px;
+  background: var(--color-navy-soft);
+  clip-path: polygon(48px 0, 100% 0, calc(100% - 48px) 100%, 0 100%);
+}
+
+.registro__numero-input {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--color-on-navy);
+  font-family: var(--font-display);
+  font-size: 112px;
+  font-style: italic;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+}
+
+.registro__numero-input::placeholder {
+  color: var(--color-navy-2);
+}
+
+.registro__numero-input:focus-visible {
+  outline: none;
+  color: var(--color-accent);
+}
+
+.registro__numero:focus-within {
+  box-shadow: inset 0 -8px 0 var(--color-accent);
+}
+
+/* ---- Mensajes y botones ---- */
+.registro__status {
+  min-height: 24px;
+  margin: 16px 0;
+  color: #ff8a80;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.registro__status.is-info {
+  color: var(--color-on-navy);
+}
+
+.registro__nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.registro__btn {
+  min-width: 160px;
+  padding: 8px 24px;
+  border-radius: 8px;
+  background: var(--reg-field);
+  color: var(--color-on-navy);
+  /* Misma letra que .btn */
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  line-height: 1.5;
+  text-transform: uppercase;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    opacity 0.2s;
+}
+
+.registro__btn:hover {
+  background: var(--color-navy-soft);
+  color: var(--color-white);
+}
+
+.registro__btn[type='submit'] {
+  background: var(--color-accent);
+  color: var(--color-navy);
+}
+
+.registro__btn[type='submit']:hover {
+  filter: brightness(1.08);
+}
+
+.registro__btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* ---- Celular ---- */
+@media (max-width: 680px) {
+  .registro {
+    align-items: flex-start;
+    padding-inline: 16px;
+  }
+
+  .registro__title {
+    margin-bottom: 24px;
+  }
+
+  .registro__label {
+    font-size: 24px;
+  }
+
+  .registro__input {
+    height: 56px;
+    padding: 0 16px;
+    font-size: 16px;
+  }
+
+  .registro__flecha {
+    width: 40px;
+    height: 40px;
+  }
+
+  .registro__team img {
+    width: 72px;
+    height: 72px;
+  }
+
+  .registro__numero {
+    width: 240px;
+    padding-inline: 32px;
+    clip-path: polygon(32px 0, 100% 0, calc(100% - 32px) 100%, 0 100%);
+  }
+
+  .registro__numero-input {
+    font-size: 96px;
+  }
+
+  .registro__btn {
+    min-width: 0;
+    flex: 1;
+    padding: 8px 16px;
+    font-size: 19px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .registro__step {
+    animation: none;
+  }
+}

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Creá tu perfil de piloto · 22</title>
+    <meta name="description" content="Creá tu cuenta de 22 paso a paso: tus datos, tu escudería y tu número de piloto." />
+    <meta name="theme-color" content="#021d42" />
+    <meta name="robots" content="noindex" />
+
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
+    />
+
+    <!-- ?v=: cambiarlo cuando se edita el CSS o el JS, así el navegador baja la versión nueva -->
+    <link rel="stylesheet" href="css/styles.css?v=20261022h" />
+    <link rel="stylesheet" href="css/registro.css?v=20261022h" />
+    <script src="img/logo-loader-inverse.js" defer></script>
+
+    <!-- Vercel: Web Analytics (visitas) y Speed Insights (velocidad) -->
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+  </head>
+
+  <body class="page-registro">
+    <header class="registro-header">
+      <a class="brand-header__logo" href="index.html" aria-label="Volver a la página principal de 22">
+        <logo-loader-inverse color="currentColor" aria-hidden="true"></logo-loader-inverse>
+      </a>
+    </header>
+
+    <main class="registro">
+      <!-- Registro por pasos (js/registro.js). Cada <fieldset> es un paso. -->
+      <form class="registro__card" data-registro novalidate>
+        <p class="eyebrow registro__paso" aria-live="polite"><span data-paso-actual>01</span> / <span data-paso-total>04</span></p>
+        <h1 class="section-title section-title--sm registro__title">Hola piloto <em>“<span data-alias>...</span>”</em></h1>
+
+        <!-- Paso 1: nombre y apellido -->
+        <fieldset class="registro__step" data-step>
+          <legend class="visually-hidden">Tu nombre</legend>
+          <label class="registro__label" for="reg-nombre">Nombre</label>
+          <input class="registro__input" id="reg-nombre" name="nombre" autocomplete="given-name" maxlength="60" required />
+          <label class="registro__label" for="reg-apellido">Apellido</label>
+          <input class="registro__input" id="reg-apellido" name="apellido" autocomplete="family-name" maxlength="60" required />
+          <p class="registro__alt">¿Ya tenés cuenta? <a href="index.html#ingresar">Iniciá sesión</a></p>
+        </fieldset>
+
+        <!-- Paso 2: fecha de nacimiento y mail -->
+        <fieldset class="registro__step" data-step hidden>
+          <legend class="visually-hidden">Tus datos</legend>
+          <label class="registro__label" for="reg-nacimiento">Fecha de nacimiento</label>
+          <input class="registro__input" id="reg-nacimiento" name="fecha_nacimiento" type="date" autocomplete="bday" min="1900-01-02" required />
+          <label class="registro__label" for="reg-email">Email</label>
+          <input class="registro__input" id="reg-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="tu@mail.com" required />
+        </fieldset>
+
+        <!-- Paso 3: contraseña -->
+        <fieldset class="registro__step" data-step hidden>
+          <legend class="visually-hidden">Tu contraseña</legend>
+          <label class="registro__label" for="reg-pass">Contraseña</label>
+          <input class="registro__input" id="reg-pass" name="password" type="password" autocomplete="new-password" minlength="8" placeholder="Mínimo 8 caracteres" required />
+          <label class="registro__label" for="reg-pass2">Repetí la contraseña</label>
+          <input class="registro__input" id="reg-pass2" name="password2" type="password" autocomplete="new-password" minlength="8" required />
+        </fieldset>
+
+        <!-- Paso 4: escudería y número de piloto -->
+        <fieldset class="registro__step registro__step--wide" data-step hidden>
+          <legend class="visually-hidden">Tu escudería y tu número</legend>
+          <p class="registro__label" id="reg-escuderia-label">Elegí tu escudería</p>
+          <!-- Las opciones salen de img/Iconos/escuderias/teams.json -->
+          <!-- Carrusel: se ven 2 columnas x 2 filas; las flechas pasan de a 2 columnas -->
+          <div class="registro__carrusel">
+            <button class="icon-btn registro__flecha" type="button" aria-label="Escuderías anteriores" data-teams-prev>←</button>
+            <div class="registro__teams" role="radiogroup" aria-labelledby="reg-escuderia-label" data-teams></div>
+            <button class="icon-btn registro__flecha" type="button" aria-label="Más escuderías" data-teams-next>→</button>
+          </div>
+          <label class="registro__label" for="reg-numero">Tu número de piloto</label>
+          <div class="registro__numero">
+            <input
+              class="registro__numero-input"
+              id="reg-numero"
+              name="numero"
+              type="text"
+              inputmode="numeric"
+              maxlength="2"
+              placeholder="00"
+              autocomplete="off"
+              aria-describedby="reg-numero-ayuda"
+              required
+            />
+          </div>
+          <p class="registro__hint" id="reg-numero-ayuda">Del 01 al 98</p>
+        </fieldset>
+
+        <p class="registro__status" role="status" aria-live="polite" data-status></p>
+
+        <div class="registro__nav">
+          <button class="registro__btn" type="button" data-volver>Volver</button>
+          <button class="registro__btn" type="submit" data-avanzar>Avanzar</button>
+        </div>
+      </form>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="js/supabase-config.js?v=20261022h"></script>
+    <script src="js/registro.js?v=20261022h"></script>
+  </body>
+</html>
