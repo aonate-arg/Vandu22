@@ -99,70 +99,25 @@
   }
 
   /* ---------- Botones de entradas ---------- */
-  /* Textos del formulario según el botón que lo abrió */
-  const SIGNUP_COPY = {
-    entradas: {
-      eyebrow: 'Entradas',
-      title: 'Dejanos tu <em>mail</em>',
-      text: 'Te escribimos con toda la info para sacar tu entrada.',
-      submit: 'Quiero mi entrada',
-      done: 'Ya tenemos tu mail. Te escribimos pronto con la info de las entradas.',
-    },
-    registro: {
-      eyebrow: 'Registro',
-      title: 'Registrate',
-      text: 'Dejanos tu mail y te avisamos antes que nadie de los próximos eventos.',
-      submit: 'Registrarme',
-      done: 'Ya estás registrado. Te escribimos pronto.',
-    },
-  };
-
-  /* Usuario registrado: se guarda solo la parte del mail antes del @, en este navegador */
-  const USER_KEY = 'vandu22_usuario';
-
-  function showUser(name) {
-    if (!name) return;
-    qs('[data-user-name]').textContent = name;
-    qs('[data-user]').title = name;
-    qs('[data-user]').hidden = false;
-    qs('[data-cta="registro"]').hidden = true;
-  }
-
+  /* "Sacá tu entrada" va directo a la venta; si no hay link, abre el formulario de mail.
+     El registro con cuenta (botón "Registrarme") está en js/cuenta.js */
   function initCta(urlEntradas) {
     const dialog = qs('[data-signup]');
     const form = qs('[data-signup-form]', dialog);
     const done = qs('.signup__done', dialog);
     const status = qs('.signup__status', form);
     const submit = qs('[data-signup-submit]', form);
-    let origen = 'entradas';
-
-    try {
-      showUser(localStorage.getItem(USER_KEY));
-    } catch {}
-
-    const setCopy = (mode) => {
-      const copy = SIGNUP_COPY[mode];
-      qs('[data-signup-eyebrow]', dialog).textContent = copy.eyebrow;
-      qs('[data-signup-title]', dialog).innerHTML = copy.title;
-      qs('[data-signup-text]', dialog).textContent = copy.text;
-      qs('[data-signup-done-text]', dialog).textContent = copy.done;
-      submit.textContent = copy.submit;
-    };
 
     qsa('[data-cta]').forEach((link) => {
-      const esRegistro = link.dataset.cta === 'registro';
-      // "Sacá tu entrada" va directo a la venta; si no hay link, abre el formulario de mail
-      if (!esRegistro && urlEntradas) {
+      if (urlEntradas) {
         link.href = urlEntradas;
         link.target = '_blank';
         link.rel = 'noopener';
       }
       link.addEventListener('click', (e) => {
-        track(esRegistro ? 'cta_registro' : 'cta_entradas', { ubicacion: link.dataset.cta });
-        if (!esRegistro && urlEntradas) return;
+        track('cta_entradas', { ubicacion: link.dataset.cta });
+        if (urlEntradas) return;
         e.preventDefault();
-        origen = esRegistro ? 'registro' : 'entradas';
-        setCopy(origen);
         status.textContent = '';
         dialog.showModal();
       });
@@ -176,20 +131,14 @@
       status.textContent = '';
       submit.disabled = true;
       try {
-        const fields = Object.fromEntries(new FormData(form));
         const res = await fetch('/api/suscribir', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(fields),
+          body: JSON.stringify(Object.fromEntries(new FormData(form))),
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok || !data.ok) throw new Error(data.error || `HTTP ${res.status}`);
-        track('registro_entradas', { origen });
-        const name = fields.email.trim().split('@')[0];
-        showUser(name);
-        try {
-          localStorage.setItem(USER_KEY, name);
-        } catch {}
+        track('registro_entradas');
         form.hidden = true;
         done.hidden = false;
       } catch (err) {

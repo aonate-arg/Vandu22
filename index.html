@@ -34,7 +34,7 @@
     </noscript>
 
     <!-- ?v=: cambiarlo cuando se edita el CSS o el JS, así el navegador baja la versión nueva -->
-    <link rel="stylesheet" href="css/styles.css?v=20261013" />
+    <link rel="stylesheet" href="css/styles.css?v=20261022b" />
     <script src="img/logo-loader-inverse.js" defer></script>
 
     <!-- Vercel: Web Analytics (visitas) y Speed Insights (velocidad). Se activan desde el panel de Vercel -->
@@ -61,15 +61,29 @@
         <logo-loader-inverse color="currentColor" aria-hidden="true"></logo-loader-inverse>
       </a>
       <div class="brand-header__actions">
-        <a class="btn brand-header__register" href="#entradas" data-cta="registro">Registrarme</a>
-        <!-- Se muestra en lugar de "Registrarme" cuando la persona ya dejó su mail -->
-        <span class="brand-header__user" data-user hidden>
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="8" r="4" />
-            <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />
-          </svg>
-          <span class="brand-header__user-name" data-user-name></span>
-        </span>
+        <a class="btn brand-header__register" href="#cuenta" data-account-open>Registrarme</a>
+        <!-- Se muestra en lugar de "Registrarme" cuando hay una sesión iniciada (js/cuenta.js) -->
+        <div class="brand-header__user-wrap" data-user hidden>
+          <button
+            class="brand-header__user"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="user-menu"
+            data-user-toggle
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />
+            </svg>
+            <span class="brand-header__user-name" data-user-name></span>
+          </button>
+          <div class="user-menu" id="user-menu" data-user-menu hidden>
+            <p class="user-menu__name"><span data-user-fullname></span> <span class="user-menu__number" data-user-number></span></p>
+            <p class="user-menu__email" data-user-email></p>
+            <button class="user-menu__item" type="button" data-logout>Cerrar sesión</button>
+          </div>
+        </div>
         <a class="btn brand-header__cta" href="#entradas" data-cta="header"
           >Sacá tu entrada ↗</a
         >
@@ -81,7 +95,6 @@
       <section class="section section--navy event" id="evento" aria-labelledby="evento-title">
         <div class="event__grid">
           <div class="reveal">
-            <p class="eyebrow">Próximo evento</p>
             <h1 class="section-title" id="evento-title">
               Se apagan las luces.<br /><em>¿Estás?</em>
             </h1>
@@ -148,7 +161,6 @@
         </div>
 
         <div class="recap-head reveal">
-          <p class="eyebrow">Lo que corremos</p>
           <h2 class="section-title section-title--sm">Llegar es tu meta</h2>
         </div>
 
@@ -159,11 +171,99 @@
           <ul class="recap__photos" data-recap-photos aria-label="Fotos del último evento"></ul>
         </div>
 
+        <!-- Cuenta: crear cuenta / iniciar sesión con Supabase (js/cuenta.js) -->
+        <dialog class="signup account" id="cuenta" data-account aria-labelledby="account-title">
+          <button class="icon-btn signup__close" type="button" aria-label="Cerrar" data-account-close>✕</button>
+
+          <div class="account__tabs" role="tablist">
+            <button class="account__tab" type="button" role="tab" aria-selected="true" data-account-tab="registro">
+              Crear cuenta
+            </button>
+            <button class="account__tab" type="button" role="tab" aria-selected="false" data-account-tab="login">
+              Iniciar sesión
+            </button>
+          </div>
+
+          <!-- Crear cuenta -->
+          <form class="signup__form" data-account-form="registro" novalidate>
+            <h2 class="signup__title" id="account-title">Creá tu <em>cuenta</em></h2>
+            <div class="account__grid">
+              <div class="account__field">
+                <label class="signup__label" for="cuenta-nombre">Nombre</label>
+                <input class="signup__input" id="cuenta-nombre" name="nombre" autocomplete="given-name" maxlength="60" required />
+              </div>
+              <div class="account__field">
+                <label class="signup__label" for="cuenta-apellido">Apellido</label>
+                <input class="signup__input" id="cuenta-apellido" name="apellido" autocomplete="family-name" maxlength="60" required />
+              </div>
+              <div class="account__field account__field--full">
+                <label class="signup__label" for="cuenta-nacimiento">Fecha de nacimiento</label>
+                <input class="signup__input" id="cuenta-nacimiento" name="fecha_nacimiento" type="date" autocomplete="bday" min="1900-01-02" required />
+              </div>
+              <div class="account__field account__field--full">
+                <label class="signup__label" for="cuenta-email">Email</label>
+                <input class="signup__input" id="cuenta-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="tu@mail.com" required />
+              </div>
+              <div class="account__field">
+                <label class="signup__label" for="cuenta-pass">Contraseña</label>
+                <input class="signup__input" id="cuenta-pass" name="password" type="password" autocomplete="new-password" minlength="8" required />
+              </div>
+              <div class="account__field">
+                <label class="signup__label" for="cuenta-pass2">Confirmar contraseña</label>
+                <input class="signup__input" id="cuenta-pass2" name="password2" type="password" autocomplete="new-password" minlength="8" required />
+              </div>
+              <div class="account__field">
+                <label class="signup__label" for="cuenta-escuderia">Escudería</label>
+                <select class="signup__input" id="cuenta-escuderia" name="escuderia" required>
+                  <option value="" disabled selected>Elegí una</option>
+                  <option>Alpine</option>
+                  <option>Aston Martin</option>
+                  <option>Audi</option>
+                  <option>Cadillac</option>
+                  <option>Ferrari</option>
+                  <option>Haas</option>
+                  <option>McLaren</option>
+                  <option>Mercedes</option>
+                  <option>Racing Bulls</option>
+                  <option>Red Bull Racing</option>
+                  <option>Williams</option>
+                </select>
+              </div>
+              <div class="account__field">
+                <label class="signup__label" for="cuenta-numero">Número (01 a 98)</label>
+                <input class="signup__input" id="cuenta-numero" name="numero" type="text" inputmode="numeric" maxlength="2" placeholder="07" autocomplete="off" required />
+              </div>
+            </div>
+            <button class="btn" type="submit">Crear cuenta</button>
+            <p class="signup__status" role="status" aria-live="polite"></p>
+          </form>
+
+          <!-- Iniciar sesión -->
+          <form class="signup__form" data-account-form="login" novalidate hidden>
+            <h2 class="signup__title">Iniciá <em>sesión</em></h2>
+            <label class="signup__label" for="login-email">Email</label>
+            <input class="signup__input" id="login-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="tu@mail.com" required />
+            <label class="signup__label" for="login-pass">Contraseña</label>
+            <input class="signup__input" id="login-pass" name="password" type="password" autocomplete="current-password" required />
+            <button class="btn" type="submit">Entrar</button>
+            <p class="signup__status" role="status" aria-live="polite"></p>
+          </form>
+
+          <!-- Cuenta creada: falta confirmar el mail -->
+          <div class="signup__done" data-account-done hidden>
+            <p class="eyebrow">Casi listo</p>
+            <h2 class="signup__title">Revisá tu <em>mail</em></h2>
+            <p class="signup__text">
+              Te mandamos un link a <strong data-account-done-email></strong> para confirmar tu cuenta. Tocalo y
+              volvés a la página con la sesión iniciada.
+            </p>
+          </div>
+        </dialog>
+
         <!-- Formulario de entradas: guarda el mail en Brevo (api/suscribir.js) -->
         <dialog class="signup" id="entradas" data-signup aria-labelledby="signup-title">
           <button class="icon-btn signup__close" type="button" aria-label="Cerrar">✕</button>
           <form class="signup__form" data-signup-form>
-            <p class="eyebrow" data-signup-eyebrow>Entradas</p>
             <h2 class="signup__title" id="signup-title" data-signup-title>Dejanos tu <em>mail</em></h2>
             <p class="signup__text" data-signup-text>Te escribimos con toda la info para sacar tu entrada.</p>
             <label class="signup__label" for="signup-email">Email</label>
@@ -240,6 +340,10 @@
       </div>
     </footer>
 
-    <script src="js/main.js?v=20261022"></script>
+    <script src="js/main.js?v=20261022b"></script>
+    <!-- Cuentas de usuario con Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="js/supabase-config.js?v=20261022b"></script>
+    <script src="js/cuenta.js?v=20261022b"></script>
   </body>
 </html>
