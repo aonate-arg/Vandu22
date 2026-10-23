@@ -47,19 +47,17 @@
   }
 
   /* ---------- Pantalla de carga ---------- */
-  /* Se va cuando la página terminó de cargar (o a los 4 s, para no trabar si algo tarda) */
+  /* Se va cuando están las fuentes (o a los 1,5 s, para no trabar si tardan).
+     No espera al "load" de la página: ese espera a Supabase, los scripts de Vercel y las imágenes,
+     y en el navegador de Instagram o de Google en el celular puede tardar varios segundos. */
   function hidePageLoader() {
     const loader = qs('[data-page-loader]');
     if (!loader) return;
-    const loaded = new Promise((resolve) => {
-      if (document.readyState === 'complete') resolve();
-      else window.addEventListener('load', resolve, { once: true });
-    });
-    const minTime = new Promise((resolve) => setTimeout(resolve, 600));
-    const maxTime = new Promise((resolve) => setTimeout(resolve, 4000));
-    Promise.race([Promise.all([loaded, minTime]), maxTime]).then(() => {
+    const fonts = document.fonts?.ready ?? Promise.resolve();
+    const maxTime = new Promise((resolve) => setTimeout(resolve, 1500));
+    Promise.race([fonts, maxTime]).then(() => {
       loader.classList.add('is-done');
-      loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+      setTimeout(() => loader.remove(), 400);
     });
   }
 

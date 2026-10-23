@@ -33,7 +33,8 @@
   /* Tipografías */
   --font-display: 'Barlow Condensed', 'DejaVu Sans Condensed', sans-serif;
   --font-body: 'Inter', system-ui, 'DejaVu Sans', sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'DejaVu Sans Mono', monospace;
+  /* Etiquetas chicas en mayúscula (antes JetBrains Mono): Inter más gruesa y espaciada */
+  --font-label: var(--font-body);
 
   /* Espaciado fluido: crece con el ancho de pantalla */
   --gutter: clamp(24px, 5vw, 96px);
@@ -69,6 +70,20 @@ html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent; /* sin el recuadro gris al tocar en el celular */
+}
+
+/* Sin la demora del doble toque para hacer zoom */
+a,
+button,
+label,
+input {
+  touch-action: manipulation;
+}
+
+/* Con una ventana abierta (login, entradas, visor de fotos) no se scrollea la página de atrás */
+html:has(dialog[open]) {
+  overflow: hidden;
 }
 
 body {
@@ -119,7 +134,8 @@ ol {
   padding: 8px 16px;
   background: var(--color-navy);
   color: var(--color-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 12px;
   transform: translateY(-200%);
 }
@@ -143,9 +159,10 @@ ol {
 }
 
 /* ---- base/typography.css ---- */
-/* Etiqueta (JetBrains Mono) con rayita turquesa */
+/* Etiqueta (Inter en mayúscula, espaciada) con rayita turquesa */
 .eyebrow {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 12px;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -217,9 +234,16 @@ ol {
     transform 0.2s;
 }
 
-.btn:hover {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .btn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+  }
+}
+
+/* Al tocar (celular): se oscurece un poco */
+.btn:active {
+  filter: brightness(0.92);
 }
 
 .btn--navy {
@@ -236,10 +260,12 @@ ol {
   transform: skewX(-12deg);
 }
 
-.btn--outline:hover {
-  background: var(--color-navy);
-  color: var(--color-white);
-  transform: skewX(-12deg) translateY(-1px);
+@media (hover: hover) {
+  .btn--outline:hover {
+    background: var(--color-navy);
+    color: var(--color-white);
+    transform: skewX(-12deg) translateY(-1px);
+  }
 }
 
 /* Botón redondo (flechas y cierre del visor de fotos) */
@@ -256,10 +282,12 @@ ol {
     opacity 0.2s;
 }
 
-.icon-btn:hover {
-  background: var(--color-accent);
-  color: var(--color-navy);
-  box-shadow: none;
+@media (hover: hover) {
+  .icon-btn:hover {
+    background: var(--color-accent);
+    color: var(--color-navy);
+    box-shadow: none;
+  }
 }
 
 .icon-btn:disabled {
@@ -277,7 +305,8 @@ ol {
   overflow: hidden;
   background: linear-gradient(135deg, var(--color-line), var(--color-line-2));
   color: var(--color-placeholder);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 12px;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -293,7 +322,8 @@ ol {
 }
 
 /* ---- components/page-loader.css ---- */
-/* Pantalla de carga inicial con el logo animado */
+/* Pantalla de carga inicial con el logo animado.
+   Aparece recién a los 0,3 s: si la página carga rápido, no llega a verse. */
 .page-loader {
   position: fixed;
   inset: 0;
@@ -301,12 +331,20 @@ ol {
   display: grid;
   place-items: center;
   background: var(--color-navy);
+  animation: page-loader-in 0.2s ease 0.3s both;
   transition:
-    opacity 0.5s ease,
-    visibility 0.5s;
+    opacity 0.3s ease,
+    visibility 0.3s;
+}
+
+@keyframes page-loader-in {
+  from {
+    opacity: 0;
+  }
 }
 
 .page-loader.is-done {
+  animation: none;
   opacity: 0;
   visibility: hidden;
 }
@@ -319,6 +357,14 @@ ol {
   transition:
     opacity 0.8s ease,
     transform 0.8s var(--ease-out);
+}
+
+/* En celular, más corta y más rápida */
+@media (max-width: 680px) {
+  .reveal {
+    transform: translateY(16px);
+    transition-duration: 0.5s;
+  }
 }
 
 .reveal.is-visible {
@@ -352,7 +398,7 @@ ol {
 .section {
   position: relative;
   overflow: hidden;
-  padding: var(--section-space) var(--gutter);
+  padding: var(--section-space) max(var(--gutter), env(safe-area-inset-right)) var(--section-space) max(var(--gutter), env(safe-area-inset-left));
   scroll-margin-top: calc(var(--nav-h) - 1px);
 }
 
@@ -378,9 +424,17 @@ ol {
   display: flex;
   align-items: center;
   height: var(--nav-h);
-  padding: 0 var(--gutter);
-  background: rgb(2 29 66 / 92%);
-  backdrop-filter: saturate(1.4) blur(8px);
+  padding: 0 max(var(--gutter), env(safe-area-inset-right)) 0 max(var(--gutter), env(safe-area-inset-left));
+  background: rgb(2 29 66 / 97%);
+}
+
+/* Blur solo en pantallas grandes: en celular es caro al scrollear y casi no se nota */
+@media (min-width: 865px) {
+  .brand-header {
+    background: rgb(2 29 66 / 92%);
+    -webkit-backdrop-filter: saturate(1.4) blur(8px);
+    backdrop-filter: saturate(1.4) blur(8px);
+  }
 }
 
 /* Línea neón bajo el logo */
@@ -406,11 +460,13 @@ ol {
   transition: color 0.2s;
 }
 
-.brand-header__logo:hover logo-loader-inverse {
-  color: var(--color-accent);
+@media (hover: hover) {
+  .brand-header__logo:hover logo-loader-inverse {
+    color: var(--color-accent);
+  }
 }
 
-/* Acciones a la derecha: registro / usuario + entradas */
+/* Acciones a la derecha: personita (cuenta) + Entradas + tres rayitas (menú) */
 .brand-header__actions {
   display: flex;
   align-items: center;
@@ -418,98 +474,90 @@ ol {
   margin-left: auto;
 }
 
-/* Versión compacta del .btn */
-.brand-header__cta,
-.brand-header__register {
+/* Entradas: versión compacta del .btn */
+.brand-header__cta {
   padding: 8px 24px;
   font-size: 15px;
 }
 
-/* Registrarme: misma forma que .btn, en contorno neón sobre el navy.
-   El fondo es el color del borde y ::before rellena el interior con el mismo corte. */
-.brand-header__register {
-  position: relative;
-  isolation: isolate;
-  background: var(--color-neon);
+/* Botones redondos del header: personita y tres rayitas */
+.brand-header__user,
+.brand-header__burger {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  box-shadow: inset 0 0 0 1.5px var(--color-neon);
   color: var(--color-white);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 
-.brand-header__register::before {
-  content: '';
-  position: absolute;
-  inset: 1.5px;
-  z-index: -1;
-  background: var(--color-navy);
-  clip-path: var(--cut-btn);
-  transition: background 0.2s;
+@media (hover: hover) {
+  .brand-header__user:hover,
+  .brand-header__burger:hover {
+    color: var(--color-accent);
+  }
 }
 
-.brand-header__register[hidden] {
-  display: none;
-}
-
-.brand-header__register:hover {
-  filter: none;
-}
-
-.brand-header__register:hover::before {
+.brand-header__user[aria-expanded='true'],
+.brand-header__burger[aria-expanded='true'] {
   background: var(--color-navy-soft);
 }
 
-/* Iniciar sesión: link de texto, para no competir con "Registrarme" */
-.brand-header__login {
-  padding: 8px 0;
-  color: var(--color-white);
-  font-family: var(--font-display);
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  white-space: nowrap;
-  transition: color 0.2s;
-}
-
-.brand-header__login:hover {
-  color: var(--color-accent);
-}
-
-.brand-header__login svg {
-  display: none;
-}
-
-.brand-header__login[hidden] {
-  display: none;
-}
-
-/* Usuario registrado: personita + mail hasta el @ */
-.brand-header__user-wrap {
+/* Personita: sin sesión abre el login; con sesión, el menú del usuario */
+.brand-header__user-wrap,
+.brand-header__menu-wrap {
   position: relative;
 }
 
-.brand-header__user-wrap[hidden] {
-  display: none;
+.brand-header__user svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
 }
 
-.brand-header__user {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  max-width: 200px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--color-white);
-  font-family: var(--font-mono);
-  font-size: 13px;
-  cursor: pointer;
+/* Con la sesión iniciada la personita queda rellena en turquesa */
+.brand-header__user.is-logged {
+  background: var(--color-accent);
+  box-shadow: none;
+  color: var(--color-navy);
 }
 
-.brand-header__user:hover .brand-header__user-name {
-  color: var(--color-accent);
+@media (hover: hover) {
+  .brand-header__user.is-logged:hover {
+    color: var(--color-navy);
+    filter: brightness(1.08);
+  }
 }
 
-/* Menú que se abre al tocar la personita */
-.user-menu {
+/* Tres rayitas */
+.brand-header__burger-lines {
+  display: grid;
+  gap: 4px;
+  width: 16px;
+}
+
+.brand-header__burger-lines span {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+/* Menús que se abren desde el header (usuario y secciones) */
+.user-menu,
+.site-menu {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
@@ -523,7 +571,8 @@ ol {
     0 16px 32px rgb(2 29 66 / 35%);
 }
 
-.user-menu[hidden] {
+.user-menu[hidden],
+.site-menu[hidden] {
   display: none;
 }
 
@@ -561,27 +610,88 @@ ol {
   cursor: pointer;
 }
 
-.user-menu__item:hover {
-  color: var(--color-navy);
+@media (hover: hover) {
+  .user-menu__item:hover {
+    color: var(--color-navy);
+  }
 }
 
-.brand-header__user svg {
+/* Secciones (por ahora, Prode) */
+.site-menu__link {
+  display: block;
+  padding: 8px 0;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-style: italic;
+  font-weight: 800;
+  text-transform: uppercase;
+  /* Subrayado: indica que lleva a otra página */
+  text-decoration: underline;
+  text-decoration-color: var(--color-neon);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* Flechita al lado (menos en Inicio, que lleva la casita).
+   inline-block para que no la tome el subrayado */
+.site-menu__link:not(.site-menu__link--inicio)::after {
+  content: '→';
+  display: inline-block;
+  margin-left: 8px;
+  color: var(--color-neon);
+  font-style: normal;
+  transition: transform 0.2s;
+}
+
+@media (hover: hover) {
+  .site-menu__link:not(.site-menu__link--inicio):hover::after {
+    color: var(--color-accent);
+    transform: translateX(4px);
+  }
+}
+
+/* Inicio: con una casita al lado (la agrega js/menu.js fuera de la página principal) */
+.site-menu__link--inicio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+/* El subrayado va solo en la palabra, no en la casita */
+.site-menu__link--inicio span {
+  text-decoration: underline;
+  text-decoration-color: var(--color-neon);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+@media (hover: hover) {
+  .site-menu__link--inicio:hover span {
+    text-decoration-color: var(--color-accent);
+  }
+}
+
+.site-menu__link--inicio svg {
   flex: none;
-  width: 40px;
-  height: 40px;
-  padding: 8px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1.5px var(--color-neon);
+  width: 24px;
+  height: 24px;
   fill: none;
-  stroke: var(--color-accent);
+  stroke: currentColor;
   stroke-width: 2;
   stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.brand-header__user-name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.site-menu__link[aria-current='page'] {
+  color: var(--color-navy-2);
+}
+
+@media (hover: hover) {
+  .site-menu__link:hover {
+    color: var(--color-navy-2);
+    text-decoration-color: var(--color-accent);
+  }
 }
 
 @media (max-width: 520px) {
@@ -593,68 +703,26 @@ ol {
     gap: 8px;
   }
 
-  /* Más compactos para que entren logo + personita + Registrarme + entradas */
-  .brand-header__cta,
-  .brand-header__register {
+  .brand-header__cta {
     padding: 8px 16px;
     font-size: 13px;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
   }
 
-  /* En celular no entra el texto: queda la personita, como la del usuario logueado */
-  .brand-header__login {
-    flex: none;
-    padding: 0;
-  }
-
-  .brand-header__login svg {
-    display: block;
-    width: 32px;
-    height: 32px;
-    padding: 8px;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 1.5px var(--color-neon);
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-  }
-
-  .brand-header__login-text {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-  }
-
-  .brand-header__user {
-    max-width: 96px;
-    font-size: 12px;
-  }
-
-  .brand-header__user svg {
-    width: 32px;
-    height: 32px;
+  .user-menu,
+  .site-menu {
+    position: fixed;
+    top: var(--nav-h);
+    right: max(16px, env(safe-area-inset-right));
+    left: max(16px, env(safe-area-inset-left));
+    min-width: 0;
   }
 }
 
-/* Celulares angostos (360px o menos): menos margen y botones más chicos para que entre todo el header */
 @media (max-width: 400px) {
   .brand-header {
-    padding-inline: 16px;
-  }
-
-  /* "Sacá tu entrada" queda como "Entrada" */
-  .brand-header__cta-extra {
-    display: none;
-  }
-}
-
-@media (max-width: 359px) {
-  .brand-header__cta,
-  .brand-header__register {
-    padding-inline: 8px;
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
   }
 }
 
@@ -812,9 +880,10 @@ ol {
 
 .gp-card__meta dt {
   color: var(--color-navy-2);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 11px;
-  font-weight: 500;
+  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
@@ -823,8 +892,10 @@ ol {
   text-underline-offset: 3px;
 }
 
-.gp-card__place-link:hover {
-  color: var(--color-navy);
+@media (hover: hover) {
+  .gp-card__place-link:hover {
+    color: var(--color-navy);
+  }
 }
 
 .gp-card__text {
@@ -889,7 +960,8 @@ ol {
   bottom: 14%;
   left: 50%;
   color: rgb(109 155 224 / 67%);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 11px;
   letter-spacing: 1px;
   text-align: center;
@@ -926,9 +998,11 @@ button.recap__photo {
     filter 0.3s;
 }
 
-button.recap__photo:hover img {
-  filter: brightness(1.08);
-  transform: scale(1.05);
+@media (hover: hover) {
+  button.recap__photo:hover img {
+    filter: brightness(1.08);
+    transform: scale(1.05);
+  }
 }
 
 /* "+N" cuando hay más de 4 fotos */
@@ -970,7 +1044,13 @@ button.recap__photo:hover img {
 
 .lightbox::backdrop {
   background: rgb(2 29 66 / 94%);
-  backdrop-filter: blur(8px);
+}
+
+@media (min-width: 865px) {
+  .lightbox::backdrop {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
 }
 
 .lightbox__img {
@@ -982,7 +1062,8 @@ button.recap__photo:hover img {
 
 .lightbox__caption {
   color: var(--color-on-navy-2);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 12px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -995,8 +1076,8 @@ button.recap__photo:hover img {
 }
 
 .lightbox__close {
-  top: 24px;
-  right: 24px;
+  top: calc(24px + env(safe-area-inset-top));
+  right: calc(24px + env(safe-area-inset-right));
 }
 
 .lightbox__prev,
@@ -1006,11 +1087,11 @@ button.recap__photo:hover img {
 }
 
 .lightbox__prev {
-  left: clamp(8px, 2vw, 32px);
+  left: calc(clamp(8px, 2vw, 32px) + env(safe-area-inset-left));
 }
 
 .lightbox__next {
-  right: clamp(8px, 2vw, 32px);
+  right: calc(clamp(8px, 2vw, 32px) + env(safe-area-inset-right));
 }
 
 .lightbox__prev[hidden],
@@ -1028,11 +1109,18 @@ button.recap__photo:hover img {
   background: var(--color-white);
   color: var(--color-navy);
   box-shadow: inset 0 2px 0 var(--color-neon);
+  overscroll-behavior: contain; /* el scroll de adentro no arrastra la página de atrás */
 }
 
 .signup::backdrop {
   background: rgb(2 29 66 / 94%);
-  backdrop-filter: blur(8px);
+}
+
+@media (min-width: 865px) {
+  .signup::backdrop {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
 }
 
 .signup__close {
@@ -1069,9 +1157,10 @@ button.recap__photo:hover img {
   display: block;
   margin-bottom: 8px;
   color: var(--color-navy-2);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 11px;
-  font-weight: 500;
+  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
@@ -1189,9 +1278,12 @@ button.recap__photo:hover img {
 /* Pie de página (esqueleto: contenido a definir) */
 .site-footer {
   position: relative;
-  padding: clamp(48px, 5vw, 80px) var(--gutter) 32px;
+  padding: clamp(48px, 5vw, 80px) max(var(--gutter), env(safe-area-inset-right)) calc(32px + env(safe-area-inset-bottom)) max(var(--gutter), env(safe-area-inset-left));
   background: var(--color-navy);
   color: var(--color-on-navy);
+  /* No se dibuja (ni se anima el logo) hasta que entra en pantalla */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 480px;
 }
 
 /* Línea neón arriba, igual que la cabecera */
@@ -1236,8 +1328,10 @@ button.recap__photo:hover img {
   font-size: 14px;
 }
 
-.site-footer__col a:hover {
-  color: var(--color-accent);
+@media (hover: hover) {
+  .site-footer__col a:hover {
+    color: var(--color-accent);
+  }
 }
 
 .site-footer__bottom {
@@ -1249,7 +1343,8 @@ button.recap__photo:hover img {
   padding-top: 24px;
   border-top: 1px solid rgb(109 155 224 / 25%);
   color: var(--color-on-navy-2);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 11px;
   letter-spacing: 1px;
   text-transform: uppercase;

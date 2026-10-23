@@ -17,7 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,800&family=Inter:wght@400;500;600&display=swap"
     />
 
 
@@ -33,9 +33,12 @@
       </style>
     </noscript>
 
-    <!-- ?v=: cambiarlo cuando se edita el CSS o el JS, así el navegador baja la versión nueva -->
-    <link rel="stylesheet" href="css/styles.css?v=20261023a" />
+    <!-- ?v=: cambiarlo SIEMPRE que se edita el CSS o el JS. El navegador guarda estos archivos
+         por un año (vercel.json), así que sin cambiar el ?v= la gente sigue viendo la versión vieja -->
+    <link rel="stylesheet" href="css/styles.css?v=20261023q" />
     <script src="img/logo-loader-inverse.js" defer></script>
+    <!-- Logo animado de la pantalla de carga -->
+    <script src="img/loader.js" defer></script>
 
     <!-- Vercel: Web Analytics (visitas) y Speed Insights (velocidad). Se activan desde el panel de Vercel -->
     <script>
@@ -51,7 +54,6 @@
     <div class="page-loader" data-page-loader aria-hidden="true">
       <logo-loader-tide color="#ffffff" size="min(264px, 60vw)"></logo-loader-tide>
     </div>
-    <script src="img/loader.js"></script>
 
     <a class="skip-link" href="#evento">Saltar al contenido</a>
 
@@ -61,21 +63,13 @@
         <logo-loader-inverse color="currentColor" aria-hidden="true"></logo-loader-inverse>
       </a>
       <div class="brand-header__actions">
-        <button class="brand-header__login" type="button" aria-label="Iniciar sesión" data-login-open>
-          <!-- En celular se ve solo la personita -->
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="8" r="4" />
-            <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />
-          </svg>
-          <span class="brand-header__login-text">Iniciar sesión</span>
-        </button>
-        <a class="btn brand-header__register" href="registro.html" data-account-open>Registrarme</a>
-        <!-- Se muestra en lugar de "Registrarme" cuando hay una sesión iniciada (js/cuenta.js) -->
-        <div class="brand-header__user-wrap" data-user hidden>
+        <!-- Cuenta (js/cuenta.js): sin sesión abre el login (que tiene el link para registrarse);
+             con la sesión iniciada abre el menú del usuario -->
+        <div class="brand-header__user-wrap" data-user>
           <button
             class="brand-header__user"
             type="button"
-            aria-haspopup="true"
+            aria-label="Iniciar sesión"
             aria-expanded="false"
             aria-controls="user-menu"
             data-user-toggle
@@ -84,7 +78,6 @@
               <circle cx="12" cy="8" r="4" />
               <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />
             </svg>
-            <span class="brand-header__user-name" data-user-name></span>
           </button>
           <div class="user-menu" id="user-menu" data-user-menu hidden>
             <p class="user-menu__name"><span data-user-fullname></span> <span class="user-menu__number" data-user-number></span></p>
@@ -92,9 +85,23 @@
             <button class="user-menu__item" type="button" data-logout>Cerrar sesión</button>
           </div>
         </div>
-        <a class="btn brand-header__cta" href="#entradas" data-cta="header"
-          ><span class="brand-header__cta-extra">Sacá tu </span>entrada ↗</a
-        >
+        <a class="btn brand-header__cta" href="#entradas" data-cta="header">Entradas</a>
+        <!-- Menú de secciones (js/menu.js) -->
+        <div class="brand-header__menu-wrap" data-nav>
+          <button
+            class="brand-header__burger"
+            type="button"
+            aria-label="Menú"
+            aria-expanded="false"
+            aria-controls="site-menu"
+            data-nav-toggle
+          >
+            <span class="brand-header__burger-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+          </button>
+          <nav class="site-menu" id="site-menu" aria-label="Secciones" data-nav-menu hidden>
+            <a class="site-menu__link" href="prode.html">Prode</a>
+          </nav>
+        </div>
       </div>
     </header>
 
@@ -186,6 +193,7 @@
           <!-- Iniciar sesión -->
           <form class="signup__form" data-account-form="login" novalidate>
             <h2 class="signup__title" id="account-title">Iniciá <em>sesión</em></h2>
+            <p class="signup__text" data-login-aviso hidden></p>
             <label class="signup__label" for="login-email">Email</label>
             <input class="signup__input" id="login-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="tu@mail.com" required />
             <label class="signup__label" for="login-pass">Contraseña</label>
@@ -286,10 +294,11 @@
       </div>
     </footer>
 
-    <script src="js/main.js?v=20261023a"></script>
+    <script src="js/main.js?v=20261023q"></script>
+    <script src="js/menu.js?v=20261023q" defer></script>
     <!-- Cuentas de usuario con Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-    <script src="js/supabase-config.js?v=20261023a"></script>
-    <script src="js/cuenta.js?v=20261023a"></script>
-  </body>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js" defer></script>
+    <script src="js/supabase-config.js?v=20261023q" defer></script>
+    <script src="js/cuenta.js?v=20261023q" defer></script>
+    </body>
 </html>

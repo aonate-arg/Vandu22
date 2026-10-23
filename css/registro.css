@@ -22,7 +22,7 @@
 }
 
 .registro-header {
-  padding: 24px var(--gutter) 0;
+  padding: calc(24px + env(safe-area-inset-top)) max(var(--gutter), env(safe-area-inset-right)) 0 max(var(--gutter), env(safe-area-inset-left));
 }
 
 /* ---- Contenido (sin recuadro: directo sobre el navy) ---- */
@@ -31,7 +31,7 @@
   flex: 1;
   align-items: center;
   justify-content: center;
-  padding: 24px var(--gutter) 48px;
+  padding: 24px max(var(--gutter), env(safe-area-inset-right)) calc(48px + env(safe-area-inset-bottom)) max(var(--gutter), env(safe-area-inset-left));
 }
 
 .registro__card {
@@ -142,7 +142,8 @@
 .registro__hint {
   margin-top: 8px;
   color: var(--color-on-navy-2);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 12px;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -224,11 +225,17 @@
 }
 
 /* Hover, foco y elegida: solo el neón */
-.registro__team label:hover,
 .registro__team input:focus-visible + label,
 .registro__team input:checked + label {
   background: var(--color-neon);
   box-shadow: 0 0 24px var(--color-neon);
+}
+
+@media (hover: hover) {
+  .registro__team label:hover {
+    background: var(--color-neon);
+    box-shadow: 0 0 24px var(--color-neon);
+  }
 }
 
 /* ---- Número de piloto ---- */
@@ -308,9 +315,11 @@
     opacity 0.2s;
 }
 
-.registro__btn:hover {
-  background: var(--color-navy-soft);
-  color: var(--color-white);
+@media (hover: hover) {
+  .registro__btn:hover {
+    background: var(--color-navy-soft);
+    color: var(--color-white);
+  }
 }
 
 .registro__btn[type='submit'] {
@@ -318,8 +327,15 @@
   color: var(--color-navy);
 }
 
-.registro__btn[type='submit']:hover {
-  filter: brightness(1.08);
+@media (hover: hover) {
+  .registro__btn[type='submit']:hover {
+    filter: brightness(1.08);
+  }
+}
+
+/* Al tocar (celular): se oscurece un poco */
+.registro__btn:active {
+  filter: brightness(0.92);
 }
 
 .registro__btn:disabled {
@@ -331,7 +347,8 @@
 @media (max-width: 680px) {
   .registro {
     align-items: flex-start;
-    padding-inline: 16px;
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
   }
 
   .registro__title {

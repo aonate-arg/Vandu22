@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Prode del GP · 22</title>
+    <meta name="description" content="Armá tu top 10 del próximo Gran Premio y vení al evento de 22 a ver si acertaste." />
+    <meta name="theme-color" content="#021d42" />
+
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,800&family=Inter:wght@400;500;600&display=swap"
+    />
+
+    <!-- ?v=: cambiarlo SIEMPRE que se edita el CSS o el JS. El navegador guarda estos archivos
+         por un año (vercel.json), así que sin cambiar el ?v= la gente sigue viendo la versión vieja -->
+    <link rel="stylesheet" href="css/styles.css?v=20261023q" />
+    <link rel="stylesheet" href="css/prode.css?v=20261023q" />
+    <script src="img/logo-loader-inverse.js" defer></script>
+
+    <!-- Vercel: Web Analytics (visitas) y Speed Insights (velocidad) -->
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+  </head>
+
+  <body class="page-prode">
+    <a class="skip-link" href="#prode">Saltar al contenido</a>
+
+    <!-- ============ HEADER (igual al de index.html) ============ -->
+    <header class="brand-header">
+      <a class="brand-header__logo" href="index.html" aria-label="22 · Volver a la página principal">
+        <logo-loader-inverse color="currentColor" aria-hidden="true"></logo-loader-inverse>
+      </a>
+      <div class="brand-header__actions">
+        <!-- Cuenta (js/cuenta.js): sin sesión abre el login; con sesión, el menú del usuario -->
+        <div class="brand-header__user-wrap" data-user>
+          <button
+            class="brand-header__user"
+            type="button"
+            aria-label="Iniciar sesión"
+            aria-expanded="false"
+            aria-controls="user-menu"
+            data-user-toggle
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />
+            </svg>
+          </button>
+          <div class="user-menu" id="user-menu" data-user-menu hidden>
+            <p class="user-menu__name"><span data-user-fullname></span> <span class="user-menu__number" data-user-number></span></p>
+            <p class="user-menu__email" data-user-email></p>
+            <button class="user-menu__item" type="button" data-logout>Cerrar sesión</button>
+          </div>
+        </div>
+        <!-- El link de venta sale de data/content.json (js/prode.js) -->
+        <a class="btn brand-header__cta" href="index.html" data-cta="header">Entradas</a>
+        <!-- Menú de secciones (js/menu.js) -->
+        <div class="brand-header__menu-wrap" data-nav>
+          <button
+            class="brand-header__burger"
+            type="button"
+            aria-label="Menú"
+            aria-expanded="false"
+            aria-controls="site-menu"
+            data-nav-toggle
+          >
+            <span class="brand-header__burger-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+          </button>
+          <nav class="site-menu" id="site-menu" aria-label="Secciones" data-nav-menu hidden>
+            <a class="site-menu__link" href="prode.html">Prode</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="prode" id="prode">
+      <!-- El GP y la fecha salen de data/content.json, igual que en la página principal -->
+      <div class="prode__intro">
+        <h1 class="section-title section-title--sm prode__title">Hola piloto <em>“<span data-alias>...</span>”</em></h1>
+        <p class="prode__subtitle">Prode del GP</p>
+        <p class="prode__text">Armá el prode para el <strong data-gp>Gran Premio</strong>.</p>
+        <p class="prode__text">Para ganar los premios, te esperamos en el evento.</p>
+        <p class="eyebrow prode__cierre" data-cierre></p>
+      </div>
+
+      <!-- Top 10 (js/prode.js). Cada puesto abre la lista de pilotos. -->
+      <form class="prode__form" data-prode novalidate>
+        <ol class="prode__lista" data-puestos></ol>
+        <div class="prode__acciones">
+          <p class="prode__status" role="status" aria-live="polite" data-prode-status></p>
+          <button class="prode__enviar" type="submit" data-prode-enviar>Enviar</button>
+        </div>
+      </form>
+    </main>
+
+    <!-- Lista de pilotos para elegir el de un puesto -->
+    <dialog class="prode-picker" aria-labelledby="picker-title" data-picker>
+      <div class="prode-picker__head">
+        <h2 class="prode-picker__title" id="picker-title">Puesto <span data-picker-puesto>1</span></h2>
+        <button class="icon-btn prode-picker__close" type="button" aria-label="Cerrar" data-picker-close>✕</button>
+      </div>
+      <p class="prode-picker__ayuda">Los que ya están en otro puesto aparecen tachados: tocalos para pasarlos a este.</p>
+      <div class="prode-picker__lista" data-picker-lista></div>
+      <button class="prode-picker__quitar" type="button" data-picker-quitar hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 7h16" />
+          <path d="M9 7V4h6v3" />
+          <path d="M6 7l1 13h10l1-13" />
+          <path d="M10 11v6M14 11v6" />
+        </svg>
+        <span>Quitar puesto</span>
+      </button>
+    </dialog>
+
+    <!-- Cuenta: iniciar sesión (js/cuenta.js), igual que en index.html. Crear cuenta está en registro.html -->
+    <dialog class="signup account" id="cuenta" data-account aria-labelledby="account-title">
+      <button class="icon-btn signup__close" type="button" aria-label="Cerrar" data-account-close>✕</button>
+
+      <form class="signup__form" data-account-form="login" novalidate>
+        <h2 class="signup__title" id="account-title">Iniciá <em>sesión</em></h2>
+        <p class="signup__text" data-login-aviso hidden></p>
+        <label class="signup__label" for="login-email">Email</label>
+        <input class="signup__input" id="login-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="tu@mail.com" required />
+        <label class="signup__label" for="login-pass">Contraseña</label>
+        <input class="signup__input" id="login-pass" name="password" type="password" autocomplete="current-password" required />
+        <button class="btn" type="submit">Entrar</button>
+        <p class="signup__status" role="status" aria-live="polite"></p>
+        <p class="account__alt">¿No tenés cuenta? <a href="registro.html">Creá tu perfil de piloto</a></p>
+      </form>
+
+      <div class="signup__done" data-account-done hidden>
+        <p class="eyebrow">Casi listo</p>
+        <h2 class="signup__title">Revisá tu <em>mail</em></h2>
+        <p class="signup__text">
+          Te mandamos un link a <strong data-account-done-email></strong> para confirmar tu cuenta. Tocalo y
+          volvés a la página con la sesión iniciada.
+        </p>
+      </div>
+    </dialog>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js" defer></script>
+    <script src="js/supabase-config.js?v=20261023q" defer></script>
+    <script src="js/cuenta.js?v=20261023q" defer></script>
+    <script src="js/menu.js?v=20261023q" defer></script>
+    <script src="js/prode.js?v=20261023q" defer></script>
+  </body>
+</html>
