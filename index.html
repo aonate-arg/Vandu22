@@ -34,7 +34,7 @@
     </noscript>
 
     <!-- ?v=: cambiarlo cuando se edita el CSS o el JS, así el navegador baja la versión nueva -->
-    <link rel="stylesheet" href="css/styles.css?v=20261022c" />
+    <link rel="stylesheet" href="css/styles.css?v=20261023a" />
     <script src="img/logo-loader-inverse.js" defer></script>
 
     <!-- Vercel: Web Analytics (visitas) y Speed Insights (velocidad). Se activan desde el panel de Vercel -->
@@ -61,6 +61,14 @@
         <logo-loader-inverse color="currentColor" aria-hidden="true"></logo-loader-inverse>
       </a>
       <div class="brand-header__actions">
+        <button class="brand-header__login" type="button" aria-label="Iniciar sesión" data-login-open>
+          <!-- En celular se ve solo la personita -->
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />
+          </svg>
+          <span class="brand-header__login-text">Iniciar sesión</span>
+        </button>
         <a class="btn brand-header__register" href="registro.html" data-account-open>Registrarme</a>
         <!-- Se muestra en lugar de "Registrarme" cuando hay una sesión iniciada (js/cuenta.js) -->
         <div class="brand-header__user-wrap" data-user hidden>
@@ -85,7 +93,7 @@
           </div>
         </div>
         <a class="btn brand-header__cta" href="#entradas" data-cta="header"
-          >Sacá tu entrada ↗</a
+          ><span class="brand-header__cta-extra">Sacá tu </span>entrada ↗</a
         >
       </div>
     </header>
@@ -278,10 +286,10 @@
       </div>
     </footer>
 
-    <script src="js/main.js?v=20261022c"></script>
+    <script src="js/main.js?v=20261023a"></script>
     <!-- Cuentas de usuario con Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-    <script src="js/supabase-config.js?v=20261022c"></script>
-    <script src="js/cuenta.js?v=20261022c"></script>
+    <script src="js/supabase-config.js?v=20261023a"></script>
+    <script src="js/cuenta.js?v=20261023a"></script>
   </body>
 </html>

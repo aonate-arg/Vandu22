@@ -21,6 +21,7 @@
   const userToggle = qs('[data-user-toggle]');
   const userMenu = qs('[data-user-menu]');
   const registerBtn = qs('[data-account-open]');
+  const loginBtn = qs('[data-login-open]');
   // Lo guarda js/registro.js al terminar el registro, si falta confirmar el mail
   const AVISO_KEY = 'vandu22_registro_email';
 
@@ -44,6 +45,11 @@
     qs('.signup__status', loginForm).textContent = '';
     dialog.showModal();
   }
+
+  loginBtn.addEventListener('click', () => {
+    track('cta_login');
+    openLogin();
+  });
 
   qs('[data-account-close]', dialog).addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', (e) => e.target === dialog && dialog.close());
@@ -148,6 +154,7 @@
   async function mostrarUsuario(session) {
     const user = session?.user;
     registerBtn.hidden = Boolean(user);
+    loginBtn.hidden = Boolean(user);
     userBox.hidden = !user;
     if (!user) return closeMenu();
 

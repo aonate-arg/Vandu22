@@ -9,8 +9,8 @@ create table if not exists public.perfiles (
   fecha_nacimiento date not null check (fecha_nacimiento > date '1900-01-01'),
   email            text not null,
   escuderia        text not null check (char_length(btrim(escuderia)) between 1 and 40),
-  -- Siempre dos dígitos, de 01 a 98 (se guarda como texto para conservar el 0 de adelante)
-  numero           text not null constraint perfiles_numero_check check (numero ~ '^(0[1-9]|[1-8][0-9]|9[0-8])$'),
+  -- Siempre dos dígitos, de 01 a 99 (se guarda como texto para conservar el 0 de adelante)
+  numero           text not null constraint perfiles_numero_check check (numero ~ '^(0[1-9]|[1-8][0-9]|9[0-9])$'),
   creado_en        timestamptz not null default now(),
   actualizado_en   timestamptz not null default now()
 );
@@ -25,7 +25,7 @@ begin
     alter table public.perfiles drop constraint if exists perfiles_numero_check;
     alter table public.perfiles alter column numero type text using lpad(numero::text, 2, '0');
     alter table public.perfiles add constraint perfiles_numero_check
-      check (numero ~ '^(0[1-9]|[1-8][0-9]|9[0-8])$');
+      check (numero ~ '^(0[1-9]|[1-8][0-9]|9[0-9])$');
   end if;
 end;
 $$;

@@ -456,6 +456,31 @@ ol {
   background: var(--color-navy-soft);
 }
 
+/* Iniciar sesión: link de texto, para no competir con "Registrarme" */
+.brand-header__login {
+  padding: 8px 0;
+  color: var(--color-white);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.brand-header__login:hover {
+  color: var(--color-accent);
+}
+
+.brand-header__login svg {
+  display: none;
+}
+
+.brand-header__login[hidden] {
+  display: none;
+}
+
 /* Usuario registrado: personita + mail hasta el @ */
 .brand-header__user-wrap {
   position: relative;
@@ -561,18 +586,46 @@ ol {
 
 @media (max-width: 520px) {
   .brand-header__logo logo-loader-inverse {
-    width: 72px;
+    width: 64px;
   }
 
   .brand-header__actions {
     gap: 8px;
   }
 
+  /* Más compactos para que entren logo + personita + Registrarme + entradas */
   .brand-header__cta,
   .brand-header__register {
     padding: 8px 16px;
     font-size: 13px;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+  }
+
+  /* En celular no entra el texto: queda la personita, como la del usuario logueado */
+  .brand-header__login {
+    flex: none;
+    padding: 0;
+  }
+
+  .brand-header__login svg {
+    display: block;
+    width: 32px;
+    height: 32px;
+    padding: 8px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px var(--color-neon);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+
+  .brand-header__login-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 
   .brand-header__user {
@@ -583,6 +636,25 @@ ol {
   .brand-header__user svg {
     width: 32px;
     height: 32px;
+  }
+}
+
+/* Celulares angostos (360px o menos): menos margen y botones más chicos para que entre todo el header */
+@media (max-width: 400px) {
+  .brand-header {
+    padding-inline: 16px;
+  }
+
+  /* "Sacá tu entrada" queda como "Entrada" */
+  .brand-header__cta-extra {
+    display: none;
+  }
+}
+
+@media (max-width: 359px) {
+  .brand-header__cta,
+  .brand-header__register {
+    padding-inline: 8px;
   }
 }
 

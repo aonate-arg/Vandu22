@@ -141,8 +141,8 @@
     (f) => {
       const numero = /^\d{1,2}$/.test(f.numero) ? Number(f.numero) : NaN;
       if (!f.escuderia) return ['escuderia', 'Elegí tu escudería.'];
-      if (!Number.isInteger(numero) || numero <= 0 || numero >= 99)
-        return ['numero', 'El número tiene que ser entre 01 y 98.'];
+      if (!Number.isInteger(numero) || numero <= 0 || numero > 99)
+        return ['numero', 'El número tiene que ser entre 01 y 99.'];
     },
   ];
 
@@ -196,6 +196,11 @@
   function mensajeError(error) {
     const msg = (error?.message || '').toLowerCase();
     if (msg.includes('already registered')) return 'Ya existe una cuenta con ese mail. Iniciá sesión.';
+    // Supabase rechaza mails que no existen o que parecen de prueba
+    if (error?.code === 'email_address_invalid' || (msg.includes('email address') && msg.includes('invalid')))
+      return 'Ese mail no es válido. Usá un mail real que revises.';
+    if (error?.code === 'email_address_not_authorized')
+      return 'Todavía no podemos mandar mails a esa dirección. Probá más tarde.';
     if (msg.includes('password')) return 'La contraseña no es válida: probá con una más larga o más difícil.';
     if (msg.includes('rate limit') || error?.status === 429)
       return 'Hubo demasiados intentos. Probá de nuevo en un rato.';
@@ -206,7 +211,7 @@
   // Paso al que hay que volver según el error
   function pasoDelError(error) {
     const msg = (error?.message || '').toLowerCase();
-    if (msg.includes('already registered')) return [1, 'email'];
+    if (msg.includes('already registered') || msg.includes('email address')) return [1, 'email'];
     if (msg.includes('password')) return [2, 'password'];
     return null;
   }
