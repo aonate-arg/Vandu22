@@ -13,12 +13,12 @@
     lugar: 'Cucha Cucha 2595, CABA.',
     url_lugar: 'https://www.instagram.com/aci2bar/',
     texto: 'Los que llegan temprano eligen mesa; los demás, miran desde la tribuna.',
-    url_entradas: 'https://www.passline.com/eventos/vandu-x-acido',
+    url_entradas: 'https://www.instagram.com/vandu.f1/',
     fotos: [
-      { img: 'img/bar-exterior.jpg', alt: 'Entrada del bar de noche' },
-      { img: 'img/bar-barra.jpg', alt: 'La barra iluminada en rojo' },
-      { img: 'img/bar-comida.jpg', alt: 'Alitas y cervezas en la mesa' },
-      { img: 'img/bar-mesa-22.jpg', alt: 'La carta del bar con los stickers de 22' },
+      { img: 'img/recap-vasos-22.jpg', alt: 'Dos chicos en la barra con los vasos de 22' },
+      { img: 'img/recap-vidriera.jpg', alt: 'Gente mirando la carrera desde la vidriera del bar' },
+      { img: 'img/recap-mesa.jpg', alt: 'Mesa con comida, cervezas y la servilleta de la estrella' },
+      { img: 'img/recap-barra.jpg', alt: 'La barra con las canillas y la carrera en la pantalla' },
     ],
     video_vertical: 'media/recap.mp4',
   };

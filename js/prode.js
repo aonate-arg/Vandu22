@@ -22,7 +22,7 @@
   const DATOS_RESPALDO = {
     gran_premio: 'GP de Austin',
     largada_carrera: '2026-10-25T17:00:00-03:00',
-    url_entradas: 'https://www.passline.com/eventos/vandu-x-acido',
+    url_entradas: 'https://www.instagram.com/vandu.f1/',
   };
 
   /* Pilotos por escudería. El ícono sale de img/Iconos/escuderias/<escuderia>.svg */
