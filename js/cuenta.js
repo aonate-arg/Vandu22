@@ -162,7 +162,12 @@
       new CustomEvent('cuenta:cambio', { detail: { session: sesionActual, perfil: perfilActual } }),
     );
 
+  // Cada llamada tiene su número: si llega tarde la respuesta de una sesión vieja
+  // (cerró sesión o entró otra persona mientras tanto), se descarta
+  let pedido = 0;
+
   async function mostrarUsuario(session) {
+    const miPedido = ++pedido;
     const user = session?.user;
     sesionActual = session || null;
     perfilActual = null;
@@ -191,6 +196,7 @@
       .select('nombre, apellido, numero, escuderia')
       .eq('id', user.id)
       .maybeSingle();
+    if (miPedido !== pedido) return;
     if (data) {
       mostrarPerfil(data);
       avisarCambio();
@@ -205,6 +211,11 @@
   };
 
   if (client) {
+    // La sesión guardada se lee apenas carga, sin esperar el primer aviso de cambio
+    client.auth
+      .getSession()
+      .then(({ data }) => !sesionActual && data?.session && mostrarUsuario(data.session))
+      .catch(() => {});
     client.auth.onAuthStateChange((_event, session) => {
       // Se difiere para no llamar a Supabase dentro del propio aviso de cambio de sesión
       setTimeout(() => mostrarUsuario(session), 0);

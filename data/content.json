@@ -1,29 +1,34 @@
 {
-  "_ayuda": "fecha_hora: hora del evento en el bar, en formato ISO con zona horaria. largada_carrera: hora en que larga la carrera (en hora de Argentina, mismo formato); el prode cierra ahí. Fotos: se muestran 4; si cargás más, la cuarta muestra +N y todas se ven en el visor. Imágenes: link https://... o ruta tipo img/foto-01.jpg. video_vertical: .mp4/.webm (ej. media/recap.mp4) o link de YouTube Shorts / Vimeo. pais: código de 2 letras del país del GP para la bandera (us, br, mx, it, gb, jp...). url_entradas: link de venta de entradas (si queda vacío, el botón abre el formulario de mail). url_lugar: link del lugar (ej. su Instagram); si queda vacío, no se muestra.",
+  "_ayuda": "temporada: 'en_curso' (cuenta regresiva al próximo GP, botones 'Quiero mi entrada') o 'verano' (aparece la Misión 2027, la cuenta va a largada_2027 y los botones dicen 'Sumarme a la grilla 2027'). fecha_hora (hora del evento en el bar), largada_carrera (hora en que larga la carrera; el prode cierra ahí) y largada_2027 en formato ISO con zona horaria (vacío = 'Fecha a confirmar'). estado: 'abierto', 'ultimos' o 'agotado'. cupo: cantidad de lugares (número). pilotos: cuántos anotados en la grilla 2027 (vacío = no se muestra el número). Fotos: se muestran 4; si cargás más, la cuarta muestra +N y todas se ven en el visor. Imágenes: link https://... o ruta tipo img/foto-01.jpg. video_vertical: .mp4/.webm (ej. media/recap.mp4) o link de YouTube Shorts / Vimeo. pais: código de 2 letras del país del GP para la bandera (us, br, mx, it, gb, jp...). url_entradas: link de venta de entradas (si queda vacío, los botones llevan al formulario de mail del cierre). url_lugar: link del lugar (ej. su Instagram).",
+  "temporada": "en_curso",
+  "largada_2027": "",
+  "pilotos": "",
   "gran_premio": "GP de Austin",
   "pais": "us",
   "fecha_hora": "2026-10-25T16:15:00-03:00",
   "largada_carrera": "2026-10-25T17:00:00-03:00",
-  "lugar": "Cucha Cucha 2595, CABA.",
+  "estado": "abierto",
+  "cupo": 50,
+  "lugar": "Aci2bar · Cucha Cucha 2595",
   "url_lugar": "https://www.instagram.com/aci2bar/",
   "texto": "Los que llegan temprano eligen mesa; los demás, miran desde la tribuna.",
   "url_entradas": "https://www.instagram.com/vandu.f1/",
   "fotos": [
     {
-      "img": "img/recap-vasos-22.jpg",
-      "alt": "En pocas palabras, la onda que manejamos..."
-    },
-    {
       "img": "img/recap-vidriera.jpg",
-      "alt": "Una foto que concentra la concentracion de ustedes."
+      "alt": "La carrera en pantalla grande, vista desde la vidriera del bar"
     },
     {
-      "img": "img/recap-mesa.jpg",
-      "alt": "De las mesas más cools que existen"
+      "img": "img/recap-vasos-22.jpg",
+      "alt": "Dos amigos con camisetas de fútbol brindan con los vasos de 22 × Ácido"
     },
     {
       "img": "img/recap-barra.jpg",
-      "alt": "La barra con las canillas y la carrera en la pantalla"
+      "alt": "La barra con la carrera en la pantalla y baldes de cerveza con hielo"
+    },
+    {
+      "img": "img/recap-mesa.jpg",
+      "alt": "Una mesa con cervezas, alitas y servilletas, entre vuelta y vuelta"
     }
   ],
   "video_vertical": "media/recap.mp4"

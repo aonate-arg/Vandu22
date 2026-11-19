@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es" data-theme="noche">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vandú · Mailbox</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../components.css">
+<style>body{margin:0;background:var(--bg)}</style>
+</head>
+<body>
+<div class="vd" style="background: var(--bg); padding: 24px">
+  <div class="vd-mailbox" style="max-width: 420px">
+    <div class="vd-steps" aria-hidden="true"><span class="is-on" id="mb-s1"></span><span id="mb-s2"></span></div>
+
+    <div id="mb-intro" style="display: flex; flex-direction: column; gap: 16px">
+      <p class="vd-mailbox__title">Contanos tus ideas para el próximo evento.</p>
+      <p style="color: var(--muted)">¿Ya viniste? Dejá tu reseña.</p>
+      <button type="button" class="vd-btn vd-btn--primary" id="mb-go" style="align-self: flex-start">Escribir</button>
+    </div>
+
+    <form id="mb-form" hidden style="display: flex; flex-direction: column; gap: 16px">
+      <div class="vd-segment" role="group" aria-label="Tipo de mensaje">
+        <button type="button" class="vd-chip" aria-pressed="true" id="mb-idea">Idea</button>
+        <button type="button" class="vd-chip" aria-pressed="false" id="mb-res">Reseña</button>
+      </div>
+      <div class="vd-field">
+        <label class="vd-field__label" for="mb-msg">Tu mensaje</label>
+        <textarea class="vd-textarea" id="mb-msg" required placeholder="Ej: prode en vivo…"></textarea>
+      </div>
+      <div class="vd-field">
+        <label class="vd-field__label" for="mb-mail">Tu mail <small>(obligatorio)</small></label>
+        <input class="vd-input" id="mb-mail" type="email" required placeholder="vos@mail.com">
+      </div>
+      <label class="vd-check"><input type="checkbox"> Doy permiso para que Vandú publique mi mensaje</label>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap">
+        <button type="submit" class="vd-btn vd-btn--primary">Enviar</button>
+        <button type="button" class="vd-btn vd-btn--secondary" id="mb-back">Volver</button>
+      </div>
+    </form>
+
+    <div id="mb-done" hidden style="display: flex; flex-direction: column; gap: 14px">
+      <p class="vd-mailbox__title">¡Gracias! Ya estás en la grilla.</p>
+      <button type="button" class="vd-btn vd-btn--secondary" id="mb-again" style="align-self: flex-start">Escribir otra</button>
+    </div>
+  </div>
+</div>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const show = (step) => {
+    $('mb-intro').hidden = step !== 'intro';
+    $('mb-form').hidden = step !== 'form';
+    $('mb-done').hidden = step !== 'done';
+    $('mb-s2').classList.toggle('is-on', step !== 'intro');
+  };
+  $('mb-go').addEventListener('click', () => show('form'));
+  $('mb-back').addEventListener('click', () => show('intro'));
+  $('mb-again').addEventListener('click', () => show('form'));
+  $('mb-form').addEventListener('submit', (e) => { e.preventDefault(); show('done'); });
+  const pick = (on) => { $('mb-idea').setAttribute('aria-pressed', String(on === 'idea')); $('mb-res').setAttribute('aria-pressed', String(on === 'res')); };
+  $('mb-idea').addEventListener('click', () => pick('idea'));
+  $('mb-res').addEventListener('click', () => pick('res'));
+</script>
+
+</body>
+</html>

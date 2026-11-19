@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Próximo evento · 22</title>
-    <!-- Los datos del evento se editan en data/content.json -->
+    <title>Vandú · La F1 se vive mejor en comunidad</title>
+    <!-- Los datos del evento y la temporada se editan en data/content.json -->
     <meta
       name="description"
-      content="Se apagan las luces. Fecha, lugar y entradas para el próximo evento de 22: la F1 en comunidad."
+      content="Se apagan las luces. Viví cada Gran Premio de F1 en modo paddock con la comunidad Vandú, en Buenos Aires."
     />
-    <meta name="theme-color" content="#021d42" />
+    <meta name="theme-color" content="#001b44" />
     <meta name="google-site-verification" content="zdhCkgrrgpL2BJK_Eav85PvA_bUmiz1LfFFfzD-l8zc" />
 
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
@@ -21,25 +21,22 @@
       href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,800&family=Inter:wght@400;500;600&display=swap"
     />
 
+    <!-- ?v=: cambiarlo SIEMPRE que se edita el CSS o el JS (vercel.json guarda css/ y js/ por un año) -->
+    <link rel="stylesheet" href="vandu-ui-kit/tokens.css?v=20261118a" />
+    <link rel="stylesheet" href="vandu-ui-kit/components.css?v=20261118a" />
+    <link rel="stylesheet" href="css/site.css?v=20261118d" />
 
+    <!-- Logos animados (web components): "22" con trazo que corre y pantalla de carga con marea -->
+    <script src="img/logo-loader-inverse.js" defer></script>
+    <script src="img/loader.js" defer></script>
+
+    <!-- Sin JavaScript: todo visible y sin pantalla de carga -->
     <noscript>
       <style>
-        .reveal {
-          opacity: 1;
-          transform: none;
-        }
-        .page-loader {
-          display: none;
-        }
+        .reveal, .reveal-group > * { opacity: 1 !important; transform: none !important; }
+        .page-loader { display: none !important; }
       </style>
     </noscript>
-
-    <!-- ?v=: cambiarlo SIEMPRE que se edita el CSS o el JS. El navegador guarda estos archivos
-         por un año (vercel.json), así que sin cambiar el ?v= la gente sigue viendo la versión vieja -->
-    <link rel="stylesheet" href="css/styles.css?v=20261028a" />
-    <script src="img/logo-loader-inverse.js" defer></script>
-    <!-- Logo animado de la pantalla de carga -->
-    <script src="img/loader.js" defer></script>
 
     <!-- Vercel: Web Analytics (visitas) y Speed Insights (velocidad). Se activan desde el panel de Vercel -->
     <script>
@@ -50,256 +47,676 @@
     <script defer src="/_vercel/speed-insights/script.js"></script>
   </head>
 
-  <body class="page-event">
-    <!-- Pantalla de carga: se oculta sola cuando la página está lista (js/main.js) -->
+  <!-- data-temporada: "en_curso" o "verano". Lo pisa data/content.json al cargar (js/main.js) -->
+  <body class="vd site" data-temporada="en_curso">
+    <!-- Pantalla de carga: aparece recién a los 0,3 s y se va sola cuando la página está lista (js/main.js) -->
     <div class="page-loader" data-page-loader aria-hidden="true">
-      <logo-loader-tide color="#ffffff" size="min(264px, 60vw)"></logo-loader-tide>
+      <logo-loader-tide color="currentColor" size="min(264px, 60vw)"></logo-loader-tide>
     </div>
 
-    <a class="skip-link" href="#evento">Saltar al contenido</a>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-    <!-- ============ LOGO ============ -->
-    <header class="brand-header">
-      <a class="brand-header__logo" href="#evento" aria-label="22">
-        <logo-loader-inverse color="currentColor" aria-hidden="true"></logo-loader-inverse>
-      </a>
-      <div class="brand-header__actions">
-        <!-- Cuenta (js/cuenta.js): sin sesión abre el login (que tiene el link para registrarse);
-             con la sesión iniciada abre el menú del usuario -->
-        <div class="brand-header__user-wrap" data-user>
-          <button
-            class="brand-header__user"
-            type="button"
-            aria-label="Iniciar sesión"
-            aria-expanded="false"
-            aria-controls="user-menu"
-            data-user-toggle
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />
-            </svg>
-          </button>
-          <div class="user-menu" id="user-menu" data-user-menu hidden>
-            <p class="user-menu__name"><span data-user-fullname></span> <span class="user-menu__number" data-user-number></span></p>
-            <p class="user-menu__email" data-user-email></p>
-            <button class="user-menu__item" type="button" data-logout>Cerrar sesión</button>
+    <!-- ============ HEADER (igual al sitio publicado vandu22.vercel.app) ============ -->
+    <header class="site-header" data-site-header>
+      <div class="site-header__inner">
+        <!-- Logo animado (img/logo-loader-inverse.js): blanco, turquesa al pasar el mouse -->
+        <a class="site-header__logo" href="#inicio" aria-label="Vandú, ir al inicio">
+          <logo-loader-inverse color="currentColor" aria-hidden="true"></logo-loader-inverse>
+        </a>
+
+        <!-- A la derecha: personita (cuenta) + En breve + tres rayitas (menú) -->
+        <div class="site-header__actions">
+          <!-- Cuenta (js/cuenta.js): sin sesión abre el login (que tiene el link para registrarse);
+               con la sesión iniciada queda rellena en turquesa y abre el menú del usuario -->
+          <div class="site-header__user-wrap" data-user>
+            <button
+              class="site-header__user"
+              type="button"
+              aria-label="Iniciar sesión"
+              aria-expanded="false"
+              aria-controls="user-menu"
+              data-user-toggle
+            >
+              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />
+              </svg>
+            </button>
+            <div class="user-menu" id="user-menu" data-user-menu hidden>
+              <p class="user-menu__name"><span data-user-fullname></span> <span class="user-menu__number" data-user-number></span></p>
+              <p class="user-menu__email" data-user-email></p>
+              <button class="user-menu__item" type="button" data-logout>Cerrar sesión</button>
+            </div>
           </div>
-        </div>
-        <a class="btn brand-header__cta" href="#entradas" data-cta="header">En breve</a>
-        <!-- Menú de secciones (js/menu.js) -->
-        <div class="brand-header__menu-wrap" data-nav>
-          <button
-            class="brand-header__burger"
-            type="button"
-            aria-label="Menú"
-            aria-expanded="false"
-            aria-controls="site-menu"
-            data-nav-toggle
-          >
-            <span class="brand-header__burger-lines" aria-hidden="true"><span></span><span></span><span></span></span>
-          </button>
-          <nav class="site-menu" id="site-menu" aria-label="Secciones" data-nav-menu hidden>
-            <a class="site-menu__link" href="prode.html">Prode</a>
-          </nav>
+
+          <!-- Entradas: va a la venta si hay url_entradas; si no, abre la ventana de la grilla (js/main.js) -->
+          <a class="site-header__cta" href="#grilla" data-cta="header">En breve</a>
+
+          <!-- Menú de secciones (js/nav.js) -->
+          <div class="site-header__menu-wrap" data-nav>
+            <button
+              class="site-header__burger"
+              type="button"
+              aria-label="Menú"
+              aria-expanded="false"
+              aria-controls="site-menu"
+              data-nav-toggle
+            >
+              <span class="site-header__burger-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+            </button>
+            <nav class="site-menu" id="site-menu" aria-label="Secciones" data-nav-menu hidden>
+              <a class="site-menu__link" href="#proximo-gp" data-spy="proximo-gp">Eventos</a>
+              <a class="site-menu__link" href="stickers.html">Stickers</a>
+              <a class="site-menu__link" href="prode.html">Prode</a>
+              <a class="site-menu__link" href="#merch" data-spy="merch">Merch</a>
+              <a class="site-menu__link" href="#comunidad" data-spy="comunidad">Comunidad</a>
+            </nav>
+          </div>
         </div>
       </div>
     </header>
 
-    <main>
-      <!-- ============ PRÓXIMO EVENTO ============ -->
-      <section class="section section--navy event" id="evento" aria-labelledby="evento-title">
-        <div class="event__grid">
-          <div class="reveal">
-            <h1 class="section-title" id="evento-title">
-              Se apagan las luces.<br /><em>¿Estás?</em>
-            </h1>
+    <main id="contenido">
+      <!-- ============ 00 · HERO ============ -->
+      <section class="site-section hero" id="inicio" aria-labelledby="hero-title">
+        <!-- 22 gigante de fondo, abajo a la derecha -->
+        <logo-loader-inverse class="hero__watermark" color="currentColor" aria-hidden="true"></logo-loader-inverse>
+        <div class="container hero__grid">
+          <div class="hero__copy reveal-group">
+            <p class="vd-label vd-label--line" data-countdown-label>Próximo GP</p>
+            <h1 class="title-hero" id="hero-title">Se apagan las luces.<br /><em>¿Estás?</em></h1>
 
+            <!-- Semáforo de largada: se prenden de a una y se apagan todas (js/main.js) -->
             <div class="lights" aria-hidden="true" data-lights>
-              <i class="lights__bulb"></i><i class="lights__bulb"></i><i class="lights__bulb"></i
-              ><i class="lights__bulb"></i><i class="lights__bulb"></i>
+              <i class="lights__bulb"></i><i class="lights__bulb"></i><i class="lights__bulb"></i><i class="lights__bulb"></i><i class="lights__bulb"></i>
+            </div>
+            <p class="lead">
+              La F1 no se mira solo en el sillón. Vení a vivir el Gran Premio en modo paddock con la comunidad Vandú.
+            </p>
+            <div class="btn-row">
+              <a class="vd-btn vd-btn--primary" href="#grilla" data-cta="hero" data-cta-label>Quiero mi entrada</a>
+              <a class="vd-btn vd-btn--secondary" href="#por-que">¿Qué es Vandú?</a>
             </div>
 
-            <div
-              class="countdown"
-              data-countdown
-              role="timer"
-              aria-label="Tiempo hasta el próximo evento"
-            >
-              <div class="countdown__unit">
-                <b class="countdown__value" data-unit="days">00</b
-                ><small class="countdown__label">Días</small>
-              </div>
-              <div class="countdown__unit">
-                <b class="countdown__value" data-unit="hours">00</b
-                ><small class="countdown__label">Horas</small>
-              </div>
-              <div class="countdown__unit">
-                <b class="countdown__value" data-unit="minutes">00</b
-                ><small class="countdown__label">Min</small>
-              </div>
-              <div class="countdown__unit">
-                <b class="countdown__value" data-unit="seconds">00</b
-                ><small class="countdown__label">Seg</small>
-              </div>
+            <!-- En temporada cuenta hasta el próximo GP; en verano, hasta la largada 2027 -->
+            <div class="vd-countdown hero__countdown" data-countdown role="timer" aria-label="Tiempo hasta el próximo GP">
+              <div class="vd-countdown__cell"><span class="vd-countdown__num" data-unit="days">00</span><span class="vd-countdown__unit">días</span></div>
+              <div class="vd-countdown__cell"><span class="vd-countdown__num" data-unit="hours">00</span><span class="vd-countdown__unit">hs</span></div>
+              <div class="vd-countdown__cell"><span class="vd-countdown__num" data-unit="minutes">00</span><span class="vd-countdown__unit">min</span></div>
+              <div class="vd-countdown__cell"><span class="vd-countdown__num" data-unit="seconds">00</span><span class="vd-countdown__unit">seg</span></div>
             </div>
           </div>
 
-          <article class="gp-card reveal">
-            <logo-loader-inverse class="gp-card__watermark" color="currentColor" aria-hidden="true"></logo-loader-inverse>
-            <p class="eyebrow">Gran Premio</p>
-            <h2 class="gp-card__name">
-              <span data-event="name">GP de Austin</span>
-              <img
-                class="gp-card__flag"
-                data-event="flag"
-                src="https://flagcdn.com/us.svg"
-                alt="Bandera de Estados Unidos"
-                width="48"
-                height="32"
-              />
-            </h2>
-            <dl class="gp-card__meta">
-              <div>
-                <dt>Fecha</dt>
-                <dd><time data-event="date">DD/MM · 00:00 h</time></dd>
-              </div>
-              <div>
-                <dt>Lugar</dt>
-                <dd data-event="place">Cucha Cucha 2595, CABA.</dd>
-              </div>
-            </dl>
-            <p class="gp-card__text" data-event="text"></p>
-            <a class="btn" href="https://www.instagram.com/vandu.f1/" data-cta="pagina-evento"
-              >En breve ↗</a
-            >
-          </article>
-        </div>
-
-        <div class="recap-head reveal">
-          <h2 class="section-title section-title--sm">Llegar es tu meta</h2>
-        </div>
-
-        <div class="recap reveal">
-          <div class="recap__video" data-recap-video>
-            <span class="recap__label">Video vertical · 9:16</span>
+          <!-- Video del hero: sin sonido, en loop. El original está en originales/hero.mp4 -->
+          <div class="vd-ph vd-ph--slant hero__media hero__media--video reveal" data-hero-video>
+            <video class="hero__video" src="media/hero.mp4" poster="img/hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="Un domingo de F1 en Aci2bar: la barra, las mesas y la carrera en pantalla grande"></video>
+            <button class="video-pause" type="button" aria-pressed="false" aria-label="Pausar video" data-video-pause>
+              <svg class="video-pause__pause" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>
+              <svg class="video-pause__play" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M7 4l13 8-13 8z" /></svg>
+            </button>
           </div>
-          <ul class="recap__photos" data-recap-photos aria-label="Fotos del último evento"></ul>
         </div>
+      </section>
 
-        <!-- Cuenta: iniciar sesión con Supabase (js/cuenta.js). Crear cuenta está en registro.html -->
-        <dialog class="signup account" id="cuenta" data-account aria-labelledby="account-title">
-          <button class="icon-btn signup__close" type="button" aria-label="Cerrar" data-account-close>✕</button>
-
-          <!-- Iniciar sesión -->
-          <form class="signup__form" data-account-form="login" novalidate>
-            <h2 class="signup__title" id="account-title">Iniciá <em>sesión</em></h2>
-            <p class="signup__text" data-login-aviso hidden></p>
-            <label class="signup__label" for="login-email">Email</label>
-            <input class="signup__input" id="login-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="tu@mail.com" required />
-            <label class="signup__label" for="login-pass">Contraseña</label>
-            <input class="signup__input" id="login-pass" name="password" type="password" autocomplete="current-password" required />
-            <button class="btn" type="submit">Entrar</button>
-            <p class="signup__status" role="status" aria-live="polite"></p>
-            <p class="account__alt">¿No tenés cuenta? <a href="registro.html">Creá tu perfil de piloto</a></p>
-          </form>
-
-          <!-- Cuenta creada: falta confirmar el mail -->
-          <div class="signup__done" data-account-done hidden>
-            <p class="eyebrow">Casi listo</p>
-            <h2 class="signup__title">Revisá tu <em>mail</em></h2>
-            <p class="signup__text">
-              Te mandamos un link a <strong data-account-done-email></strong> para confirmar tu cuenta. Tocalo y
-              volvés a la página con la sesión iniciada.
+      <!-- ============ 01 · POR QUÉ ============ -->
+      <section class="site-section" id="por-que" data-theme="dia" aria-labelledby="por-que-title">
+        <div class="container">
+          <div class="porque-head">
+            <header class="section-head reveal">
+              <h2 class="title-section" id="por-que-title">Creemos que la F1 se vive mejor en comunidad.</h2>
+              <p class="lead">
+                Somos una comunidad joven de Fórmula 1 en Argentina. Llegamos antes que la propia F1 a armar la experiencia:
+                un lugar para juntarse, debatir cada vuelta y salir de la rutina.
+              </p>
+            </header>
+            <p class="flip-hint reveal">
+              Tres razones. Dalas vuelta para ver qué pasa en un domingo de Vandú.
+              <strong data-flip-count aria-live="polite">0 de 3 descubiertas</strong>
             </p>
           </div>
-        </dialog>
 
-        <!-- Formulario de entradas: guarda el mail en Brevo (api/suscribir.js) -->
-        <dialog class="signup" id="entradas" data-signup aria-labelledby="signup-title">
-          <button class="icon-btn signup__close" type="button" aria-label="Cerrar">✕</button>
-          <form class="signup__form" data-signup-form>
-            <h2 class="signup__title" id="signup-title" data-signup-title>Dejanos tu <em>mail</em></h2>
-            <p class="signup__text" data-signup-text>Te escribimos con toda la info para sacar tu entrada.</p>
-            <label class="signup__label" for="signup-email">Email</label>
+          <!-- Tarjetas que se dan vuelta (js/main.js → initFlipCards). Las fotos son placeholders -->
+          <ul class="grid grid--3 flip-grid reveal-group" role="list">
+            <li>
+              <button class="flip-card" type="button" aria-pressed="false" aria-label="Juntarse" data-flip="juntarse">
+                <span class="flip-card__inner">
+                  <span class="flip-card__face flip-card__front">
+                    <span class="flip-card__top">
+                      <span class="flip-card__num">01</span>
+                      <span class="vd-value__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3" /><circle cx="17" cy="9" r="2.5" /><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 2 6 5.5" /></svg></span>
+                    </span>
+                    <span class="flip-card__title">Juntarse</span>
+                    <span class="flip-card__cta">Tocá para ver por qué <span class="flip-card__arrow" aria-hidden="true">→</span></span>
+                  </span>
+                  <span class="flip-card__face flip-card__back" id="flip-back-juntarse" aria-hidden="true">
+                    <span class="vd-label">01 · Juntarse</span>
+                    <span class="flip-card__punch" id="flip-punch-juntarse">Nadie grita un sobrepaso solo.</span>
+                    <span class="flip-card__text" id="flip-text-juntarse">Lo social + la pasión. Un lugar para encontrarte con gente que vive la F1 como vos.</span>
+                    <span class="vd-ph vd-ph--slant flip-card__photo"><span class="vd-label">Foto real · la mesa gritando un sobrepaso</span></span>
+                    <span class="flip-card__cta flip-card__cta--back">← Dar vuelta</span>
+                  </span>
+                </span>
+              </button>
+            </li>
+            <li>
+              <button class="flip-card" type="button" aria-pressed="false" aria-label="Debatir" data-flip="debatir">
+                <span class="flip-card__inner">
+                  <span class="flip-card__face flip-card__front">
+                    <span class="flip-card__top">
+                      <span class="flip-card__num">02</span>
+                      <span class="vd-value__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v10H9l-5 4z" /></svg></span>
+                    </span>
+                    <span class="flip-card__title">Debatir</span>
+                    <span class="flip-card__cta">Tocá para ver por qué <span class="flip-card__arrow" aria-hidden="true">→</span></span>
+                  </span>
+                  <span class="flip-card__face flip-card__back" id="flip-back-debatir" aria-hidden="true">
+                    <span class="vd-label">02 · Debatir</span>
+                    <span class="flip-card__punch" id="flip-punch-debatir">Opinión sincera, de igual a igual.</span>
+                    <span class="flip-card__text" id="flip-text-debatir">Estrategia, neumáticos, el undercut que salió mal: se discute como entre amigos, vuelta a vuelta.</span>
+                    <span class="vd-ph vd-ph--slant flip-card__photo"><span class="vd-label">Foto real · el debate después de la bandera</span></span>
+                    <span class="flip-card__cta flip-card__cta--back">← Dar vuelta</span>
+                  </span>
+                </span>
+              </button>
+            </li>
+            <li>
+              <button class="flip-card" type="button" aria-pressed="false" aria-label="Vivir el paddock" data-flip="paddock">
+                <span class="flip-card__inner">
+                  <span class="flip-card__face flip-card__front">
+                    <span class="flip-card__top">
+                      <span class="flip-card__num">03</span>
+                      <span class="vd-value__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4M5 4h12l-2 4 2 4H5" /></svg></span>
+                    </span>
+                    <span class="flip-card__title">Vivir el paddock</span>
+                    <span class="flip-card__cta">Tocá para ver por qué <span class="flip-card__arrow" aria-hidden="true">→</span></span>
+                  </span>
+                  <span class="flip-card__face flip-card__back" id="flip-back-paddock" aria-hidden="true">
+                    <span class="vd-label">03 · Vivir el paddock</span>
+                    <span class="flip-card__punch" id="flip-punch-paddock">Cerca de la pista, en Buenos Aires.</span>
+                    <span class="flip-card__text" id="flip-text-paddock">Pantalla grande, storytelling del GP y un bar a la altura: el clima de carrera sin subirte a un avión.</span>
+                    <span class="vd-ph vd-ph--slant flip-card__photo"><span class="vd-label">Foto real · pantalla grande en Aci2bar</span></span>
+                    <span class="flip-card__cta flip-card__cta--back">← Dar vuelta</span>
+                  </span>
+                </span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 01B · MISIÓN DE VERANO (solo con temporada "verano") ============ -->
+      <section class="site-section site-section--band" id="mision-2027" data-solo-verano aria-labelledby="mision-title">
+        <div class="vd-speed" aria-hidden="true"></div>
+        <div class="container">
+          <header class="section-head reveal">
+            <h2 class="title-section" id="mision-title">Este verano no hay carreras. Armamos la grilla 2027.</h2>
+            <p class="lead">
+              Nuestra misión en el receso es hacer crecer la comunidad para largar la temporada 2027 de F1 con más fuerza
+              que nunca. Cuantos más seamos, mejor se vive cada domingo.
+            </p>
+          </header>
+
+          <ol class="grid grid--3 reveal-group" role="list">
+            <li class="vd-card">
+              <span class="step-num" aria-hidden="true">01</span>
+              <h3 class="vd-value__title">Seguinos</h3>
+              <p class="vd-value__text">
+                Opinión, memes y diseño F1 todo el verano en
+                <a class="text-link" href="https://www.instagram.com/vandu.f1/" target="_blank" rel="noopener">@thevandu</a>.
+              </p>
+            </li>
+            <li class="vd-card">
+              <span class="step-num" aria-hidden="true">02</span>
+              <h3 class="vd-value__title">Anotate en la lista</h3>
+              <p class="vd-value__text">Te avisamos primero cuando abran las entradas del primer GP 2027.</p>
+            </li>
+            <li class="vd-card">
+              <span class="step-num" aria-hidden="true">03</span>
+              <h3 class="vd-value__title">Traé a tu amigo fierrero</h3>
+              <p class="vd-value__text">Compartí Vandú con quien grita los sobrepasos con vos. [Beneficio por referido: a definir]</p>
+            </li>
+          </ol>
+
+          <div class="btn-row">
+            <p class="counter"><span class="counter__num" data-pilotos>[N]</span> pilotos anotados</p>
+            <a class="vd-btn vd-btn--primary" href="#grilla">Sumarme a la grilla 2027</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 02 · CÓMO ============ -->
+      <section class="site-section" id="como" aria-labelledby="como-title">
+        <div class="container">
+          <div class="ruta" data-ruta>
+            <div class="ruta__head reveal">
+              <header class="section-head">
+                <h2 class="title-section" id="como-title">Tu domingo de GP, vuelta a vuelta.</h2>
+                <p class="lead">Tocá cada parada de la pista o dale play y mirá cómo se vive.</p>
+              </header>
+              <div class="ruta__controls">
+                <button class="ruta__arrow" type="button" aria-label="Parada anterior" data-ruta-prev>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+                </button>
+                <button class="vd-btn vd-btn--primary ruta__play" type="button" aria-pressed="false" data-ruta-play>
+                  <svg class="ruta__icon-play" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z" /></svg>
+                  <svg class="ruta__icon-pause" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>
+                  <span data-ruta-play-label>Ver el domingo</span>
+                </button>
+                <button class="ruta__arrow" type="button" aria-label="Parada siguiente" data-ruta-next>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Cada parada: foto + texto. Solo se ve la activa (js/main.js · initRuta) -->
+            <div class="ruta__stage reveal">
+              <article class="ruta__scene" id="ruta-panel-1" role="tabpanel" aria-labelledby="ruta-tab-1" tabindex="0">
+                <figure class="ruta__media">
+                  <img src="img/esquina-bar.jpg" alt="La esquina del bar, con gente tomando algo en las mesas de la vereda" loading="lazy" />
+                  <figcaption class="vd-tag vd-tag--open">Aci2bar · Cucha Cucha 2595</figcaption>
+                </figure>
+                <div class="ruta__text">
+                  <p class="ruta__num"><span>01</span> <span class="vd-label">de 5 · [X] min antes de largar</span></p>
+                  <h3 class="ruta__title">Llegás al paddock.</h3>
+                  <p class="ruta__body">Entrás a Aci2bar. En la barra ya sale la coctelería de autor y la cocina con reconocimiento Michelin está en marcha.</p>
+                  <p class="ruta__pillar">Un bar a la altura</p>
+                </div>
+              </article>
+              <article class="ruta__scene" id="ruta-panel-2" role="tabpanel" aria-labelledby="ruta-tab-2" tabindex="0" hidden>
+                <figure class="ruta__media">
+                  <img src="img/ubicaciones.jpg" alt="Amigos charlando en una mesa junto a la ventana" loading="lazy" />
+                  <figcaption class="vd-tag vd-tag--open">Solo 50 lugares</figcaption>
+                </figure>
+                <div class="ruta__text">
+                  <p class="ruta__num"><span>02</span> <span class="vd-label">de 5 · antes de la largada</span></p>
+                  <h3 class="ruta__title">Somos 50, no 500.</h3>
+                  <p class="ruta__body">Elegís tu mesa. Un espacio pensado para el ida y vuelta de ideas con el de al lado, no para el amontonamiento.</p>
+                  <p class="ruta__pillar">Solo 50 lugares</p>
+                </div>
+              </article>
+              <article class="ruta__scene" id="ruta-panel-3" role="tabpanel" aria-labelledby="ruta-tab-3" tabindex="0" hidden>
+                <figure class="ruta__media">
+                  <img src="img/preparacion-largada.jpg" alt="Mesas llenas mirando la previa de la largada en la pantalla grande" loading="lazy" />
+                  <figcaption class="vd-tag vd-tag--open">Pantalla grande</figcaption>
+                </figure>
+                <div class="ruta__text">
+                  <p class="ruta__num"><span>03</span> <span class="vd-label">de 5 · se apagan las luces</span></p>
+                  <h3 class="ruta__title">Se apagan las luces.</h3>
+                  <p class="ruta__body">La carrera en pantalla grande. Antes, un storytelling que te mete en el GP: qué se juega y quién llega con la soga al cuello.</p>
+                  <p class="ruta__pillar">Ambiente paddock</p>
+                </div>
+              </article>
+              <article class="ruta__scene" id="ruta-panel-4" role="tabpanel" aria-labelledby="ruta-tab-4" tabindex="0" hidden>
+                <figure class="ruta__media">
+                  <img src="img/recap-mesa.jpg" alt="Una mesa con cervezas y alitas, entre vuelta y vuelta" loading="lazy" />
+                  <figcaption class="vd-tag vd-tag--open">Estrategia en la mesa</figcaption>
+                </figure>
+                <div class="ruta__text">
+                  <p class="ruta__num"><span>04</span> <span class="vd-label">de 5 · vuelta a vuelta</span></p>
+                  <h3 class="ruta__title">Box, box: se debate.</h3>
+                  <p class="ruta__body">Neumáticos, undercut, la parada que salió mal. Se discute como entre amigos mientras la cocina sigue saliendo.</p>
+                  <p class="ruta__pillar">Ambiente paddock</p>
+                </div>
+              </article>
+              <article class="ruta__scene" id="ruta-panel-5" role="tabpanel" aria-labelledby="ruta-tab-5" tabindex="0" hidden>
+                <figure class="ruta__media">
+                  <img src="img/recap-vasos-22.jpg" alt="Dos amigos con camisetas de fútbol brindan con los vasos de 22 × Ácido" loading="lazy" />
+                  <figcaption class="vd-tag vd-tag--open">La voz Vandú</figcaption>
+                </figure>
+                <div class="ruta__text">
+                  <p class="ruta__num"><span>05</span> <span class="vd-label">de 5 · bandera a cuadros</span></p>
+                  <h3 class="ruta__title">Termina la carrera, no la charla.</h3>
+                  <p class="ruta__body">Humor, diseño y opinión de F1. En carrera fue pura emoción; ahora, el análisis de igual a igual.</p>
+                  <p class="ruta__pillar">La voz Vandú</p>
+                </div>
+              </article>
+            </div>
+
+            <!-- La pista: el auto avanza hasta la parada activa (--pos de 0 a 1) -->
+            <div class="ruta__track reveal" style="--pos: 0">
+              <div class="ruta__rail" aria-hidden="true">
+                <span class="ruta__progress"></span>
+                <span class="ruta__flag"></span>
+                <!-- Auto: img/Iconos/f1-car-vector.svg pegado acá (con máscara CSS no se ve al abrir el archivo con doble clic) -->
+                <svg class="ruta__car" viewBox="0 0 1786 364.75" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M190 361.9C161.4 353.8 137.4 336.4 121.4 312.1C98.1 276.7 95.2 231.7 113.8 193.6C125.5 169.5 145 150 169.1 138.3C202.2 122.1 241 122.1 274.1 138.3C298.2 150 317.8 169.5 329.5 193.6C345.6 226.7 345.6 265.5 329.5 298.6C315.5 327.5 290.3 349.6 260 359.8C258 360.5 255 361.4 253.2 361.9L250.1 362.8L221.5 362.7L192.9 362.7L190 361.9ZM1393 361.9C1364.4 353.8 1340.4 336.4 1324.4 312.1C1301.1 276.7 1298.2 231.7 1316.8 193.6C1328.5 169.5 1348 150 1372.1 138.3C1405.2 122.1 1444 122.1 1477.1 138.3C1503.8 151.3 1524.9 173.9 1535.9 201.4C1548.6 232.9 1547.3 268.2 1532.5 298.6C1518.5 327.5 1493.3 349.6 1463 359.8C1461 360.5 1458 361.4 1456.2 361.9L1453.1 362.8L1424.5 362.7L1395.9 362.7L1393 361.9ZM1627.4 353.4C1627.4 353.3 1624.8 353.1 1621.7 353C1613.8 352.7 1611.9 352 1610.4 349.1C1609.5 347.4 1609.5 346.7 1610 332.5C1610.3 323.4 1610.4 312.9 1610.2 302.6C1610 291.9 1610.9 291.4 1630.9 291.6C1643.7 291.7 1648.7 292.2 1661 294.3C1673.9 296.5 1692.7 301.5 1712.6 308C1715.1 308.8 1719.7 310.3 1722.9 311.3C1733.7 314.6 1748.9 319.7 1766.7 325.9C1780.7 330.8 1782.4 332.7 1782.2 343C1782.1 348.4 1781.3 350.3 1778.5 351.7C1776.2 352.9 1778.2 352.9 1729.6 353.1C1704.3 353.2 1671 353.3 1655.6 353.4C1640.2 353.5 1627.5 353.4 1627.4 353.4ZM323.4 346.5C319.8 346 318 344.4 318 341.9C318 339.7 319.3 337.7 324.1 332.8C335.8 320.7 345.3 302.1 349.4 283C351.7 272.2 352.5 262.6 352.6 247.1C352.6 241.5 352.7 241 353.2 239.7C353.9 238 355.3 236.7 356.7 236.3C357.9 235.9 361.5 235.9 363 236.3C363.6 236.4 367.1 236.6 370.6 236.7C395.5 237.6 409.4 240.4 428.4 248.7C435.2 251.6 441.8 255.5 453.9 263.8C457.6 266.3 469.7 274 473.1 276.1C480.7 280.5 488.6 284.9 493.8 287.5C495.5 288.4 497.8 289.6 498.9 290.2C500.7 291.2 503.3 292.5 512.9 296.9C523.7 301.9 541.2 309.1 551.5 312.6C553.2 313.2 556.7 314.5 559.2 315.4C561.8 316.3 566.1 317.7 568.8 318.5C580.7 322.1 583 322.8 588.4 324.4C597.3 326.9 616.4 331.7 625.9 333.6C628.2 334.1 631.7 334.8 633.6 335.2C637.9 336.1 645.2 337.5 654.6 339.2C666.3 341.4 669 342 669 342.9C669 343.7 667.1 344.2 662.2 344.8C649.9 346.2 638.4 346.3 602.5 345.7C555 344.9 334 345.6 325.8 346.6C325.1 346.7 324.1 346.6 323.4 346.5ZM717.4 344.5C702.8 344.3 701.6 344.1 686.9 339.1C677.1 335.8 675 335.3 669.2 334.3C655.4 331.9 635.9 328 626.2 325.7C623.8 325.2 620.3 324.3 618.3 323.9C616.4 323.4 614 322.8 613.1 322.5C612.1 322.3 609.3 321.5 606.8 320.9C597.4 318.5 584.7 314.9 575.1 311.8C572.6 311 569.2 309.8 567.5 309.3C555.6 305.4 535.8 298.1 523.4 292.8C520.2 291.4 516.2 289.7 514.4 288.9C512.6 288.2 509.2 286.6 506.8 285.5C504.3 284.4 500.9 282.7 499 281.9C494.8 279.9 475.8 270.4 471 267.8C455.2 259.3 452.2 257.4 446.5 252.5C439 245.9 431.7 241.6 420.8 237.3C410.5 233.2 398 230.7 381.4 229.5C376.4 229.1 367.7 228.3 365.4 228C364.4 227.9 362.3 227.6 360.8 227.5C353 226.8 350.5 224.9 350.5 219.9C350.5 215.1 351.8 214.7 363.8 215.9C365.7 216.1 370.4 216.3 374.1 216.4C386 216.6 388.8 216.7 391.5 217C392.9 217.1 395.8 217.3 397.8 217.3C399.7 217.3 406.6 217.4 412.9 217.5C470.2 218.9 516.3 219.3 615.8 219.3C669.1 219.3 689.7 219.3 695.5 219C705.4 218.6 715.8 218.3 728.9 218C734.5 217.9 739.8 217.7 740.6 217.6C748.7 216.8 903.9 216.8 945.4 217.6C949.1 217.7 959.3 217.9 968 218C984.4 218.2 994.1 218.5 1001.2 219C1005.1 219.2 1006.5 219.3 1013.4 220C1028.9 221.5 1033.8 223.6 1035.4 229.6C1035.9 231.8 1035.9 335.6 1035.4 337.7C1034.5 340.9 1032.8 342.7 1029.5 343.8C1028 344.3 1027.1 344.3 1018.6 344.5C1007.9 344.7 733.8 344.7 717.4 344.5ZM1079.8 344.3C1077.3 343.8 1076.1 342.8 1075.3 340.7C1074.7 338.9 1074.7 333.9 1075.6 243.5C1075.8 229.7 1075.7 227.1 1074.9 223.1C1073.7 217 1071.3 212.9 1067.2 209.9C1062.4 206.3 1057.7 205 1042.2 203.4C1040.3 203.1 1037.2 202.8 1035.4 202.6C1033.6 202.4 1030.4 202.1 1028.4 201.9C1013.9 200.4 1006.5 199.1 1006.8 198.2C1007.2 197.1 1007.2 197.1 1040.4 197.1C1073.3 197.2 1083 197.3 1114 198.5C1129 199 1134.3 199.2 1145.1 199.6C1151.3 199.9 1159 200.1 1162.2 200.3C1178.3 200.9 1195 201.5 1218.6 202.2C1222.9 202.4 1229.8 202.6 1233.9 202.7C1241 203 1246.6 203.2 1264.1 203.7C1268.2 203.9 1275.3 204.1 1279.9 204.2C1291.2 204.5 1293.8 204.9 1295.8 206.7C1297.8 208.4 1297.9 212.3 1296.3 220.1C1294.3 229.7 1293.7 236.1 1293.7 248.9C1293.7 259.6 1294.1 265.5 1295.2 271.9C1299.2 296.8 1307.3 314.5 1322.2 331.4C1327.7 337.5 1327.8 337.7 1327.9 339.3C1328.1 340.8 1327.6 341.7 1326.2 342.4C1325.3 342.9 1319.1 343.4 1315.5 343.3C1268.9 342.3 1122.1 342.8 1102.6 344C1096.9 344.4 1081.3 344.5 1079.8 344.3ZM1557.9 335.1C1557.8 335 1551.4 334.8 1543.6 334.8C1529.8 334.6 1529.5 334.6 1528.8 334.1C1527.1 332.8 1527.4 331.4 1530.8 326.1C1541.1 310.2 1547.5 295.4 1551.9 277.1C1555.4 262.6 1556.4 247.7 1554.9 232.5C1554.9 231.9 1555 231.9 1556.3 231.8C1557.7 231.7 1559.3 232.2 1571.5 236.1C1573.8 236.9 1579.1 238.5 1583.2 239.9C1587.4 241.2 1592.2 242.7 1593.8 243.3C1595.3 243.8 1599.7 245.2 1603.5 246.4C1607.3 247.6 1613.1 249.4 1616.5 250.5C1633.4 255.9 1645.7 259.4 1646.2 258.9C1648 257.1 1598.4 239 1557.5 226.5C1555.7 225.9 1554.1 225.5 1554.1 225.4C1554 225.4 1553.7 223.8 1553.4 222C1553 220.1 1552.7 218.4 1552.6 218.1C1552.3 217 1550.9 216.6 1574.2 224.3C1589 229.2 1602.1 233.8 1607.4 235.7C1609.3 236.5 1613 237.8 1615.6 238.7C1622 241 1626 242.5 1632.8 245.1C1635.8 246.3 1640.5 248.1 1643 249C1648.2 251 1662.5 256.9 1671 260.4C1674.1 261.7 1678.1 263.4 1679.9 264.1C1683 265.4 1691.7 269 1699.6 272.4C1701.7 273.2 1705.3 274.8 1707.8 275.8C1710.2 276.7 1714.7 278.6 1717.8 279.9C1720.8 281.2 1725.1 282.9 1727.2 283.8C1731.1 285.3 1732.4 285.8 1742.4 289.6C1749.6 292.4 1765.2 297.9 1771.8 300C1780 302.7 1781.5 303.6 1783.1 306.7C1784.8 310.3 1783.2 317.2 1779.9 319.6C1778.7 320.5 1776.6 320.4 1770.2 319.2C1755 316.1 1742.2 311.9 1714.4 300.8C1690.8 291.4 1678.4 288 1658.3 285.4C1653.7 284.8 1652.4 284.6 1646.2 284C1644.9 283.9 1641.4 283.6 1638.4 283.5C1635.3 283.4 1631.5 283.1 1629.8 283C1624.2 282.5 1608.2 282.8 1606.2 283.5C1602.9 284.5 1601.8 286.3 1601.1 291.1C1600.8 293.6 1600.8 297.2 1600.8 311.9C1600.8 331.2 1600.8 331.1 1599.4 332.9C1599 333.4 1598.1 334.1 1597.3 334.5C1595.9 335.1 1595.9 335.1 1577 335.2C1566.6 335.2 1558 335.2 1557.9 335.1ZM232.1 311.3C260.9 306.3 282.1 284.9 286.9 255.9C287.6 251.9 287.6 240.3 286.9 236.4C282 207.1 260.7 185.7 231.4 180.8C227.4 180.2 215.8 180.2 211.9 180.8C182.6 185.7 161.2 207.1 156.3 236.4C155.7 240.3 155.7 251.9 156.3 255.9C161.4 286.4 184.3 308.2 215.2 311.8C217.9 312.2 229.2 311.8 232.1 311.3ZM1435.1 311.3C1463.9 306.3 1485.1 284.9 1489.9 255.9C1490.6 251.9 1490.6 240.3 1489.9 236.4C1485 207.1 1463.7 185.7 1434.4 180.8C1430.4 180.2 1418.8 180.2 1414.9 180.8C1385.6 185.7 1364.2 207.1 1359.3 236.4C1358.3 242.8 1358.7 254.1 1360.4 261.1C1366.8 288.7 1389.3 308.4 1418.2 311.8C1420.9 312.2 1432.2 311.8 1435.1 311.3ZM219.8 301.1C183.3 299.9 158 263.7 169.4 228.9C178.8 200.2 210 184.5 238.8 193.9C267.6 203.3 283.3 234.5 273.8 263.3C266.3 286.4 244.2 301.8 219.8 301.1ZM1422.8 301.1C1393.2 300.1 1369.7 275.8 1369.7 246.1C1369.7 208.7 1406.2 182.3 1441.8 193.9C1470.6 203.3 1486.3 234.5 1476.8 263.3C1469.3 286.4 1447.2 301.8 1422.8 301.1ZM81 258.9C77 258.2 62 254.7 47.8 251.1C30.6 246.7 16.6 242.8 12.6 241.3C8.5 239.7 5.2 237 3.8 233.9C2.5 231.1 2.4 230.8 2.6 215.6C2.9 193.5 2.8 107.8 2.5 78.1C2.1 35.2 2 36.6 2.6 34.9C3.2 33.2 4.6 31.5 6.2 30.7C7.4 30.1 7.4 30.1 56.8 30.1C103.1 30 106.2 30 108 30.4C110.2 30.9 127.3 31 159.1 30.6C173.5 30.4 177.9 30.4 181 30.7C183.7 30.9 188.9 31 197.8 31C218.7 30.9 218.4 30.7 219.9 43.2C221.4 55.3 220.9 63.8 218.1 72.9C214.7 84.1 209.8 92.8 197.3 109.4C189.7 119.5 190.5 118.8 185.8 120.1C182.1 121.2 176.8 123 174.2 124C173.5 124.3 171.4 125.1 169.7 125.7C144.6 134.3 119.8 157.5 104.3 187C98.8 197.5 94.1 210.9 92 222.3C90.4 231.1 90 235 89.8 246.2C89.6 253.8 89.6 254.5 89 255.8C87.9 258.7 85.6 259.6 81 258.9ZM356.5 211.8C354.1 211.5 352.5 210.9 350 209.2C346.9 207.1 346.6 206.7 345.4 203.2C344.8 201.5 343.6 198.4 342.8 196.4C340.9 191.8 340.9 191.8 341.4 190.8C342.5 188.8 342.3 188.9 361.8 188.4C364.6 188.3 366.9 188.2 367 188.1C367.4 187.9 383.8 187.4 392.2 187.4C396.6 187.3 401.6 187.2 403.5 187.1C405.4 187 409.6 187 412.9 187C416.2 187 421.1 186.9 423.9 186.7C426.6 186.6 432 186.4 435.8 186.4C439.5 186.3 446.5 186.2 451.2 186C456 185.9 463.8 185.6 468.5 185.5C477.4 185.2 487.5 184.9 500.9 184.5C563 182.5 575.2 182.3 629.6 182.3C677.4 182.3 689.2 182.5 711.9 183.5C725.9 184.1 728.6 184.3 733 184.5C735.5 184.6 739.8 184.9 742.5 185C745.2 185.1 749.3 185.3 751.8 185.5C754.2 185.6 759.6 185.9 763.9 186.1C768.1 186.3 773.5 186.6 775.8 186.8C778 186.9 782 187.1 784.5 187.3C787 187.4 791 187.6 793.4 187.8C800.2 188.2 817.5 189 833.5 189.8C845.8 190.3 865.1 190.9 880 191.2C889.3 191.4 889.9 191.4 891 191.9C892.6 192.6 893 193.7 892.1 194.7C891.5 195.4 891.5 195.4 829.2 195.6C794.9 195.6 760.3 195.8 752.2 196C721.9 196.5 675.4 197.6 645.9 198.5C640.5 198.7 633.5 198.8 630.2 198.9C627 198.9 623.2 199 621.9 199.2C620.5 199.3 614.5 199.5 608.6 199.6C602.7 199.7 596.6 199.9 595 200C593.4 200.2 589.6 200.3 586.5 200.4C579.5 200.5 561.6 201.1 544.4 201.7C536.7 202 527.9 202.4 517.1 202.7C513.3 202.9 507.1 203.1 503.4 203.3C493.5 203.6 483.8 204 476.1 204.2C460.7 204.8 444.6 205.6 433.2 206.4C430.2 206.6 425.9 206.9 423.8 207C419.5 207.3 414.9 207.6 410 208C408.3 208.1 405.4 208.4 403.5 208.5C401.6 208.6 398.7 208.9 397 209C395.3 209.1 392.3 209.4 390.4 209.5C388.4 209.6 385.5 209.9 383.9 210C382.2 210.1 378.5 210.4 375.5 210.6C372.5 210.8 369 211.1 367.6 211.2C363.5 211.6 359.1 212 358.6 212C358.3 211.9 357.4 211.9 356.5 211.8ZM1288.7 197.9C1288.6 197.8 1285.8 197.6 1282.3 197.5C1278.9 197.3 1273.9 197.1 1271.2 197C1263.8 196.7 1255.4 196.3 1249.6 196C1246.7 195.9 1241.8 195.6 1238.8 195.5C1235.7 195.4 1230.7 195.1 1227.8 195C1220.4 194.7 1211.9 194.3 1203.8 194C1200 193.9 1193.4 193.6 1189.1 193.5C1184.9 193.3 1179.1 193.1 1176.4 193.1C1173.6 193 1166.9 192.9 1161.5 192.7C1156.1 192.6 1148.1 192.4 1143.8 192.2C1139.4 192.1 1131.9 191.9 1127 191.8C1109.4 191.2 1102.7 191 1069.5 190.2C1057.1 189.9 1037.3 189.6 1016.4 189.3C995.9 188.9 983.3 188.6 960 187.8C955.9 187.6 950.7 187.4 948.3 187.4C945.9 187.3 943.9 187.2 943.7 187.1C943.6 187 938.9 186.8 933.4 186.6C927.9 186.4 921.4 186.1 918.9 186C916.4 185.9 911.8 185.6 908.8 185.5C905.7 185.3 900.9 185.1 898.2 185C895.6 184.9 891.1 184.6 888.2 184.5C878.7 184 872.9 183.8 868.1 183.5C865.5 183.4 858.6 183.1 852.9 182.9C847.1 182.7 839.8 182.4 836.6 182.2C826.8 181.8 817.4 181.5 809.4 181.2C801.3 181 793.2 180.7 784.1 180.3C781.2 180.1 776.3 179.9 773.2 179.8C770.2 179.6 765.5 179.4 763 179.2C760.5 179.1 756.2 178.9 753.5 178.8C750.8 178.6 746.4 178.4 743.8 178.2C741.1 178.1 736.6 177.9 733.9 177.7C731.1 177.6 726.8 177.4 724.2 177.3C721.7 177.1 717.4 176.9 714.6 176.8C711.9 176.6 707 176.4 703.8 176.2C700.5 176.1 696.5 175.9 694.9 175.9C692.1 175.8 686.7 175.6 672.4 175C646.7 173.9 604.9 173.9 558.2 175C553.1 175.1 542.9 175.3 535.6 175.5C528.3 175.6 520.4 175.9 518 176C515.6 176.2 511.5 176.4 509 176.4C504.7 176.5 497.9 176.7 484.5 177.3C473 177.7 466.7 178 461.6 178.3C458.7 178.4 453.9 178.6 450.9 178.7C447.9 178.9 443.2 179.1 440.5 179.2C437.8 179.4 433.4 179.6 430.6 179.8C420.7 180.2 415.8 180.5 402.1 181.3C399.5 181.4 395.3 181.6 392.8 181.7C384.6 182.1 361.1 182.5 350.4 182.4C335.9 182.3 337 183 329.4 171.1C326 165.9 323.7 163.2 316.2 155.6C310.7 149.9 310.7 150 312.7 148.9C314.3 148.1 328 142.9 332.4 141.6C341.1 138.8 344.5 137.9 349.8 136.5C360.6 133.7 365.2 132.4 372.4 130.3C376.4 129.1 381.5 127.6 383.9 127C388.5 125.6 397 123 403.5 120.9C417.4 116.4 435.2 110.5 438.9 109.2C441.2 108.4 445.2 107 447.8 106.1C452.8 104.4 460.1 101.9 471.1 98C475.1 96.6 480.3 94.8 482.6 94C485 93.2 489.8 91.5 493.4 90.3C496.9 89 501.4 87.4 503.4 86.8C505.3 86.1 509.5 84.6 512.6 83.5C533.7 76 590.2 56.9 605.9 51.9C609.7 50.7 615.2 48.9 618.1 48C624 46.1 642 40.6 649.8 38.3C665 33.8 668.6 32.8 679.4 29.7C695 25.2 700.4 23.7 706.5 22.1C756.6 8.9 790.3 2.6 813.2 2.1C822.7 1.9 824.9 2.4 827.7 5.3C830.7 8.6 831.3 11.6 830.5 22C830.4 24.7 830.2 27.7 830.1 28.8C829.2 46 827.2 56.2 822.2 69.8C819.3 77.6 820 85.7 824.8 97.6C826.6 102.1 826.8 102.6 827.9 103.9C830.6 107.2 839 108.5 841.9 105.9C843.2 104.8 843.5 103.8 843.9 99.6C845.1 85.7 851.8 70.6 860.5 62.4C871.3 52.3 885.5 48 901.4 50C915.3 51.8 924.5 56.1 932.9 64.8C944.2 76.4 949.7 97.4 947.6 120.6C946.8 129.8 946 132.1 943.1 133.4C940 134.8 925.2 133.9 914.8 131.7C901.9 128.9 896.2 127 885.8 122.1C872.1 115.6 865.6 113.8 851.8 112.4C846.5 111.8 837.2 112.1 829.5 113.1C826.5 113.5 821.6 114 814.5 114.6C806.9 115.3 803.4 115.5 798.8 115.6C796.2 115.7 792.8 115.9 791.1 116C789.5 116.2 786 116.3 783.4 116.4C755.2 117.1 749.8 117.4 747.3 118.9C744.7 120.4 743.2 123.9 744.1 126.1C744.6 127.3 745.6 127.3 748 126.1C751.4 124.4 752.8 124.3 768.5 124C791.1 123.6 808.1 122.8 823.5 121.4C825.8 121.2 829.2 120.9 831.1 120.8C833 120.6 837 120.2 839.9 119.9C850.9 118.6 856.8 119.3 866 123C867.3 123.5 870.3 124.8 872.8 125.7C887.7 131.8 899.5 135.4 916.8 139C930 141.8 951.2 143.8 965 143.5C973 143.4 995.1 143.4 1015.9 143.7C1046.9 144 1061.8 143.3 1077.5 140.7C1084.7 139.5 1089.5 136.5 1088.3 133.9C1087.6 132.4 1086.2 132.2 1076.2 132.5C1070.8 132.6 1069 131.3 1069 127.1C1069 119 1079.9 112.9 1095.1 112.6C1103.1 112.4 1107 113.4 1110.4 116.6C1116.3 122 1115 125.9 1105.9 131C1101 133.7 1099 136.1 1100.2 137.7C1101.1 139 1102.6 139 1110.5 137.8C1118 136.8 1127.2 133.8 1134.1 130.2C1138.9 127.7 1142.3 125.4 1151.5 118.8C1157.6 114.3 1166.2 109.9 1177 105.6C1191.3 99.9 1191.9 99.8 1200.2 103.8C1222.1 114.4 1248.9 124.1 1289.2 136C1293 137.1 1298.6 138.8 1301.6 139.8C1304.7 140.7 1309.5 142.2 1312.4 143C1318.9 144.9 1331.7 149.1 1332.5 149.5C1332.8 149.7 1333.3 150.2 1333.5 150.7C1334 151.5 1334 151.5 1332.1 153.4C1329.9 155.6 1330.5 155.6 1324.1 154.1C1322.1 153.6 1318.9 152.9 1317 152.5C1302.6 149.3 1297.5 147.9 1279.2 142.4C1274 140.8 1267.6 138.9 1265.1 138.1C1244.8 132.2 1222.3 124.5 1209.9 119.4C1201.7 116 1196.5 114.7 1190.2 114.6C1182.9 114.4 1181.1 114.9 1171.5 119.4C1161.3 124.1 1160.6 124.7 1165.4 124.6C1167.8 124.5 1171 124 1178 122.7C1180.4 122.3 1181.8 122.2 1186.5 122.2C1193.3 122.1 1195.1 122.4 1203.4 124.9C1206.4 125.7 1211.5 127.2 1214.5 128.1C1217.6 129 1222.4 130.4 1225.2 131.3C1230.6 132.9 1239 135.3 1245.4 137.1C1247.4 137.7 1251.6 138.9 1254.6 139.8C1259.4 141.2 1274.8 145.7 1286 149C1297.3 152.2 1311.6 156.4 1314.1 157.2C1315.8 157.8 1318.1 158.5 1319.2 158.8C1321.6 159.6 1323.1 160.5 1323.6 161.5C1323.9 162.3 1323.9 162.3 1322.3 164.4C1315.9 172.3 1308.8 183.8 1305.5 191.6C1303 197.5 1302.4 197.8 1294.5 198C1291.4 198 1288.8 198 1288.7 197.9ZM352 146.7C357.7 146 369.9 143.3 379.9 140.5C397.7 135.5 414.6 130.5 421.6 128.3C423.3 127.7 426.7 126.7 429.2 125.9C440.8 122.4 476.8 110.3 519.2 95.9C551.7 84.8 609.6 65.4 616.8 63.1C619.6 62.2 623.8 60.9 626.2 60.1C639 56.1 656.2 51 663.1 49.1C664.5 48.8 670.3 47.1 676 45.5C681.7 43.9 690.8 41.3 696.1 39.8C701.5 38.3 708.5 36.2 711.8 35.3C727.1 30.8 732.7 29.1 739.9 26.9C761.3 20.3 775.5 17.5 793.8 16.3C795.9 16.1 798.8 15.9 800.1 15.7C801.5 15.6 804.2 15.4 806.1 15.3C808 15.1 810.8 14.9 812.2 14.8C813.7 14.6 816.6 14.4 818.6 14.2C824.5 13.8 825.9 12.8 823.4 10.6C821.5 8.9 820.2 8.8 811.8 9.2C802.6 9.7 797 10.2 788.5 11.4C785 11.9 781.8 12.3 781.5 12.4C767.9 15 755.6 17.6 745.4 20C729 24 719.6 26.4 708.5 29.4C692.5 33.8 686.7 35.5 675.2 38.9C670.9 40.2 665.9 41.7 664.1 42.3C662.3 42.8 658.4 44 655.4 44.9C652.4 45.9 647.6 47.4 644.9 48.2C642.1 49.1 637 50.7 633.5 51.9C630 53 623.9 55 620 56.2C607.2 60.3 548.7 79.9 528.6 86.9C524 88.5 517.5 90.7 514.4 91.8C511.2 92.8 503.7 95.4 497.6 97.5C483.9 102.2 437.5 117.7 425.4 121.6C409.4 126.7 407.7 127.3 403.1 128.6C400.6 129.4 395.5 130.9 391.6 132.1C385.2 134.1 381.4 135.2 360.1 141.4C352.5 143.6 348.7 144.8 346.9 145.8C344.3 147.1 346.1 147.4 352 146.7Z"/></svg>
+              </div>
+              <div class="ruta__stops" role="tablist" aria-label="Paradas del domingo">
+                <button class="ruta__stop" type="button" role="tab" id="ruta-tab-1" aria-controls="ruta-panel-1" aria-selected="true"><span class="ruta__stop-num">01</span><span class="ruta__stop-name">Llegás</span></button>
+                <button class="ruta__stop" type="button" role="tab" id="ruta-tab-2" aria-controls="ruta-panel-2" aria-selected="false" tabindex="-1"><span class="ruta__stop-num">02</span><span class="ruta__stop-name">Tu lugar</span></button>
+                <button class="ruta__stop" type="button" role="tab" id="ruta-tab-3" aria-controls="ruta-panel-3" aria-selected="false" tabindex="-1"><span class="ruta__stop-num">03</span><span class="ruta__stop-name">Largada</span></button>
+                <button class="ruta__stop" type="button" role="tab" id="ruta-tab-4" aria-controls="ruta-panel-4" aria-selected="false" tabindex="-1"><span class="ruta__stop-num">04</span><span class="ruta__stop-name">En carrera</span></button>
+                <button class="ruta__stop" type="button" role="tab" id="ruta-tab-5" aria-controls="ruta-panel-5" aria-selected="false" tabindex="-1"><span class="ruta__stop-num">05</span><span class="ruta__stop-name">Bandera</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 03 · QUÉ ============ -->
+      <section class="site-section" id="que-incluye" data-theme="dia" aria-labelledby="que-title">
+        <div class="container">
+          <header class="section-head reveal">
+            <h2 class="title-section" id="que-title">Un domingo de GP, a la manera Vandú.</h2>
+            <p class="lead">Cambie el formato o la sede, cada evento Vandú siempre tiene esto:</p>
+          </header>
+
+          <div class="que-grid">
+            <!-- La entrada: lo que trae cada evento + Entradas 2027 (pase oscuro con troquel) -->
+            <article class="entrada reveal" data-theme="noche" aria-labelledby="entrada-title">
+              <div class="entrada__row">
+                <span class="vd-label">Entrada · Domingo de GP</span>
+                <svg class="entrada__logo" width="96" height="40" viewBox="77 135 1645 662" fill="currentColor" role="img" aria-label="Vandú"><path d="M85.6 345.4C85.6 345.4 85.2 338.2 85.2 338.2C85.2 338.2 85.4 337.4 86.6 336.6C87.8 335.8 87.3 336.0 92.6 333.6C97.9 331.2 109.4 326.6 118.4 322.4C127.4 318.2 140.4 311.4 146.6 308.6C152.8 305.8 151.1 307.4 155.4 305.4C159.7 303.4 157.4 303.8 172.6 296.6C187.8 289.4 204.7 282.7 246.4 262.4C288.1 242.1 389.2 191.1 422.6 174.6C456.0 158.1 438.2 167.1 446.6 163.6C455.0 160.1 463.9 156.6 472.8 153.8C481.7 151.0 493.0 148.5 500.0 147.0C507.0 145.5 511.2 145.3 515.0 145.0C518.8 144.7 521.0 145.2 523.0 145.0C525.0 144.8 522.3 144.2 527.0 144.0C531.7 143.8 546.3 143.8 551.0 144.0C555.7 144.2 552.8 144.8 555.0 145.0C557.2 145.2 558.7 144.5 564.0 145.0C569.3 145.5 578.5 146.4 587.0 148.0C595.5 149.6 606.3 152.2 615.2 154.8C624.1 157.4 633.2 160.8 640.4 163.6C647.6 166.4 652.6 168.8 658.4 171.6C664.2 174.4 671.2 178.2 675.4 180.6C679.6 183.0 679.4 182.9 683.8 186.2C688.2 189.5 696.3 195.4 701.8 200.2C707.3 205.0 712.5 210.4 716.8 215.2C721.1 220.0 724.4 224.5 727.8 229.2C731.2 233.9 732.8 235.7 737.4 243.6C742.0 251.5 750.4 266.9 755.4 276.6C760.4 286.3 763.1 291.9 767.4 301.6C771.7 311.3 776.6 322.4 781.4 334.6C786.2 346.8 792.4 363.6 796.2 374.8C800.0 386.0 801.7 391.9 804.2 401.8C806.7 411.7 809.9 425.3 811.0 434.0C812.1 442.7 811.3 449.1 811.0 454.0C810.7 458.9 809.9 460.6 809.2 463.2C808.5 465.8 807.8 467.3 806.6 469.6C805.4 471.9 803.6 474.6 801.8 476.8C800.0 479.0 798.7 480.5 795.8 482.8C792.9 485.1 788.7 488.2 784.4 490.4C780.1 492.6 778.3 493.9 770.2 496.2C762.1 498.5 749.2 501.7 736.0 504.0C722.8 506.3 705.3 507.7 691.0 510.0C676.7 512.3 662.7 514.9 650.0 518.0C637.3 521.1 623.0 526.0 614.8 528.8C606.6 531.6 608.5 530.8 600.6 534.6C592.7 538.4 577.8 545.9 567.6 551.6C557.4 557.3 551.3 561.2 539.6 568.6C527.9 576.0 512.3 585.6 497.2 596.2C482.1 606.8 458.6 624.9 449.2 632.2C439.8 639.5 443.5 637.6 440.8 639.8C438.1 642.0 435.2 643.5 433.2 645.2C431.2 646.9 430.8 648.1 428.8 649.8C426.8 651.5 424.0 653.0 421.2 655.2C418.4 657.4 414.5 660.9 412.2 663.2C409.9 665.5 407.6 668.8 407.6 668.8C407.6 668.8 405.4 669.0 410.0 670.0C414.6 671.0 423.5 673.0 435.0 675.0C446.5 677.0 448.8 676.7 479.0 682.0C509.2 687.3 556.7 696.7 616.0 707.0C675.3 717.3 794.7 737.0 835.0 744.0C875.3 751.0 848.2 746.6 858.0 749.0C867.8 751.4 884.4 755.6 893.6 758.4C902.8 761.2 908.1 763.4 913.4 765.6C918.7 767.8 922.0 769.7 925.4 771.6C928.8 773.5 931.9 775.5 933.8 777.2C935.7 778.9 936.5 780.2 937.0 782.0C937.5 783.8 936.8 787.8 936.8 787.8C936.8 787.8 947.1 788.8 935.0 789.0C922.9 789.2 876.5 789.2 864.0 789.0C851.5 788.8 901.7 788.2 860.0 788.0C818.3 787.8 655.7 788.2 614.0 788.0C572.3 787.8 680.5 787.2 610.0 787.0C539.5 786.8 191.2 786.8 191.2 786.8C191.2 786.8 190.2 786.1 190.0 785.0C189.8 783.9 189.6 782.1 190.0 780.0C190.4 777.9 190.3 777.7 192.6 772.6C194.9 767.5 197.6 761.1 203.6 749.6C209.6 738.1 220.2 718.0 228.6 703.6C237.0 689.2 246.3 674.8 254.2 663.2C262.1 651.6 271.3 640.3 276.2 634.2C281.1 628.1 282.1 628.6 283.8 626.8C285.5 625.0 281.5 628.0 286.2 623.2C290.9 618.4 301.0 607.7 312.2 598.2C323.4 588.7 333.8 580.0 353.2 566.2C372.6 552.4 397.9 535.2 428.6 515.6C459.3 496.0 514.9 462.5 537.4 448.4C559.9 434.3 555.4 436.7 563.8 430.8C572.2 424.9 580.6 419.0 587.8 412.8C595.0 406.6 602.0 399.4 606.8 393.8C611.6 388.2 613.6 384.1 616.4 379.4C619.2 374.7 621.5 370.5 623.4 365.4C625.3 360.3 626.9 353.9 628.0 349.0C629.1 344.1 629.8 341.3 630.0 336.0C630.2 330.7 629.8 322.4 629.0 317.0C628.2 311.6 627.3 308.2 625.4 303.6C623.5 299.0 620.7 293.6 617.8 289.2C614.9 284.8 612.7 281.5 607.8 277.2C602.9 272.9 593.5 266.7 588.4 263.6C583.3 260.5 581.8 260.2 577.2 258.8C572.6 257.4 565.0 255.8 561.0 255.0C557.0 254.2 558.2 254.2 553.0 254.0C547.8 253.8 537.8 253.5 530.0 254.0C522.2 254.5 514.2 255.5 506.0 257.0C497.8 258.5 492.8 259.7 480.8 262.8C468.8 265.9 456.4 269.2 433.8 275.8C411.2 282.4 370.5 295.2 345.2 302.2C319.9 309.2 300.2 313.7 282.0 318.0C263.8 322.3 251.8 324.8 236.0 328.0C220.2 331.2 202.3 334.5 187.0 337.0C171.7 339.5 154.2 341.7 144.0 343.0C133.8 344.3 130.7 344.7 126.0 345.0C121.3 345.3 118.3 344.8 116.0 345.0C113.7 345.2 117.1 345.9 112.0 346.0C106.9 346.1 85.6 345.4 85.6 345.4Z" /><path d="M858.6 344.4C858.6 344.4 857.9 339.4 858.0 338.0C858.1 336.6 856.1 337.7 859.0 336.0C861.9 334.3 870.7 329.9 875.6 327.6C880.5 325.3 883.1 324.9 888.4 322.4C893.7 319.9 902.3 315.1 907.6 312.6C912.9 310.1 901.9 315.9 920.4 307.4C938.9 298.9 972.7 283.5 1018.4 261.4C1064.1 239.3 1160.7 191.1 1194.6 174.6C1228.5 158.1 1213.2 166.1 1221.6 162.6C1230.0 159.1 1236.6 156.4 1244.8 153.8C1253.0 151.2 1263.0 148.6 1271.0 147.0C1279.0 145.4 1287.3 144.5 1293.0 144.0C1298.7 143.5 1302.3 144.2 1305.0 144.0C1307.7 143.8 1303.3 143.0 1309.0 143.0C1314.7 143.0 1331.0 143.5 1339.0 144.0C1347.0 144.5 1348.0 144.4 1357.0 146.0C1366.0 147.6 1382.3 150.9 1393.2 153.8C1404.1 156.7 1414.2 160.5 1422.4 163.6C1430.6 166.7 1437.2 170.1 1442.4 172.6C1447.6 175.1 1447.2 174.5 1453.4 178.6C1459.6 182.7 1472.2 191.1 1479.8 197.2C1487.4 203.3 1493.6 209.7 1498.8 215.2C1504.0 220.7 1506.9 224.8 1510.8 230.2C1514.7 235.6 1517.6 239.5 1522.4 247.6C1527.2 255.7 1534.9 269.9 1539.4 278.6C1543.9 287.3 1544.9 289.3 1549.4 299.6C1553.9 309.9 1560.9 326.2 1566.4 340.6C1571.9 355.0 1578.4 373.4 1582.2 385.8C1586.0 398.2 1587.4 406.5 1589.0 415.0C1590.6 423.5 1591.7 430.8 1592.0 437.0C1592.3 443.2 1591.5 448.3 1591.0 452.0C1590.5 455.7 1590.0 457.0 1589.2 459.2C1588.4 461.4 1587.8 463.0 1586.4 465.4C1585.0 467.8 1583.4 471.1 1580.8 473.8C1578.2 476.5 1575.7 478.9 1570.8 481.8C1565.9 484.7 1557.5 488.8 1551.2 491.2C1544.9 493.6 1538.7 494.7 1533.0 496.0C1527.3 497.3 1530.8 496.8 1517.0 499.0C1503.2 501.2 1466.7 506.0 1450.0 509.0C1433.3 512.0 1428.0 513.4 1416.8 516.8C1405.6 520.2 1391.3 526.0 1382.6 529.6C1373.9 533.2 1377.9 530.8 1364.6 538.6C1351.3 546.4 1318.3 566.5 1302.6 576.6C1286.9 586.7 1282.8 589.9 1270.2 599.2C1257.6 608.5 1236.1 625.1 1227.2 632.2C1218.3 639.3 1221.1 638.1 1216.8 641.8C1212.5 645.5 1204.9 651.0 1201.2 654.2C1197.5 657.4 1196.5 659.3 1194.8 660.8C1193.1 662.3 1191.2 663.2 1191.2 663.2C1191.2 663.2 1178.0 663.5 1195.0 667.0C1212.0 670.5 1256.5 677.3 1293.0 684.0C1329.5 690.7 1360.2 697.5 1414.0 707.0C1467.8 716.5 1577.7 734.3 1616.0 741.0C1654.3 747.7 1636.1 745.2 1644.0 747.0C1651.9 748.8 1658.9 750.6 1663.2 751.8C1667.5 753.0 1664.7 752.6 1669.6 754.4C1674.5 756.2 1687.3 760.6 1692.4 762.6C1697.5 764.6 1697.2 764.7 1700.4 766.6C1703.6 768.5 1709.5 772.3 1711.8 774.2C1714.1 776.1 1713.7 776.4 1714.0 778.0C1714.3 779.6 1713.8 783.8 1713.8 783.8C1713.8 783.8 1723.1 784.8 1712.0 785.0C1700.9 785.2 1658.5 785.2 1647.0 785.0C1635.5 784.8 1653.3 784.2 1643.0 784.0C1632.7 783.8 1595.3 784.2 1585.0 784.0C1574.7 783.8 1591.3 783.2 1581.0 783.0C1570.7 782.8 1533.3 783.2 1523.0 783.0C1512.7 782.8 1531.0 782.2 1519.0 782.0C1507.0 781.8 1463.0 782.2 1451.0 782.0C1439.0 781.8 1464.8 781.2 1447.0 781.0C1429.2 780.8 1361.8 781.2 1344.0 781.0C1326.2 780.8 1400.8 780.4 1340.0 780.0C1279.2 779.6 979.2 778.8 979.2 778.8C979.2 778.8 978.2 778.1 978.0 777.0C977.8 775.9 977.6 774.1 978.0 772.0C978.4 769.9 975.7 774.7 980.6 764.6C985.5 754.5 1000.1 725.6 1007.6 711.6C1015.1 697.6 1019.3 690.7 1025.6 680.6C1031.9 670.5 1039.1 659.8 1045.2 651.2C1051.3 642.6 1057.1 635.4 1062.2 629.2C1067.3 623.0 1070.8 619.3 1076.0 614.0C1081.2 608.7 1085.3 604.0 1093.2 597.2C1101.1 590.4 1112.9 581.0 1123.2 573.2C1133.5 565.4 1138.6 561.5 1155.2 550.2C1171.8 538.9 1196.7 522.1 1222.6 505.6C1248.5 489.1 1288.7 465.0 1310.4 451.4C1332.1 437.8 1342.6 430.9 1352.8 423.8C1363.0 416.7 1366.3 413.6 1371.8 408.8C1377.3 404.0 1381.4 400.2 1385.8 394.8C1390.2 389.4 1395.3 381.5 1398.4 376.4C1401.5 371.3 1402.8 368.3 1404.4 364.4C1406.0 360.5 1406.9 358.6 1408.2 353.2C1409.5 347.8 1411.4 337.9 1412.0 332.0C1412.6 326.1 1412.5 322.9 1412.0 318.0C1411.5 313.1 1410.5 307.4 1409.2 302.8C1407.9 298.2 1407.1 295.4 1404.4 290.6C1401.7 285.8 1398.0 279.2 1392.8 274.2C1387.6 269.2 1379.0 263.8 1373.4 260.6C1367.8 257.4 1364.3 256.4 1359.2 254.8C1354.1 253.2 1347.2 251.8 1343.0 251.0C1338.8 250.2 1338.2 250.2 1334.0 250.0C1329.8 249.8 1323.5 249.7 1318.0 250.0C1312.5 250.3 1308.2 250.8 1301.0 252.0C1293.8 253.2 1307.5 248.3 1275.0 257.0C1242.5 265.7 1150.0 292.7 1106.2 304.2C1062.4 315.7 1037.5 320.5 1012.0 326.0C986.5 331.5 970.2 334.2 953.0 337.0C935.8 339.8 919.3 341.8 909.0 343.0C898.7 344.2 894.7 343.7 891.0 344.0C887.3 344.3 892.4 344.9 887.0 345.0C881.6 345.1 858.6 344.4 858.6 344.4Z" /></svg>
+              </div>
+              <h3 class="entrada__title" id="entrada-title">Incluye</h3>
+              <ul class="entrada__list" role="list">
+                <li>La carrera completa en pantalla grande</li>
+                <li>Comunidad y debate en vivo, vuelta a vuelta</li>
+                <li>Comida y tragos a la altura de la F1</li>
+                <li>Lugares limitados, para que se pueda charlar</li>
+              </ul>
+              <div class="entrada__perf" aria-hidden="true"></div>
+              <div class="entrada__row">
+                <span class="vd-label">Temporada 2027</span>
+                <span class="vd-tag vd-tag--low">Próximamente</span>
+              </div>
+              <!-- TODO: completar precio, sede y combo de las entradas 2027 -->
+              <dl class="entrada__datos">
+                <div><dt class="vd-label">Precio</dt><dd>[$ —]</dd></div>
+                <div><dt class="vd-label">Sede</dt><dd>[Sede]</dd></div>
+                <div><dt class="vd-label">Combo</dt><dd>[Combo]</dd></div>
+              </dl>
+              <a class="vd-btn vd-btn--primary vd-btn--block entrada__cta" href="#grilla">Avisame cuando salgan</a>
+            </article>
+
+            <!-- Buzón en 2 pasos: elegís Idea o Reseña y después escribís.
+                 TODO: el envío todavía no está conectado (mail, planilla o formulario: a definir) -->
+            <div class="vd-mailbox buzon reveal" id="buzon" data-mailbox>
+              <div class="buzon__row">
+                <span class="vd-label vd-label--line">Buzón Vandú</span>
+                <span class="vd-label" data-mailbox-count>Paso 1 de 2</span>
+              </div>
+              <div class="vd-steps" aria-hidden="true"><span class="is-on"></span><span data-mailbox-step2></span></div>
+              <h3 class="vd-mailbox__title buzon__title">Contanos tus ideas para el próximo evento.</h3>
+              <p class="vd-value__text">La temporada 2027 la armamos con vos.</p>
+
+              <div class="buzon__opciones" data-mailbox-intro>
+                <button type="button" class="buzon__opcion" data-mailbox-pick="idea">
+                  <svg class="buzon__ico" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/></svg>
+                  <span class="buzon__txt"><b>Una idea</b><span>Algo que quieras ver en el próximo GP.</span></span>
+                  <span class="buzon__go"><span class="buzon__go-txt">Escribir</span> <span aria-hidden="true">→</span></span>
+                </button>
+                <button type="button" class="buzon__opcion" data-mailbox-pick="resena">
+                  <svg class="buzon__ico" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6-4.5-4.2 6.1-.7z"/></svg>
+                  <span class="buzon__txt"><b>Una reseña</b><span>¿Ya viniste? Contanos cómo te fue.</span></span>
+                  <span class="buzon__go"><span class="buzon__go-txt">Escribir</span> <span aria-hidden="true">→</span></span>
+                </button>
+              </div>
+
+              <form class="mailbox__step" data-mailbox-form hidden novalidate>
+                <div class="vd-segment buzon__segment" role="group" aria-label="Tipo de mensaje">
+                  <button type="button" class="vd-chip" aria-pressed="true" data-mailbox-type="idea">Idea</button>
+                  <button type="button" class="vd-chip" aria-pressed="false" data-mailbox-type="resena">Reseña</button>
+                </div>
+                <div class="vd-field">
+                  <label class="vd-field__label" for="mb-msg" data-mailbox-label>Tu idea</label>
+                  <textarea class="vd-textarea buzon__area" id="mb-msg" name="mensaje" required placeholder="Ej: prode en vivo…"></textarea>
+                </div>
+                <div class="vd-field">
+                  <label class="vd-field__label" for="mb-mail">Tu mail <small>(obligatorio)</small></label>
+                  <input class="vd-input" id="mb-mail" name="email" type="email" autocomplete="email" required placeholder="vos@mail.com" />
+                </div>
+                <label class="vd-check"><input type="checkbox" name="permiso" /> Doy permiso para que Vandú publique mi mensaje</label>
+                <div class="btn-row">
+                  <button type="submit" class="vd-btn vd-btn--primary">Enviar</button>
+                  <button type="button" class="vd-btn vd-btn--ghost" data-mailbox-back>Volver</button>
+                </div>
+                <p class="vd-alert" role="status" aria-live="polite" data-mailbox-status></p>
+              </form>
+            </div>
+          </div>
+
+          <!-- Extra: merch (foto recta · texto · botón) -->
+          <article class="vd-card merch reveal" id="merch">
+            <div class="vd-ph merch__media merch__media--foto"><img src="img/remera-senna.jpg" alt="Espalda de la remera negra de Vandú con la inscripción Ayrton Senna y su auto de F1" loading="lazy" /></div>
+            <div class="merch__copy">
+              <h3 class="merch__title">Merch Vandú: remera Senna</h3>
+              <p class="vd-value__text">Diseño original. Llevala puesta al próximo GP.</p>
+            </div>
+            <!-- TODO: link a la tienda o a la página de merch -->
+            <a class="vd-btn vd-btn--secondary merch__cta" href="#">Ver remera</a>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ 04 · PRÓXIMO GP (plantilla: se completa por evento en data/content.json) ============ -->
+      <!-- Prueba de mosaico: vd-bg-monograma (vandu-ui-kit/components.css). Para sacarlo, borrar la clase -->
+      <section class="site-section vd-bg vd-bg-monograma" id="proximo-gp" aria-labelledby="gp-title">
+        <div class="container">
+          <header class="section-head reveal">
+            <h2 class="title-section" id="gp-title">La próxima largada.</h2>
+          </header>
+
+          <div class="split split--gp">
+            <article class="vd-card vd-gp reveal">
+              <logo-loader-inverse class="vd-gp__watermark" color="currentColor" aria-hidden="true"></logo-loader-inverse>
+              <div class="vd-gp__top">
+                <img class="vd-gp__flag" data-event="flag" src="data:," alt="" width="48" height="32" hidden />
+                <span class="vd-tag vd-tag--open" data-event="estado">Abierto</span>
+              </div>
+              <h3 class="vd-gp__name" data-event="name">[Nombre del GP]</h3>
+              <div class="vd-gp__meta">
+                <div><span class="vd-label">Fecha</span><p class="vd-gp__value"><time data-event="date">[DD/MM · 00:00]</time></p></div>
+                <div><span class="vd-label">Cupo</span><p class="vd-gp__value" data-event="cupo">[N] lugares</p></div>
+              </div>
+              <div><span class="vd-label">Sede</span><p class="vd-gp__value" data-event="place">Aci2bar · Cucha Cucha 2595</p></div>
+              <p class="vd-value__text" data-event="text"></p>
+              <a class="vd-btn vd-btn--primary vd-btn--block" href="#grilla" data-cta="gp-card" data-cta-label>Quiero mi entrada</a>
+            </article>
+
+            <div class="stack reveal">
+              <h3 class="title-block">Calendario Vandú</h3>
+              <!-- TODO: completar fechas y GPs reales -->
+              <div class="vd-cal">
+                <div class="vd-cal__row"><span class="vd-cal__date">[DD/MM]</span><span class="vd-cal__name">[GP próximo]</span><a class="vd-btn vd-btn--secondary vd-btn--sm" href="#grilla">Reservar</a></div>
+                <div class="vd-cal__row"><span class="vd-cal__date">[DD/MM]</span><span class="vd-cal__name">[GP siguiente]</span><span class="vd-tag vd-tag--low">Pronto</span></div>
+                <div class="vd-cal__row is-break"><span class="vd-cal__date">DIC–FEB</span><span class="vd-cal__name">Receso · Misión comunidad</span><a class="vd-btn vd-btn--secondary vd-btn--sm" href="#grilla">Sumarme</a></div>
+                <div class="vd-cal__row"><span class="vd-cal__date">2027</span><span class="vd-cal__name">Largada temporada · [1er GP]</span><a class="vd-btn vd-btn--ghost" href="#grilla">Avisame</a></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="vd-ph vd-ph--map reveal">
+            <span class="vd-label">Mapa / cómo llegar</span>
+            <a
+              class="vd-btn vd-btn--secondary vd-btn--sm"
+              href="https://www.google.com/maps/search/?api=1&query=Cucha+Cucha+2595+CABA"
+              target="_blank"
+              rel="noopener"
+              >Cómo llegar ↗</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 05 · PRUEBA SOCIAL ============ -->
+      <section class="site-section" id="comunidad" data-theme="dia" aria-labelledby="social-title">
+        <div class="container">
+          <header class="section-head reveal">
+            <h2 class="title-section" id="social-title">Así se vive un domingo de GP.</h2>
+          </header>
+
+          <!-- Video 9:16 + fotos del último evento (data/content.json). En móvil es un carrusel horizontal -->
+          <div class="recap reveal">
+            <div class="vd-ph vd-ph--slant recap__video" data-recap-video>
+              <span class="vd-label recap__label">Reel 9:16 · “Llegar es tu meta”</span>
+            </div>
+            <ul class="recap__photos" data-recap-photos aria-label="Fotos del último evento"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 06 · PREGUNTAS FRECUENTES ============ -->
+      <section class="site-section" id="preguntas" aria-labelledby="faq-title">
+        <div class="container container--narrow">
+          <header class="section-head reveal">
+            <h2 class="title-section" id="faq-title">Lo que siempre nos preguntan.</h2>
+          </header>
+
+          <!-- TODO: completar las respuestas entre corchetes -->
+          <div class="faq reveal">
+            <details class="faq__item">
+              <summary>¿Cómo compro la entrada?</summary>
+              <p>[Método de pago]</p>
+            </details>
+            <details class="faq__item">
+              <summary>¿A qué hora tengo que llegar?</summary>
+              <p>[X min antes de la largada]</p>
+            </details>
+            <details class="faq__item">
+              <summary>¿Puedo pedir más comida o tragos?</summary>
+              <p>Sí, tenés la carta completa de Aci2bar.</p>
+            </details>
+            <details class="faq__item">
+              <summary>¿Hay edad mínima?</summary>
+              <p>[Confirmar: +18]</p>
+            </details>
+            <details class="faq__item">
+              <summary>¿Qué pasa si no puedo ir?</summary>
+              <p>[Política de cambios]</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ VENTANAS ============ -->
+      <!-- Grilla 2027 / entradas: guarda el mail en Brevo (api/suscribir.js).
+           Se abre con cualquier link a #grilla (botones sin link de venta, "Avisame", "Grilla 2027") -->
+      <dialog class="modal" id="grilla" data-signup aria-labelledby="signup-title">
+        <button class="vd-burger modal__close" type="button" aria-label="Cerrar" data-signup-close>
+          <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+        </button>
+        <form class="modal__form" data-signup-form novalidate>
+          <p class="vd-label vd-label--line">Grilla 2027</p>
+          <h2 class="title-block" id="signup-title">Son 50 lugares por GP. ¿Largás con nosotros?</h2>
+          <p class="vd-value__text">¿No hay carrera cerca? Anotate igual: sos parte de la grilla 2027 y te avisamos primero cuando se abran las entradas.</p>
+          <div class="vd-field" data-signup-field>
+            <label class="vd-field__label" for="signup-email">Tu mail</label>
             <input
-              class="signup__input"
+              class="vd-input"
               id="signup-email"
               name="email"
               type="email"
               autocomplete="email"
               inputmode="email"
-              placeholder="tu@mail.com"
+              placeholder="vos@mail.com"
               required
+              aria-describedby="signup-status"
             />
-            <input class="signup__trap" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
-            <button class="btn" type="submit" data-signup-submit>Quiero mi entrada</button>
-            <p class="signup__status" role="status" aria-live="polite"></p>
-          </form>
-          <div class="signup__done" hidden>
-            <p class="eyebrow">Listo</p>
-            <h2 class="signup__title">¡Gracias!</h2>
-            <p class="signup__text" data-signup-done-text>Ya tenemos tu mail. Te escribimos pronto con la info de las entradas.</p>
           </div>
-        </dialog>
+          <input class="trap" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <button class="vd-btn vd-btn--primary vd-btn--block" type="submit" data-signup-submit>Anotarme en la grilla</button>
+          <p class="form-status" id="signup-status" role="status" aria-live="polite" data-signup-status>
+            Te mandamos todo para sacar tu entrada.
+          </p>
+        </form>
+      </dialog>
 
-        <dialog class="lightbox" data-lightbox aria-label="Foto ampliada">
-          <img class="lightbox__img" alt="" />
-          <p class="lightbox__caption"></p>
-          <button class="icon-btn lightbox__close" type="button" aria-label="Cerrar">✕</button>
-          <button class="icon-btn lightbox__prev" type="button" aria-label="Foto anterior">←</button>
-          <button class="icon-btn lightbox__next" type="button" aria-label="Foto siguiente">→</button>
-        </dialog>
-      </section>
+      <!-- Cuenta: iniciar sesión con Supabase (js/cuenta.js). Crear cuenta está en registro.html -->
+      <dialog class="modal" id="cuenta" data-account aria-labelledby="account-title">
+        <button class="vd-burger modal__close" type="button" aria-label="Cerrar" data-account-close>
+          <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+        </button>
+
+        <form class="modal__form" data-account-form="login" novalidate>
+          <h2 class="title-block" id="account-title">Iniciá sesión</h2>
+          <!-- Aviso opcional (window.cuenta.abrirLogin('…')), ej. "Iniciá sesión para guardar tu prode" -->
+          <p class="vd-value__text" data-login-aviso hidden></p>
+          <div class="vd-field">
+            <label class="vd-field__label" for="login-email">Tu mail</label>
+            <input class="vd-input" id="login-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="vos@mail.com" required />
+          </div>
+          <div class="vd-field">
+            <label class="vd-field__label" for="login-pass">Contraseña</label>
+            <input class="vd-input" id="login-pass" name="password" type="password" autocomplete="current-password" required />
+          </div>
+          <button class="vd-btn vd-btn--primary vd-btn--block" type="submit">Entrar</button>
+          <p class="form-status signup__status" role="status" aria-live="polite"></p>
+          <p class="modal__alt">¿No tenés cuenta? <a class="text-link" href="registro.html">Creá tu perfil de piloto</a></p>
+        </form>
+
+        <div class="modal__form" data-account-done hidden>
+          <p class="vd-label">Casi listo</p>
+          <h2 class="title-block">Revisá tu mail</h2>
+          <p class="vd-value__text">
+            Te mandamos un link a <strong data-account-done-email></strong> para confirmar tu cuenta. Tocalo y volvés a la
+            página con la sesión iniciada.
+          </p>
+        </div>
+      </dialog>
+
+      <dialog class="lightbox" data-lightbox aria-label="Foto ampliada">
+        <img class="lightbox__img" alt="" />
+        <p class="lightbox__caption"></p>
+        <button class="vd-burger lightbox__close" type="button" aria-label="Cerrar">✕</button>
+        <button class="vd-burger lightbox__prev" type="button" aria-label="Foto anterior">←</button>
+        <button class="vd-burger lightbox__next" type="button" aria-label="Foto siguiente">→</button>
+      </dialog>
     </main>
 
-    <!-- ============ FOOTER (esqueleto) ============ -->
+    <!-- ============ FOOTER ============ -->
     <footer class="site-footer">
-      <div class="site-footer__grid">
+      <div class="vd-speed" aria-hidden="true"></div>
+      <div class="container site-footer__grid">
         <div class="site-footer__brand">
-          <a class="site-footer__logo" href="#evento" aria-label="22">
-            <logo-loader-inverse color="currentColor" aria-hidden="true"></logo-loader-inverse>
-          </a>
-          <!-- Frase de la marca: oculta por ahora. Para mostrarla, sacá el comentario y poné el texto.
-          <p class="site-footer__tagline">[Frase corta de la marca]</p>
-          -->
+          <a class="site-footer__logo" href="#inicio" aria-label="Vandú, volver al inicio"><logo-loader-inverse color="currentColor" aria-hidden="true"></logo-loader-inverse></a>
+          <p class="site-footer__tagline">La F1 se vive en comunidad.</p>
         </div>
 
-        <nav class="site-footer__col" aria-label="Secciones">
-          <p class="eyebrow">Secciones</p>
-          <ul>
-            <li>Próximamente</li>
+        <nav class="site-footer__col" aria-labelledby="footer-vandu">
+          <p class="vd-label" id="footer-vandu">Vandú</p>
+          <ul role="list">
+            <li><a href="#proximo-gp">Eventos</a></li>
+            <li><a href="stickers.html">Stickers</a></li>
+            <li><a href="prode.html">Prode</a></li>
+            <li><a href="#merch">Merch</a></li>
+          </ul>
+        </nav>
+
+        <nav class="site-footer__col" aria-labelledby="footer-comunidad">
+          <p class="vd-label" id="footer-comunidad">Comunidad</p>
+          <ul role="list">
+            <li><a href="#grilla">Grilla 2027</a></li>
+            <li><a href="#buzon">Buzón</a></li>
+            <li><a href="#preguntas">Preguntas</a></li>
           </ul>
         </nav>
 
         <div class="site-footer__col">
-          <p class="eyebrow">Contacto</p>
-          <ul>
-            <li><a href="#">vngtdx@gmail.com</a></li>
-            <li>Cucha Cucha 2595, CABA.</li>
-          </ul>
-        </div>
-
-        <div class="site-footer__col">
-          <p class="eyebrow">Redes</p>
-          <ul>
-            <li><a href="https://www.instagram.com/vandu.f1/" target="_blank" rel="noopener">Instagram ↗</a></li>
-            <li><a href="https://www.tiktok.com/@thevandu" target="_blank" rel="noopener">TikTok ↗</a></li>
-          </ul>
+          <p class="vd-label">Seguinos</p>
+          <div class="vd-social">
+            <a href="https://www.instagram.com/vandu.f1/" target="_blank" rel="noopener" aria-label="Instagram de Vandú"
+              ><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" /></svg
+            ></a>
+            <a href="https://www.tiktok.com/@thevandu" target="_blank" rel="noopener" aria-label="TikTok de Vandú"
+              ><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5M14 3c.5 2.6 2.4 4.4 5 4.6" /></svg
+            ></a>
+          </div>
+          <p class="site-footer__handle">@thevandu</p>
         </div>
       </div>
 
-      <div class="site-footer__bottom">
-        <small>© <span data-year>2026</span> · Vandu 22</small>
-        <small>.....</small>
+      <div class="container site-footer__bottom">
+        <a href="mailto:vngtdx@gmail.com">vngtdx@gmail.com</a>
+        <span>Cucha Cucha 2595, CABA</span>
+        <small>© <span data-year>2026</span> Vandu 22</small>
       </div>
     </footer>
 
-    <script src="js/main.js?v=20261028a"></script>
-    <script src="js/menu.js?v=20261028a" defer></script>
+    <script src="js/nav.js?v=20261117p"></script>
+    <script src="js/main.js?v=20261118e"></script>
     <!-- Cuentas de usuario con Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js" defer></script>
-    <script src="js/supabase-config.js?v=20261028a" defer></script>
-    <script src="js/cuenta.js?v=20261028a" defer></script>
-    </body>
+    <script src="js/supabase-config.js?v=20261117p" defer></script>
+    <script src="js/cuenta.js?v=20261117t" defer></script>
+  </body>
 </html>
