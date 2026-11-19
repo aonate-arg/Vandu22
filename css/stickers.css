@@ -1,0 +1,183 @@
+/* Vandú · catálogo de stickers (stickers.html).
+   Se carga después de css/site.css. Solo variables de vandu-ui-kit/tokens.css.
+   Grilla: 12 columnas en PC (1120px de contenido, gutter 24 = .container de site.css),
+   4 columnas en móvil (margen 16, gutter 16). Regla de los 8px en todo. */
+
+/* ---------- Grilla de columnas ---------- */
+.cols {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 24px;
+}
+.cols > .col-full { grid-column: 1 / -1; }
+
+/* ---------- Encabezado: rayitas + título + filtros ---------- */
+.stk-head { padding-top: 64px; padding-bottom: 32px; row-gap: 24px; }
+.stk-rayas { display: flex; gap: 16px; }
+.stk-rayas span {
+  display: block;
+  width: 40px;
+  height: 8px;
+  background: var(--accent);
+  transform: skewX(var(--slant));
+}
+.stk-rayas span:last-child { width: 24px; }
+.stk-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-style: italic;
+  font-size: 64px;
+  line-height: 64px;
+  text-transform: uppercase;
+}
+/* El chip tiene 8px de aire a cada lado (::before con inset 0 8px): -8px lo alinea con la columna */
+.stk-filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-left: -8px; }
+
+/* ---------- Tarjetas: 3 de 12 columnas ---------- */
+.stk-grid { padding-bottom: 96px; row-gap: 24px; }
+.stk-card { grid-column: span 3; padding: 16px 16px 24px; gap: 16px; }
+.stk-card[hidden] { display: none; }
+
+/* Foto de referencia en paralelogramo; adentro, la silueta del sticker */
+.stk-photo {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  clip-path: polygon(16px 0, 100% 0, calc(100% - 16px) 100%, 0 100%);
+}
+.stk-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.stk-shape {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: 8px solid var(--ink);
+  color: var(--muted);
+}
+.stk-shape--tira { width: 64%; height: 40%; transform: rotate(-8deg) skewX(var(--slant)); }
+.stk-shape--tira svg { transform: skewX(12deg) rotate(8deg); }
+.stk-shape--cuadrado { width: 56%; height: 56%; transform: rotate(6deg); }
+.stk-shape--corte {
+  width: 56%;
+  height: 56%;
+  border: 0;
+  outline: 8px solid var(--ink);
+  outline-offset: -8px;
+  transform: rotate(-6deg);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 24px 100%, 0 calc(100% - 24px));
+}
+
+/* Stickers Vandú: el arte de la marca directo en la foto, en el color del texto (blanco en Noche) */
+.stk-art { display: block; color: var(--ink); }
+.stk-art--logo { width: 72%; transform: rotate(-6deg); }
+.stk-art--auto { width: 80%; height: auto; transform: rotate(-6deg); }
+
+.stk-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.stk-cat {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 16px;
+  background: var(--highlight);
+  color: var(--on-highlight);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+.stk-price {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 28px;
+  line-height: 32px;
+  color: var(--accent-text);
+  font-variant-numeric: tabular-nums;
+}
+.stk-name { font-size: 20px; line-height: 24px; font-weight: 600; }
+
+/* "Agregar" → "Agregado": se rellena de teal (selección del kit) */
+.stk-add[aria-pressed="true"] { color: var(--on-highlight); }
+.stk-add[aria-pressed="true"]::before { background: var(--highlight); border-color: var(--highlight); }
+
+.stk-by { display: flex; align-items: center; gap: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+.stk-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--highlight); flex-shrink: 0; }
+.stk-by__who { display: flex; flex-direction: column; min-width: 0; }
+.stk-by__name { font-size: 15px; line-height: 24px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.stk-vacio { color: var(--muted); }
+
+/* ---------- Banda: ¿Diseñás? (texto 8 col · botón en las 4 finales) ---------- */
+.stk-cta { padding-block: 64px 72px; }
+.stk-cta .cols { row-gap: 32px; align-items: center; }
+.stk-cta__text { grid-column: 1 / span 8; display: flex; flex-direction: column; gap: 8px; }
+.stk-cta__btn { grid-column: 9 / span 4; justify-self: end; }
+
+/* ---------- Footer en columnas: marca 4 · hueco 1 · Vandú 2 · Comunidad 2 · Seguinos 3 ---------- */
+.site-footer__grid.cols { gap: 40px 24px; }
+.site-footer__grid.cols .site-footer__brand { grid-column: 1 / span 4; }
+.site-footer__grid.cols .site-footer__col:nth-of-type(1) { grid-column: 6 / span 2; }
+.site-footer__grid.cols .site-footer__col:nth-of-type(2) { grid-column: 8 / span 2; }
+.site-footer__grid.cols .site-footer__col:nth-of-type(3) { grid-column: 10 / span 3; }
+
+/* ---------- Tablet: tarjetas de 6 columnas ---------- */
+@media (max-width: 1023px) {
+  .stk-card { grid-column: span 6; }
+  .stk-cta__text,
+  .stk-cta__btn { grid-column: 1 / -1; justify-self: start; }
+  .site-footer__grid.cols .site-footer__brand { grid-column: 1 / -1; }
+  .site-footer__grid.cols .site-footer__col:nth-of-type(1) { grid-column: 1 / span 4; }
+  .site-footer__grid.cols .site-footer__col:nth-of-type(2) { grid-column: 5 / span 4; }
+  .site-footer__grid.cols .site-footer__col:nth-of-type(3) { grid-column: 9 / span 4; }
+}
+
+/* ---------- Móvil: 4 columnas, margen 16 (lo pone .container), gutter 16 ---------- */
+@media (max-width: 767px) {
+  .cols { grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 16px; }
+
+  .stk-head { padding-top: 48px; padding-bottom: 24px; row-gap: 16px; }
+  .stk-rayas { gap: 8px; }
+  .stk-rayas span { width: 32px; }
+  .stk-rayas span:last-child { width: 16px; }
+  .stk-title { font-size: 42px; line-height: 40px; }
+  /* Filtros en una fila que se desliza, de borde a borde */
+  .stk-filtros {
+    flex-wrap: nowrap;
+    gap: 0;
+    margin-inline: -16px;
+    padding-inline: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .stk-filtros::-webkit-scrollbar { display: none; }
+  .stk-filtros .vd-chip { flex-shrink: 0; white-space: nowrap; }
+
+  /* Tarjetas: 2 de 4 columnas */
+  .stk-grid { padding-bottom: 64px; row-gap: 16px; }
+  .stk-card { grid-column: span 2; --cut: 16px; padding: 8px 8px 16px; gap: 8px; }
+  .stk-photo { clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); }
+  .stk-shape svg { width: 24px; height: 24px; }
+  .stk-shape--corte { clip-path: polygon(0 0, 100% 0, 100% 100%, 16px 100%, 0 calc(100% - 16px)); }
+  .stk-row { flex-direction: column; align-items: flex-start; }
+  .stk-cat { height: 24px; font-size: 11px; }
+  .stk-price { font-size: 24px; line-height: 24px; }
+  .stk-name { font-size: 16px; min-height: 48px; }
+  .stk-card .vd-btn { padding: 0 16px; font-size: 14px; }
+  .stk-by { gap: 8px; padding-top: 8px; }
+  .stk-avatar { width: 32px; height: 32px; }
+  .stk-by .vd-label { font-size: 10px; }
+  .stk-by__name { font-size: 13px; line-height: 16px; }
+
+  .stk-cta { padding-block: 48px 56px; }
+  .stk-cta .cols { row-gap: 24px; }
+  .stk-cta .title-section { font-size: 30px; line-height: 32px; }
+  .stk-cta__btn { justify-self: stretch; }
+
+  .site-footer__grid.cols { gap: 32px 16px; }
+  .site-footer__grid.cols .site-footer__col:nth-of-type(1) { grid-column: 1 / span 2; }
+  .site-footer__grid.cols .site-footer__col:nth-of-type(2) { grid-column: 3 / span 2; }
+  .site-footer__grid.cols .site-footer__col:nth-of-type(3) { grid-column: 1 / -1; }
+}

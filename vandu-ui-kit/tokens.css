@@ -1,0 +1,75 @@
+/* Vandú UI Kit — tokens. Tema Noche por defecto; Día con data-theme="dia" en <html>. */
+:root, [data-theme="noche"] {
+  --navy-900: #001b44;
+  --navy-700: #1f4580;
+  --sky-400: #6d9be1;
+  --neon: #00ffe0;
+  --teal-400: #3cd1bf;
+  --teal-200: #81d1c8;
+  --gray-700: #3b3b3b;
+  --gray-500: #707070;
+  --gray-300: #aba7a7;
+  --white: #ffffff;
+  --mist: #eef3fb;
+  --bg: var(--navy-900);
+  --surface: var(--navy-700);
+  --ink: var(--white);
+  --muted: var(--teal-200);
+  --line: var(--sky-400);
+  --hairline: var(--navy-700);
+  --accent: var(--neon);
+  --on-accent: var(--navy-900);
+  --accent-text: var(--neon);
+  --highlight: var(--teal-400);
+  --on-highlight: var(--navy-900);
+  --focus: var(--neon);
+  --signal: #ff7a7a;   /* error */
+  --success: var(--neon); /* confirmación: enviado / guardado */
+  --status-open: var(--neon);
+  --status-low: var(--sky-400);
+  --status-out: var(--gray-500);
+  --glow: 0 0 0 4px rgba(0,255,224,0.25);
+}
+[data-theme="dia"] {
+  --bg: var(--white);
+  --surface: var(--mist);
+  --ink: var(--navy-900);
+  --muted: var(--gray-700);
+  --line: var(--gray-500);
+  --hairline: var(--gray-300);
+  --accent: var(--navy-900);
+  --on-accent: var(--white);
+  --accent-text: var(--navy-700);
+  --focus: var(--navy-700);
+  --signal: #c62828;
+  --success: #1b7a47;  /* verde que pasa 4.5:1 sobre blanco y sobre mist */
+  --glow: 0 0 0 4px rgba(31,69,128,0.2);
+}
+/* Espacios: regla de los 8px. --space-1 (4px) y --space-3 (12px) quedan solo
+   para detalles finos; para márgenes, gaps y paddings usar múltiplos de 8. */
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-18: 72px;
+  --space-20: 80px;
+  --space-24: 96px;
+  /* Forma geométrica: sin redondeos. Botones y chips en paralelogramo,
+     tarjetas con la esquina inferior izquierda cortada en diagonal. */
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-pill: 0;
+  --slant: -12deg;   /* inclinación de botones, chips y etiquetas */
+  --cut-sm: 16px;    /* corte de esquina: celdas chicas */
+  --cut: 24px;       /* corte de esquina: tarjetas */
+  --cut-lg: 40px;    /* corte de esquina: tarjetas grandes (GP, buzón) */
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-sans: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+}

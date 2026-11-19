@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es" data-theme="noche">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vandú · Choice</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../components.css">
+<style>body{margin:0;background:var(--bg)}</style>
+</head>
+<body>
+<div class="vd" style="background: var(--bg); padding: 24px; display: flex; flex-direction: column; gap: 18px; max-width: 420px">
+  <div class="vd-segment" role="group" aria-label="Tipo de mensaje">
+    <button type="button" class="vd-chip" aria-pressed="true" id="c-idea">Idea</button>
+    <button type="button" class="vd-chip" aria-pressed="false" id="c-res">Reseña</button>
+  </div>
+  <label class="vd-check"><input type="checkbox" checked> Doy permiso para que Vandú publique mi mensaje</label>
+</div>
+<script>
+  const a = document.getElementById('c-idea'), b = document.getElementById('c-res');
+  [a, b].forEach((el) => el.addEventListener('click', () => {
+    a.setAttribute('aria-pressed', String(el === a));
+    b.setAttribute('aria-pressed', String(el === b));
+  }));
+</script>
+
+</body>
+</html>

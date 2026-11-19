@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es" data-theme="noche">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vandú · Navbar</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../components.css">
+<style>body{margin:0;background:var(--bg)}</style>
+</head>
+<body>
+<div class="vd" style="background: var(--bg); display: flex; flex-direction: column; gap: 20px; padding-bottom: 20px">
+  <header class="vd-nav">
+    <img class="vd-logo vd-logo--on-dark" src="../logos/vandu-logo-blanco.svg" alt="Vandú">
+    <img class="vd-logo vd-logo--on-light" src="../logos/vandu-logo-navy.svg" alt="Vandú">
+    <nav class="vd-nav__links" aria-label="Principal">
+      <a href="#" aria-current="page">Por qué</a>
+      <a href="#">Misión 2027</a>
+      <a href="#">Cómo</a>
+      <a href="#">Próximo GP</a>
+    </nav>
+    <a class="vd-btn vd-btn--primary vd-btn--sm" href="#">Quiero mi entrada</a>
+  </header>
+  <header class="vd-nav" style="max-width: 390px; padding: 12px 16px">
+    <img class="vd-logo vd-logo--on-dark" src="../logos/vandu-logo-blanco.svg" alt="Vandú" style="height: 22px">
+    <img class="vd-logo vd-logo--on-light" src="../logos/vandu-logo-navy.svg" alt="Vandú" style="height: 22px">
+    <button type="button" class="vd-burger" aria-label="Abrir menú"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  </header>
+</div>
+
+</body>
+</html>

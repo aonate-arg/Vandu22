@@ -33,7 +33,8 @@
   /* Tipografías */
   --font-display: 'Barlow Condensed', 'DejaVu Sans Condensed', sans-serif;
   --font-body: 'Inter', system-ui, 'DejaVu Sans', sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'DejaVu Sans Mono', monospace;
+  /* Etiquetas chicas en mayúscula (antes JetBrains Mono): Inter más gruesa y espaciada */
+  --font-label: var(--font-body);
 
   /* Espaciado fluido: crece con el ancho de pantalla */
   --gutter: clamp(24px, 5vw, 96px);
@@ -69,6 +70,12 @@ html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent; /* sin el recuadro gris al tocar en el celular */
+}
+
+/* Con una ventana abierta (login, entradas, fotos) la página de atrás no scrollea */
+html:has(dialog[open]) {
+  overflow: hidden;
 }
 
 body {
@@ -100,6 +107,14 @@ button {
   cursor: pointer;
 }
 
+/* Toque inmediato: sin la espera del doble toque para hacer zoom */
+a,
+button,
+label,
+input {
+  touch-action: manipulation;
+}
+
 ul,
 ol {
   list-style: none;
@@ -119,7 +134,8 @@ ol {
   padding: 8px 16px;
   background: var(--color-navy);
   color: var(--color-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 12px;
   transform: translateY(-200%);
 }
@@ -143,9 +159,10 @@ ol {
 }
 
 /* ---- base/typography.css ---- */
-/* Etiqueta (JetBrains Mono) con rayita turquesa */
+/* Etiqueta (Inter en mayúscula) con rayita turquesa */
 .eyebrow {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 12px;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -217,9 +234,15 @@ ol {
     transform 0.2s;
 }
 
-.btn:hover {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .btn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+  }
+}
+
+.btn:active {
+  filter: brightness(0.92);
 }
 
 .btn--navy {
@@ -236,10 +259,12 @@ ol {
   transform: skewX(-12deg);
 }
 
-.btn--outline:hover {
-  background: var(--color-navy);
-  color: var(--color-white);
-  transform: skewX(-12deg) translateY(-1px);
+@media (hover: hover) {
+  .btn--outline:hover {
+    background: var(--color-navy);
+    color: var(--color-white);
+    transform: skewX(-12deg) translateY(-1px);
+  }
 }
 
 /* Botón redondo (flechas y cierre del visor de fotos) */
@@ -256,10 +281,12 @@ ol {
     opacity 0.2s;
 }
 
-.icon-btn:hover {
-  background: var(--color-accent);
-  color: var(--color-navy);
-  box-shadow: none;
+@media (hover: hover) {
+  .icon-btn:hover {
+    background: var(--color-accent);
+    color: var(--color-navy);
+    box-shadow: none;
+  }
 }
 
 .icon-btn:disabled {
@@ -277,7 +304,8 @@ ol {
   overflow: hidden;
   background: linear-gradient(135deg, var(--color-line), var(--color-line-2));
   color: var(--color-placeholder);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 12px;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -301,12 +329,21 @@ ol {
   display: grid;
   place-items: center;
   background: var(--color-navy);
+  /* Aparece recién a los 0,3 s: si la página carga rápido, no se llega a ver */
+  animation: page-loader-in 0.2s ease 0.3s both;
   transition:
-    opacity 0.5s ease,
-    visibility 0.5s;
+    opacity 0.3s ease,
+    visibility 0.3s;
+}
+
+@keyframes page-loader-in {
+  from {
+    opacity: 0;
+  }
 }
 
 .page-loader.is-done {
+  animation: none;
   opacity: 0;
   visibility: hidden;
 }
@@ -352,7 +389,8 @@ ol {
 .section {
   position: relative;
   overflow: hidden;
-  padding: var(--section-space) var(--gutter);
+  padding: var(--section-space) max(var(--gutter), env(safe-area-inset-right)) var(--section-space)
+    max(var(--gutter), env(safe-area-inset-left));
   scroll-margin-top: calc(var(--nav-h) - 1px);
 }
 
@@ -378,9 +416,16 @@ ol {
   display: flex;
   align-items: center;
   height: var(--nav-h);
-  padding: 0 var(--gutter);
-  background: rgb(2 29 66 / 92%);
-  backdrop-filter: saturate(1.4) blur(8px);
+  padding: 0 max(var(--gutter), env(safe-area-inset-right)) 0 max(var(--gutter), env(safe-area-inset-left));
+  background: rgb(2 29 66 / 97%);
+}
+
+@media (min-width: 865px) {
+  .brand-header {
+    background: rgb(2 29 66 / 92%);
+    -webkit-backdrop-filter: saturate(1.4) blur(8px);
+    backdrop-filter: saturate(1.4) blur(8px);
+  }
 }
 
 /* Línea neón bajo el logo */
@@ -406,8 +451,10 @@ ol {
   transition: color 0.2s;
 }
 
-.brand-header__logo:hover logo-loader-inverse {
-  color: var(--color-accent);
+@media (hover: hover) {
+  .brand-header__logo:hover logo-loader-inverse {
+    color: var(--color-accent);
+  }
 }
 
 /* Acciones a la derecha: registro / usuario + entradas */
@@ -448,12 +495,16 @@ ol {
   display: none;
 }
 
-.brand-header__register:hover {
-  filter: none;
+@media (hover: hover) {
+  .brand-header__register:hover {
+    filter: none;
+  }
 }
 
-.brand-header__register:hover::before {
-  background: var(--color-navy-soft);
+@media (hover: hover) {
+  .brand-header__register:hover::before {
+    background: var(--color-navy-soft);
+  }
 }
 
 /* Iniciar sesión: link de texto, para no competir con "Registrarme" */
@@ -469,8 +520,10 @@ ol {
   transition: color 0.2s;
 }
 
-.brand-header__login:hover {
-  color: var(--color-accent);
+@media (hover: hover) {
+  .brand-header__login:hover {
+    color: var(--color-accent);
+  }
 }
 
 .brand-header__login svg {
@@ -499,13 +552,16 @@ ol {
   border: 0;
   background: none;
   color: var(--color-white);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 13px;
   cursor: pointer;
 }
 
-.brand-header__user:hover .brand-header__user-name {
-  color: var(--color-accent);
+@media (hover: hover) {
+  .brand-header__user:hover .brand-header__user-name {
+    color: var(--color-accent);
+  }
 }
 
 /* Menú que se abre al tocar la personita */
@@ -561,8 +617,10 @@ ol {
   cursor: pointer;
 }
 
-.user-menu__item:hover {
-  color: var(--color-navy);
+@media (hover: hover) {
+  .user-menu__item:hover {
+    color: var(--color-navy);
+  }
 }
 
 .brand-header__user svg {
@@ -642,7 +700,7 @@ ol {
 /* Celulares angostos (360px o menos): menos margen y botones más chicos para que entre todo el header */
 @media (max-width: 400px) {
   .brand-header {
-    padding-inline: 16px;
+    padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right));
   }
 
   /* "Sacá tu entrada" queda como "Entrada" */
@@ -812,9 +870,10 @@ ol {
 
 .gp-card__meta dt {
   color: var(--color-navy-2);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 11px;
-  font-weight: 500;
+  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
@@ -823,8 +882,10 @@ ol {
   text-underline-offset: 3px;
 }
 
-.gp-card__place-link:hover {
-  color: var(--color-navy);
+@media (hover: hover) {
+  .gp-card__place-link:hover {
+    color: var(--color-navy);
+  }
 }
 
 .gp-card__text {
@@ -889,7 +950,8 @@ ol {
   bottom: 14%;
   left: 50%;
   color: rgb(109 155 224 / 67%);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 11px;
   letter-spacing: 1px;
   text-align: center;
@@ -926,9 +988,11 @@ button.recap__photo {
     filter 0.3s;
 }
 
-button.recap__photo:hover img {
-  filter: brightness(1.08);
-  transform: scale(1.05);
+@media (hover: hover) {
+  button.recap__photo:hover img {
+    filter: brightness(1.08);
+    transform: scale(1.05);
+  }
 }
 
 /* "+N" cuando hay más de 4 fotos */
@@ -970,7 +1034,6 @@ button.recap__photo:hover img {
 
 .lightbox::backdrop {
   background: rgb(2 29 66 / 94%);
-  backdrop-filter: blur(8px);
 }
 
 .lightbox__img {
@@ -982,7 +1045,8 @@ button.recap__photo:hover img {
 
 .lightbox__caption {
   color: var(--color-on-navy-2);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 12px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -995,8 +1059,8 @@ button.recap__photo:hover img {
 }
 
 .lightbox__close {
-  top: 24px;
-  right: 24px;
+  top: calc(24px + env(safe-area-inset-top));
+  right: calc(24px + env(safe-area-inset-right));
 }
 
 .lightbox__prev,
@@ -1006,16 +1070,24 @@ button.recap__photo:hover img {
 }
 
 .lightbox__prev {
-  left: clamp(8px, 2vw, 32px);
+  left: calc(clamp(8px, 2vw, 32px) + env(safe-area-inset-left));
 }
 
 .lightbox__next {
-  right: clamp(8px, 2vw, 32px);
+  right: calc(clamp(8px, 2vw, 32px) + env(safe-area-inset-right));
 }
 
 .lightbox__prev[hidden],
 .lightbox__next[hidden] {
   display: none;
+}
+
+@media (min-width: 865px) {
+  .lightbox::backdrop,
+  .signup::backdrop {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
 }
 
 /* ---- Formulario de entradas (Brevo) ---- */
@@ -1028,11 +1100,11 @@ button.recap__photo:hover img {
   background: var(--color-white);
   color: var(--color-navy);
   box-shadow: inset 0 2px 0 var(--color-neon);
+  overscroll-behavior: contain; /* con el teclado abierto, scrollear el form no mueve la página */
 }
 
 .signup::backdrop {
   background: rgb(2 29 66 / 94%);
-  backdrop-filter: blur(8px);
 }
 
 .signup__close {
@@ -1069,9 +1141,10 @@ button.recap__photo:hover img {
   display: block;
   margin-bottom: 8px;
   color: var(--color-navy-2);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 11px;
-  font-weight: 500;
+  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
@@ -1173,6 +1246,13 @@ button.recap__photo:hover img {
   }
 }
 
+@media (max-width: 680px) {
+  .reveal {
+    transform: translateY(16px);
+    transition-duration: 0.5s;
+  }
+}
+
 @media (max-width: 520px) {
   .countdown__unit {
     min-width: 0;
@@ -1189,9 +1269,13 @@ button.recap__photo:hover img {
 /* Pie de página (esqueleto: contenido a definir) */
 .site-footer {
   position: relative;
-  padding: clamp(48px, 5vw, 80px) var(--gutter) 32px;
+  padding: clamp(48px, 5vw, 80px) max(var(--gutter), env(safe-area-inset-right))
+    calc(32px + env(safe-area-inset-bottom)) max(var(--gutter), env(safe-area-inset-left));
   background: var(--color-navy);
   color: var(--color-on-navy);
+  /* Fuera de pantalla no se dibuja (ni se anima el logo) hasta que llegás scrolleando */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 480px;
 }
 
 /* Línea neón arriba, igual que la cabecera */
@@ -1236,8 +1320,10 @@ button.recap__photo:hover img {
   font-size: 14px;
 }
 
-.site-footer__col a:hover {
-  color: var(--color-accent);
+@media (hover: hover) {
+  .site-footer__col a:hover {
+    color: var(--color-accent);
+  }
 }
 
 .site-footer__bottom {
@@ -1249,7 +1335,8 @@ button.recap__photo:hover img {
   padding-top: 24px;
   border-top: 1px solid rgb(109 155 224 / 25%);
   color: var(--color-on-navy-2);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-weight: 600;
   font-size: 11px;
   letter-spacing: 1px;
   text-transform: uppercase;

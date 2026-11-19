@@ -1,0 +1,192 @@
+/* Vandú UI Kit — componentes. Todo color sale de tokens.css.
+   Adaptado a la regla de los 8px: espacios, alturas, anchos y efectos son múltiplos de 8.
+   Forma geométrica: sin redondeos. Botones y chips en paralelogramo (--slant), tarjetas con
+   la esquina inferior izquierda cortada (--cut) y una línea arriba.
+   Las fuentes se cargan en el <head> de cada página (Google Fonts). */
+
+.vd { font-family: var(--font-sans); color: var(--ink); }
+.vd *, .vd *::before, .vd *::after { box-sizing: border-box; }
+.vd p { margin: 0; }
+.vd [hidden] { display: none !important; }
+
+/* Formas reutilizables */
+.vd-cut { clip-path: polygon(0 0, 100% 0, 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut))); }
+.vd-slant { clip-path: polygon(var(--slant-x, 48px) 0, 100% 0, calc(100% - var(--slant-x, 48px)) 100%, 0 100%); }
+
+/* Logo según tema */
+.vd-logo { display: block; height: 32px; width: auto; }
+[data-theme="dia"] .vd-logo--on-dark { display: none; }
+:root:not([data-theme="dia"]) .vd-logo--on-light { display: none; }
+
+/* Etiqueta */
+.vd-label { font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+/* Etiqueta con rayita (encabezados de sección y tarjetas) */
+.vd-label--line::before { content: ""; display: inline-block; width: 24px; height: 2px; margin-right: 8px; vertical-align: middle; background: var(--accent-text); }
+
+/* Botón: el fondo y el borde van en ::before inclinado, así el texto queda recto
+   y el contorno de foco (rectangular) no se recorta */
+.vd-btn { position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 32px; border: 0; border-radius: 0; background: transparent; font-family: var(--font-sans); font-size: 16px; font-weight: 600; line-height: 24px; text-decoration: none; cursor: pointer; transition: transform .15s ease; }
+.vd-btn::before { content: ""; position: absolute; inset: 0 8px; z-index: -1; border: 2px solid transparent; transform: skewX(var(--slant)); transition: box-shadow .15s ease, border-color .15s ease, background-color .15s ease; }
+.vd-btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.vd-btn--primary { color: var(--on-accent); }
+.vd-btn--primary::before { background: var(--accent); border-color: var(--accent); }
+.vd-btn--primary:hover { transform: translateY(-1px); }
+.vd-btn--primary:hover::before { box-shadow: var(--glow); }
+.vd-btn--secondary { color: var(--ink); }
+.vd-btn--secondary::before { border-color: var(--line); }
+.vd-btn--secondary:hover::before { border-color: var(--ink); }
+.vd-btn--ghost { color: var(--accent-text); padding: 0 8px; text-decoration: underline; text-underline-offset: 4px; }
+.vd-btn--ghost::before { display: none; }
+.vd-btn--sm { min-height: 48px; padding: 0 24px; font-size: 15px; }
+.vd-btn--block { display: flex; width: 100%; }
+.vd-btn[disabled], .vd-btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; transform: none; }
+.vd-btn[disabled]::before, .vd-btn[aria-disabled="true"]::before { box-shadow: none; }
+@media (prefers-reduced-motion: reduce) { .vd-btn, .vd-btn::before { transition: none; } .vd-btn--primary:hover { transform: none; } }
+
+/* Campos */
+.vd-field { display: flex; flex-direction: column; gap: 8px; }
+.vd-field__label { font-size: 14px; font-weight: 600; color: var(--ink); }
+.vd-field__label small { font-weight: 400; color: var(--muted); font-size: 13px; }
+.vd-input, .vd-textarea { width: 100%; min-height: 48px; padding: 8px 16px; border-radius: 0; border: 2px solid var(--line); background: var(--bg); color: var(--ink); font-family: var(--font-sans); font-size: 16px; line-height: 24px; }
+.vd-textarea { min-height: 112px; padding: 16px; resize: vertical; }
+.vd-input::placeholder, .vd-textarea::placeholder { color: var(--muted); }
+.vd-input:focus, .vd-textarea:focus { outline: 3px solid var(--focus); outline-offset: 1px; border-color: var(--ink); }
+.vd-field.is-error .vd-input, .vd-field.is-error .vd-textarea { border-color: var(--signal); }
+.vd-field__error { font-size: 13px; color: var(--signal); display: flex; gap: 8px; align-items: center; }
+.vd-field.is-error .vd-field__label { color: var(--signal); }
+
+/* Aviso con color semántico: --error (rojo --signal) · --ok (verde --success).
+   Caja recta con esquina cortada, línea arriba del color y un sello inclinado con ! o ✓ */
+.vd-alert { --st: var(--line); display: flex; align-items: flex-start; gap: 16px; padding: 16px; background: var(--bg); border-top: 2px solid var(--st); color: var(--ink); font-size: 14px; line-height: 24px; clip-path: polygon(0 0, 100% 0, 100% 100%, var(--cut-sm) 100%, 0 calc(100% - var(--cut-sm))); }
+.vd-alert::before { content: "i"; flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: var(--st); color: var(--bg); font-weight: 800; font-size: 14px; line-height: 24px; transform: skewX(var(--slant)); }
+.vd-alert--error { --st: var(--signal); }
+.vd-alert--error::before { content: "!"; }
+.vd-alert--ok { --st: var(--success); }
+.vd-alert--ok::before { content: "✓"; }
+.vd-alert:empty { display: none; }
+
+/* Selección: segmentado + casilla (chip inclinado, igual que el botón) */
+.vd-segment { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.vd-chip { position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 24px; border: 0; background: transparent; color: var(--ink); font-family: var(--font-sans); font-size: 15px; font-weight: 600; cursor: pointer; }
+.vd-chip::before { content: ""; position: absolute; inset: 0 8px; z-index: -1; border: 2px solid var(--line); transform: skewX(var(--slant)); }
+.vd-chip[aria-pressed="true"] { color: var(--on-highlight); }
+.vd-chip[aria-pressed="true"]::before { background: var(--highlight); border-color: var(--highlight); }
+.vd-chip:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.vd-check { display: flex; align-items: flex-start; gap: 8px; min-height: 48px; font-size: 14px; line-height: 24px; color: var(--ink); cursor: pointer; }
+.vd-check input { width: 24px; height: 24px; margin: 0; flex-shrink: 0; accent-color: var(--highlight); }
+
+/* Etiqueta de estado (paralelogramo) */
+.vd-tag { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 16px; font-family: var(--font-sans); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); }
+.vd-tag::before { content: ""; width: 8px; height: 8px; background: currentColor; transform: skewX(var(--slant)); }
+.vd-tag--open { background: var(--status-open); color: var(--navy-900); }
+.vd-tag--low { background: var(--status-low); color: var(--navy-900); }
+.vd-tag--out { background: var(--status-out); color: var(--white); }
+
+/* Cuenta regresiva */
+.vd-countdown { display: inline-grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.vd-countdown__cell { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 80px; padding: 16px 8px; background: var(--surface); clip-path: polygon(0 0, 100% 0, 100% 100%, var(--cut-sm) 100%, 0 calc(100% - var(--cut-sm))); }
+.vd-countdown__num { font-family: var(--font-display); font-size: 48px; line-height: 48px; font-weight: 800; color: var(--accent-text); font-variant-numeric: tabular-nums; }
+.vd-countdown__unit { font-family: var(--font-sans); font-weight: 600; font-size: 11px; line-height: 16px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+/* Tarjeta base: esquina inferior izquierda cortada + línea arriba */
+.vd-card { position: relative; background: var(--surface); border-top: 2px solid var(--line); padding: 24px; display: flex; flex-direction: column; gap: 16px; clip-path: polygon(0 0, 100% 0, 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut))); }
+
+/* Tarjeta de GP */
+.vd-gp { --cut: var(--cut-lg); overflow: hidden; padding: 32px; }
+.vd-gp > * { position: relative; }
+.vd-gp__watermark { position: absolute !important; right: -32px; bottom: -32px; width: 320px; height: auto; opacity: .08; pointer-events: none; }
+.vd-gp__top { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.vd-gp__flag { width: 48px; height: 32px; object-fit: cover; clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%); }
+.vd-gp__name { font-family: var(--font-display); font-size: 40px; line-height: 40px; font-weight: 800; font-style: italic; text-transform: uppercase; }
+.vd-gp__meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.vd-gp__value { font-weight: 600; margin-top: 8px; }
+
+/* Fila de calendario */
+.vd-cal { background: var(--surface); border-top: 2px solid var(--line); overflow: hidden; clip-path: polygon(0 0, 100% 0, 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut))); }
+.vd-cal__row { display: grid; grid-template-columns: 80px minmax(0, 1fr) auto; align-items: center; gap: 16px; min-height: 64px; padding: 8px 24px; border-top: 1px solid var(--hairline); }
+.vd-cal__row:first-child { border-top: 0; }
+.vd-cal__date { font-family: var(--font-display); font-size: 20px; font-weight: 800; color: var(--accent-text); }
+.vd-cal__name { font-weight: 600; }
+.vd-cal__row.is-break { background: var(--bg); }
+
+/* Tarjeta de valor (ícono en paralelogramo) */
+.vd-value__icon { width: 56px; height: 48px; background: var(--highlight); color: var(--on-highlight); display: flex; align-items: center; justify-content: center; clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); }
+.vd-value__title { font-size: 20px; line-height: 24px; font-weight: 600; }
+.vd-value__text { color: var(--muted); line-height: 24px; }
+
+/* Reseña */
+.vd-review__stars { display: flex; gap: 8px; color: var(--accent-text); }
+.vd-review__quote { font-size: 18px; line-height: 28px; }
+.vd-review__who { display: flex; align-items: center; gap: 8px; }
+.vd-review__avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--highlight); }
+
+/* Buzón */
+.vd-mailbox { background: var(--surface); border-top: 2px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 24px; clip-path: polygon(0 0, 100% 0, 100% 100%, var(--cut-lg) 100%, 0 calc(100% - var(--cut-lg))); }
+.vd-mailbox__title { font-family: var(--font-display); font-size: 32px; line-height: 32px; font-weight: 800; font-style: italic; text-transform: uppercase; }
+.vd-steps { display: flex; gap: 8px; }
+.vd-steps span { height: 4px; flex: 1; background: var(--hairline); transform: skewX(var(--slant)); }
+.vd-steps span.is-on { background: var(--accent-text); }
+
+/* Menú y pie */
+.vd-nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 16px 24px; background: var(--bg); border-bottom: 1px solid var(--hairline); }
+.vd-nav__links { display: flex; gap: 24px; flex-wrap: wrap; }
+.vd-nav__links a { display: inline-flex; align-items: center; min-height: 48px; color: var(--ink); text-decoration: none; font-weight: 500; font-size: 15px; }
+.vd-nav__links a:hover, .vd-nav__links a[aria-current="page"], .vd-nav__links a[aria-current="true"] { color: var(--accent-text); }
+.vd-burger { width: 48px; height: 48px; border: 2px solid var(--line); background: transparent; color: var(--ink); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.vd-burger:hover { border-color: var(--ink); }
+.vd-burger:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.vd-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 32px 24px; background: var(--bg); border-top: 1px solid var(--hairline); font-size: 14px; color: var(--muted); }
+.vd-footer a { color: var(--ink); }
+.vd-social { display: flex; gap: 8px; }
+.vd-social a { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--line); display: inline-flex; align-items: center; justify-content: center; color: var(--ink); }
+.vd-social a:hover { border-color: var(--ink); }
+.vd-social a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* Velocidad: franja diagonal del logo */
+.vd-speed { height: 8px; background: repeating-linear-gradient(-24deg, var(--accent-text) 0 16px, transparent 16px 24px); opacity: .9; }
+
+/* Vandú — fondos mosaico. Uso: <section class="vd-bg vd-bg-velocidad">…</section>
+   .vd-bg prepara el contenedor (el contenido queda encima del mosaico); sumarle una variante:
+   velocidad · velocidad-blanco · monograma · monograma-blanco. La diagonal es la del logo (-24°). */
+.vd-bg { position: relative; overflow: hidden; isolation: isolate; }
+.vd-bg > * { position: relative; z-index: 1; }
+
+/* 1 · Velocidad (navy): rayas navy 700 y una línea neón cada 256px */
+.vd-bg-velocidad {
+  background-color: var(--navy-900);
+  background-image:
+    repeating-linear-gradient(-24deg, transparent 0 248px, var(--neon) 248px 256px),
+    repeating-linear-gradient(-24deg, var(--navy-700) 0 27px, transparent 27px 64px);
+}
+
+/* 1 · Velocidad blanco: rayas sky y una línea navy cada 256px */
+.vd-bg-velocidad-blanco {
+  background-color: var(--white);
+  background-image:
+    repeating-linear-gradient(-24deg, transparent 0 248px, var(--navy-900) 248px 256px),
+    repeating-linear-gradient(-24deg, var(--sky-400) 0 27px, transparent 27px 64px);
+}
+
+/* 3 · Monograma (navy) y 3 · Monograma blanco: el "22" repetido, tenue y girado -12° en una capa ::before */
+.vd-bg-monograma { background-color: var(--navy-900); }
+.vd-bg-monograma-blanco { background-color: var(--white); }
+
+.vd-bg-monograma::before,
+.vd-bg-monograma-blanco::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  z-index: 0;
+  background-repeat: repeat;
+  background-size: 208px 226px;
+  transform: rotate(-12deg);
+  pointer-events: none;
+}
+.vd-bg-monograma::before { background-image: url("fondos/monograma-blanco.svg"); opacity: .18; }
+.vd-bg-monograma-blanco::before { background-image: url("fondos/monograma-navy.svg"); opacity: .10; }
+
+/* Celular */
+@media (max-width: 767px) {
+  .vd-bg-monograma::before,
+  .vd-bg-monograma-blanco::before { background-size: 140px 152px; }
+}

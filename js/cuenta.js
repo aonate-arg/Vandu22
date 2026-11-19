@@ -1,6 +1,7 @@
 /* Cuentas de usuario con Supabase: iniciar sesión y cerrar sesión (crear cuenta: js/registro.js).
    Los datos del proyecto (URL y key pública) van en js/supabase-config.js.
-   La tabla y sus reglas están en supabase/migrations/. */
+   La tabla y sus reglas están en supabase/migrations/.
+   Otras páginas (el prode del sitio publicado; todavía no está en este repo) usan window.cuenta y el evento "cuenta:cambio" para saber quién está. */
 
 (() => {
   'use strict';
@@ -20,8 +21,9 @@
   const userBox = qs('[data-user]');
   const userToggle = qs('[data-user-toggle]');
   const userMenu = qs('[data-user-menu]');
-  const registerBtn = qs('[data-account-open]');
-  const loginBtn = qs('[data-login-open]');
+  const loginAviso = qs('[data-login-aviso]', dialog);
+  let sesionActual = null;
+  let perfilActual = null;
   // Lo guarda js/registro.js al terminar el registro, si falta confirmar el mail
   const AVISO_KEY = 'vandu22_registro_email';
 
@@ -36,20 +38,18 @@
   if (!client) console.warn('Supabase sin configurar: completá js/supabase-config.js');
 
   /* ---------- Ventana de cuenta ---------- */
-  // Crear cuenta: el botón "Registrarme" lleva a registro.html (js/registro.js)
-  registerBtn.addEventListener('click', () => track('cta_registro'));
-
-  function openLogin() {
+  // Crear cuenta: el link "Creá tu perfil de piloto" de la ventana lleva a registro.html (js/registro.js).
+  // aviso: texto opcional arriba del formulario (ej. "Iniciá sesión para guardar tu prode")
+  function openLogin(aviso = '') {
     loginForm.hidden = false;
     done.hidden = true;
     qs('.signup__status', loginForm).textContent = '';
+    if (loginAviso) {
+      loginAviso.textContent = aviso;
+      loginAviso.hidden = !aviso;
+    }
     dialog.showModal();
   }
-
-  loginBtn.addEventListener('click', () => {
-    track('cta_login');
-    openLogin();
-  });
 
   qs('[data-account-close]', dialog).addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', (e) => e.target === dialog && dialog.close());
@@ -138,7 +138,12 @@
     userToggle.setAttribute('aria-expanded', 'false');
   }
 
+  // Personita: sin sesión abre el login; con sesión, el menú del usuario
   userToggle.addEventListener('click', () => {
+    if (!sesionActual) {
+      track('cta_login');
+      return openLogin();
+    }
     const open = userMenu.hidden;
     userMenu.hidden = !open;
     userToggle.setAttribute('aria-expanded', String(open));
@@ -151,35 +156,66 @@
     await client?.auth.signOut();
   });
 
-  async function mostrarUsuario(session) {
-    const user = session?.user;
-    registerBtn.hidden = Boolean(user);
-    loginBtn.hidden = Boolean(user);
-    userBox.hidden = !user;
-    if (!user) return closeMenu();
+  // Avisa a las otras páginas (js/prode.js) quién está
+  const avisarCambio = () =>
+    document.dispatchEvent(
+      new CustomEvent('cuenta:cambio', { detail: { session: sesionActual, perfil: perfilActual } }),
+    );
 
-    // En el header: el mail hasta el @
-    const alias = user.email.split('@')[0];
-    qs('[data-user-name]').textContent = alias;
-    userToggle.title = alias;
+  // Cada llamada tiene su número: si llega tarde la respuesta de una sesión vieja
+  // (cerró sesión o entró otra persona mientras tanto), se descarta
+  let pedido = 0;
+
+  async function mostrarUsuario(session) {
+    const miPedido = ++pedido;
+    const user = session?.user;
+    sesionActual = session || null;
+    perfilActual = null;
+    userToggle.classList.toggle('is-logged', Boolean(user));
+    userToggle.setAttribute('aria-label', user ? 'Tu cuenta' : 'Iniciar sesión');
+    userToggle.setAttribute('aria-haspopup', user ? 'true' : 'dialog');
+    if (!user) {
+      closeMenu();
+      return avisarCambio();
+    }
+
+    userToggle.title = user.email;
     qs('[data-user-email]').textContent = user.email;
 
     // En el menú: nombre y apellido del perfil
     const meta = user.user_metadata || {};
     const mostrarPerfil = (p) => {
+      perfilActual = p;
       qs('[data-user-fullname]').textContent = [p.nombre, p.apellido].filter(Boolean).join(' ');
       qs('[data-user-number]').textContent = p.numero ? `#${dosDigitos(p.numero)}` : '';
     };
     mostrarPerfil(meta);
+    avisarCambio();
     const { data } = await client
       .from('perfiles')
-      .select('nombre, apellido, numero')
+      .select('nombre, apellido, numero, escuderia')
       .eq('id', user.id)
       .maybeSingle();
-    if (data) mostrarPerfil(data);
+    if (miPedido !== pedido) return;
+    if (data) {
+      mostrarPerfil(data);
+      avisarCambio();
+    }
   }
 
+  window.cuenta = {
+    client,
+    abrirLogin: openLogin,
+    sesion: () => sesionActual,
+    perfil: () => perfilActual,
+  };
+
   if (client) {
+    // La sesión guardada se lee apenas carga, sin esperar el primer aviso de cambio
+    client.auth
+      .getSession()
+      .then(({ data }) => !sesionActual && data?.session && mostrarUsuario(data.session))
+      .catch(() => {});
     client.auth.onAuthStateChange((_event, session) => {
       // Se difiere para no llamar a Supabase dentro del propio aviso de cambio de sesión
       setTimeout(() => mostrarUsuario(session), 0);
