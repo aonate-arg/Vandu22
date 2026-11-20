@@ -1,0 +1,71 @@
+---
+/* Ventana de iniciar sesión (src/scripts/cuenta.js). Crear cuenta está en registro.html.
+   variante "kit": home y stickers (site.css). variante "prode": prode (styles.css), hasta unificar estilos. */
+interface Props {
+  variante?: 'kit' | 'prode';
+}
+const { variante = 'kit' } = Astro.props;
+---
+
+{variante === 'kit' ? (
+  <dialog class="modal" id="cuenta" data-account aria-labelledby="account-title">
+    <button class="vd-burger modal__close" type="button" aria-label="Cerrar" data-account-close>
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+    </button>
+
+    <form class="modal__form" data-account-form="login" novalidate>
+      <h2 class="title-block" id="account-title">Iniciá sesión</h2>
+      <!-- Aviso opcional (cuenta.abrirLogin('…')), ej. "Iniciá sesión para guardar tu prode" -->
+      <p class="vd-value__text" data-login-aviso hidden></p>
+      <div class="vd-field">
+        <label class="vd-field__label" for="login-email">Tu mail</label>
+        <input class="vd-input" id="login-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="vos@mail.com" required />
+      </div>
+      <div class="vd-field">
+        <label class="vd-field__label" for="login-pass">Contraseña</label>
+        <input class="vd-input" id="login-pass" name="password" type="password" autocomplete="current-password" required />
+      </div>
+      <button class="vd-btn vd-btn--primary vd-btn--block" type="submit">Entrar</button>
+      <p class="form-status signup__status" role="status" aria-live="polite"></p>
+      <p class="modal__alt">¿No tenés cuenta? <a class="text-link" href="/registro.html">Creá tu perfil de piloto</a></p>
+    </form>
+
+    <div class="modal__form" data-account-done hidden>
+      <p class="vd-label">Casi listo</p>
+      <h2 class="title-block">Revisá tu mail</h2>
+      <p class="vd-value__text">
+        Te mandamos un link a <strong data-account-done-email></strong> para confirmar tu cuenta. Tocalo y volvés a la
+        página con la sesión iniciada.
+      </p>
+    </div>
+  </dialog>
+) : (
+  <dialog class="signup account" id="cuenta" data-account aria-labelledby="account-title">
+    <button class="icon-btn signup__close" type="button" aria-label="Cerrar" data-account-close>✕</button>
+
+    <form class="signup__form" data-account-form="login" novalidate>
+      <h2 class="signup__title" id="account-title">Iniciá <em>sesión</em></h2>
+      <p class="signup__text" data-login-aviso hidden></p>
+      <label class="signup__label" for="login-email">Email</label>
+      <input class="signup__input" id="login-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="tu@mail.com" required />
+      <label class="signup__label" for="login-pass">Contraseña</label>
+      <input class="signup__input" id="login-pass" name="password" type="password" autocomplete="current-password" required />
+      <button class="btn" type="submit">Entrar</button>
+      <p class="signup__status" role="status" aria-live="polite"></p>
+      <p class="account__alt">¿No tenés cuenta? <a href="/registro.html">Creá tu perfil de piloto</a></p>
+    </form>
+
+    <div class="signup__done" data-account-done hidden>
+      <p class="eyebrow">Casi listo</p>
+      <h2 class="signup__title">Revisá tu <em>mail</em></h2>
+      <p class="signup__text">
+        Te mandamos un link a <strong data-account-done-email></strong> para confirmar tu cuenta. Tocalo y
+        volvés a la página con la sesión iniciada.
+      </p>
+    </div>
+  </dialog>
+)}
+
+<script>
+  import '../scripts/cuenta.js';
+</script>

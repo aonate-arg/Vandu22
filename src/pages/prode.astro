@@ -1,0 +1,67 @@
+---
+/* Prode del GP: top 10 de cada persona (oculto del menú hasta los días de GP: src/data/nav.js).
+   Lógica: src/scripts/prode.js */
+import Base from '../layouts/Base.astro';
+import HeaderProde from '../components/HeaderProde.astro';
+import AccountDialog from '../components/AccountDialog.astro';
+import '../styles/styles.css';
+import '../styles/prode.css';
+---
+
+<Base
+  title="Prode del GP · 22"
+  description="Armá tu top 10 del próximo Gran Premio y vení al evento de 22 a ver si acertaste."
+  bodyClass="page-prode"
+  themeColor="#021d42"
+  conDatos
+  noindex
+>
+  <a class="skip-link" href="#prode">Saltar al contenido</a>
+
+  <HeaderProde />
+
+  <main class="prode" id="prode">
+    <!-- El GP y la fecha salen de data/content.json, igual que en la página principal -->
+    <div class="prode__intro">
+      <h1 class="section-title section-title--sm prode__title">Hola piloto <em>“<span data-alias>...</span>”</em></h1>
+      <p class="prode__subtitle">Prode del GP</p>
+      <p class="prode__text">Armá el prode para el <strong data-gp>Gran Premio</strong>.</p>
+      <p class="prode__text">Para ganar los premios, te esperamos en el evento.</p>
+      <p class="eyebrow prode__cierre" data-cierre></p>
+    </div>
+
+    <!-- Top 10 (js/prode.js). Cada puesto abre la lista de pilotos. -->
+    <form class="prode__form" data-prode novalidate>
+      <ol class="prode__lista" data-puestos></ol>
+      <div class="prode__acciones">
+        <p class="prode__status" role="status" aria-live="polite" data-prode-status></p>
+        <button class="prode__enviar" type="submit" data-prode-enviar>Enviar</button>
+      </div>
+    </form>
+  </main>
+
+  <!-- Lista de pilotos para elegir el de un puesto -->
+  <dialog class="prode-picker" aria-labelledby="picker-title" data-picker>
+    <div class="prode-picker__head">
+      <h2 class="prode-picker__title" id="picker-title">Puesto <span data-picker-puesto>1</span></h2>
+      <button class="icon-btn prode-picker__close" type="button" aria-label="Cerrar" data-picker-close>✕</button>
+    </div>
+    <p class="prode-picker__ayuda">Los que ya están en otro puesto aparecen tachados: tocalos para pasarlos a este.</p>
+    <div class="prode-picker__lista" data-picker-lista></div>
+    <button class="prode-picker__quitar" type="button" data-picker-quitar hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 7h16" />
+        <path d="M9 7V4h6v3" />
+        <path d="M6 7l1 13h10l1-13" />
+        <path d="M10 11v6M14 11v6" />
+      </svg>
+      <span>Quitar puesto</span>
+    </button>
+  </dialog>
+
+  <AccountDialog variante="prode" />
+
+  <script>
+    import '../scripts/prode.js';
+  </script>
+</Base>

@@ -1,0 +1,89 @@
+---
+/* Header del sitio (kit Vandú, css site.css): logo, cuenta, "En breve" y menú de tres rayitas.
+   Los links salen de src/data/nav.js. Fuera de la home, el menú arranca con "Inicio" y la casita.
+   Scripts: src/scripts/nav.js (menú) y src/scripts/cuenta.js (cuenta, lo carga AccountDialog). */
+import { LINKS, hrefDe, esHome, esActual } from '../data/nav.js';
+import HomeIcon from './HomeIcon.astro';
+
+const path = Astro.url.pathname;
+const enHome = esHome(path);
+const links = LINKS;
+---
+
+<header class="site-header" data-site-header>
+  <div class="site-header__inner">
+    <!-- Logo animado (public/img/logo-loader-inverse.js): blanco, turquesa al pasar el mouse -->
+    <a class="site-header__logo" href={enHome ? '#inicio' : '/'} aria-label="Vandú, ir al inicio">
+      <logo-loader-inverse color="currentColor" aria-hidden="true"></logo-loader-inverse>
+    </a>
+
+    <!-- A la derecha: personita (cuenta) + En breve + tres rayitas (menú) -->
+    <div class="site-header__actions">
+      <!-- Cuenta (src/scripts/cuenta.js): sin sesión abre el login (que tiene el link para registrarse);
+           con la sesión iniciada queda rellena en turquesa y abre el menú del usuario -->
+      <div class="site-header__user-wrap" data-user>
+        <button
+          class="site-header__user"
+          type="button"
+          aria-label="Iniciar sesión"
+          aria-expanded="false"
+          aria-controls="user-menu"
+          data-user-toggle
+        >
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />
+          </svg>
+        </button>
+        <div class="user-menu" id="user-menu" data-user-menu hidden>
+          <p class="user-menu__name"><span data-user-fullname></span> <span class="user-menu__number" data-user-number></span></p>
+          <p class="user-menu__email" data-user-email></p>
+          <button class="user-menu__item" type="button" data-logout>Cerrar sesión</button>
+        </div>
+      </div>
+
+      <!-- Entradas: en la home abre la ventana de la grilla (src/scripts/main.js) -->
+      {enHome ? (
+        <a class="site-header__cta" href="#grilla" data-cta="header">En breve</a>
+      ) : (
+        <a class="site-header__cta" href="/#grilla">En breve</a>
+      )}
+
+      <!-- Menú de secciones (src/scripts/nav.js) -->
+      <div class="site-header__menu-wrap" data-nav>
+        <button
+          class="site-header__burger"
+          type="button"
+          aria-label="Menú"
+          aria-expanded="false"
+          aria-controls="site-menu"
+          data-nav-toggle
+        >
+          <span class="site-header__burger-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        </button>
+        <nav class="site-menu" id="site-menu" aria-label="Secciones" data-nav-menu hidden>
+          {!enHome && (
+            <a class="site-menu__link site-menu__link--inicio" href="/">
+              <span>Inicio</span>
+              <HomeIcon />
+            </a>
+          )}
+          {links.map((link) => (
+            <a
+              class="site-menu__link"
+              href={hrefDe(link, enHome)}
+              data-spy={enHome && link.seccion ? link.seccion : undefined}
+              aria-current={esActual(link, path) ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  import '../scripts/nav.js';
+</script>

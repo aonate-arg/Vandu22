@@ -3,3 +3,12 @@
 *.heic
 .gstack/
 originales/
+node_modules
+
+# Astro
+node_modules/
+dist/
+.astro/
+.vercel/
+test-results/
+playwright-report/

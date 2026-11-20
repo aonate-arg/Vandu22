@@ -1,0 +1,76 @@
+---
+/* Esqueleto común de todas las páginas: <head> (fuentes, analytics, logos animados) y <body>.
+   Cada página importa sus propios CSS en su frontmatter; Astro les pone un nombre que cambia
+   con cada versión, así que ya no hace falta el ?v= a mano. */
+import content from '../data/content.json';
+
+interface Props {
+  title: string;
+  description: string;
+  bodyClass?: string;
+  /** Atributos extra del <body> (ej. data-temporada) */
+  bodyAttrs?: Record<string, string>;
+  /** Datos de content.json para los scripts del navegador (src/lib/datos.js) */
+  conDatos?: boolean;
+  /** Verificación de Google Search Console (solo hace falta en la home) */
+  googleVerification?: boolean;
+  /** Color de la barra del navegador en el celular */
+  themeColor?: string;
+  /** Que Google no la muestre en los resultados */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  bodyClass,
+  bodyAttrs = {},
+  conDatos = false,
+  googleVerification = false,
+  themeColor = '#001b44',
+  noindex = false,
+} = Astro.props;
+
+// JSON seguro dentro de <script>: "<" escapado para que un texto nunca pueda cerrar la etiqueta
+const datosJSON = JSON.stringify(content).replace(/</g, '\\u003c');
+---
+
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content={themeColor} />
+    {noindex && <meta name="robots" content="noindex" />}
+    {googleVerification && <meta name="google-site-verification" content="zdhCkgrrgpL2BJK_Eav85PvA_bUmiz1LfFFfzD-l8zc" />}
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;1,800&family=Inter:wght@400;500;600&display=swap"
+    />
+
+    <!-- Logo animado (web component). is:inline: Astro no lo empaqueta y carga igual que antes -->
+    <script is:inline src="/img/logo-loader-inverse.js" defer></script>
+    <slot name="head" />
+
+    <!-- Vercel: Web Analytics (visitas) y Speed Insights (velocidad).
+         is:inline: el stub de window.va tiene que existir antes que cualquier otro script -->
+    <script is:inline>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+    </script>
+    <script is:inline defer src="/_vercel/insights/script.js"></script>
+    <script is:inline defer src="/_vercel/speed-insights/script.js"></script>
+  </head>
+
+  <body class={bodyClass} {...bodyAttrs}>
+    {conDatos && <script is:inline type="application/json" id="datos" set:html={datosJSON} />}
+    <slot />
+  </body>
+</html>
