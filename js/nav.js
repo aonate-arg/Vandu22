@@ -9,6 +9,22 @@
   const toggle = box.querySelector('[data-nav-toggle]');
   const menu = box.querySelector('[data-nav-menu]');
 
+  // Fuera del inicio, primero va "Inicio" con una casita al lado
+  const actual = location.pathname.split('/').pop() || 'index.html';
+  const enInicio = actual === 'index.html' || actual === 'index';
+  if (!enInicio) {
+    const inicio = document.createElement('a');
+    inicio.className = 'site-menu__link site-menu__link--inicio';
+    inicio.href = 'index.html';
+    inicio.innerHTML = `
+      <span>Inicio</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 11 12 4l9 7" />
+        <path d="M5 10v10h5v-6h4v6h5V10" />
+      </svg>`;
+    menu.prepend(inicio);
+  }
+
   function cerrar({ devolverFoco = false } = {}) {
     if (menu.hidden) return;
     menu.hidden = true;

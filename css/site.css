@@ -352,6 +352,27 @@ body[data-temporada="verano"] section[data-solo-verano] { display: block !import
 .site-menu__link[aria-current] { color: var(--navy-700); }
 .site-menu__link:focus-visible { outline: 3px solid var(--navy-700); outline-offset: 2px; }
 
+/* Inicio: con una casita al lado (la agrega js/nav.js fuera de la home); subrayada solo la palabra */
+.site-menu__link--inicio { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.site-menu__link--inicio::after { content: none; }
+.site-menu__link--inicio span {
+  text-decoration: underline;
+  text-decoration-color: var(--sky-400);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.site-menu__link--inicio:hover span { text-decoration-color: var(--accent); }
+.site-menu__link--inicio svg {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 /* ---------- 00 · Hero ---------- */
 .hero__grid {
   display: grid;

@@ -12,7 +12,7 @@
   const actual = location.pathname.split('/').pop() || 'index.html';
 
   // Fuera del inicio, primero va "Inicio" con una casita al lado
-  if (actual !== 'index.html') {
+  if (actual !== 'index.html' && actual !== 'index') {
     const inicio = document.createElement('a');
     inicio.className = 'site-menu__link site-menu__link--inicio';
     inicio.href = 'index.html';

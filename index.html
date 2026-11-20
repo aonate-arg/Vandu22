@@ -24,7 +24,7 @@
     <!-- ?v=: cambiarlo SIEMPRE que se edita el CSS o el JS (vercel.json guarda css/ y js/ por un año) -->
     <link rel="stylesheet" href="vandu-ui-kit/tokens.css?v=20261118a" />
     <link rel="stylesheet" href="vandu-ui-kit/components.css?v=20261118a" />
-    <link rel="stylesheet" href="css/site.css?v=20261118d" />
+    <link rel="stylesheet" href="css/site.css?v=20261120a" />
 
     <!-- Logos animados (web components): "22" con trazo que corre y pantalla de carga con marea -->
     <script src="img/logo-loader-inverse.js" defer></script>
@@ -107,7 +107,7 @@
             <nav class="site-menu" id="site-menu" aria-label="Secciones" data-nav-menu hidden>
               <a class="site-menu__link" href="#proximo-gp" data-spy="proximo-gp">Eventos</a>
               <a class="site-menu__link" href="stickers.html">Stickers</a>
-              <a class="site-menu__link" href="prode.html">Prode</a>
+              <!-- Prode oculto hasta los días de GP: <a class="site-menu__link" href="prode.html">Prode</a> -->
               <a class="site-menu__link" href="#merch" data-spy="merch">Merch</a>
               <a class="site-menu__link" href="#comunidad" data-spy="comunidad">Comunidad</a>
             </nav>
@@ -677,7 +677,7 @@
           <ul role="list">
             <li><a href="#proximo-gp">Eventos</a></li>
             <li><a href="stickers.html">Stickers</a></li>
-            <li><a href="prode.html">Prode</a></li>
+            <!-- Prode oculto hasta los días de GP: <li><a href="prode.html">Prode</a></li> -->
             <li><a href="#merch">Merch</a></li>
           </ul>
         </nav>
@@ -712,7 +712,7 @@
       </div>
     </footer>
 
-    <script src="js/nav.js?v=20261117p"></script>
+    <script src="js/nav.js?v=20261120a"></script>
     <script src="js/main.js?v=20261118e"></script>
     <!-- Cuentas de usuario con Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js" defer></script>
