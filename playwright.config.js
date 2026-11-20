@@ -4,7 +4,7 @@
      BASE_URL=https://<rama>.vercel.app npm test */
 import { defineConfig, devices } from '@playwright/test';
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:4321';
+const BASE_URL = process.env.BASE_URL || 'http://127.0.0.1:4322';
 
 export default defineConfig({
   testDir: 'tests',
@@ -16,5 +16,5 @@ export default defineConfig({
   ],
   webServer: process.env.BASE_URL
     ? undefined
-    : { command: 'npm run build && npm run preview -- --port 4321', url: BASE_URL, reuseExistingServer: true, timeout: 120_000 },
+    : { command: 'npm run build && npm run preview -- --port 4322 --host 127.0.0.1 --ignore-lock', url: BASE_URL, reuseExistingServer: true, timeout: 120_000 },
 });
